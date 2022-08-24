@@ -1,0 +1,219 @@
+@import 'config';
+
+body {
+    font-family: $main-font;
+    margin: 0;
+    padding: 0;
+    background: $body-bg;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    max-width: 100%;
+    height: auto;
+    background: $dark-color;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: calc(100% - 40px);
+    margin: 0 20px;
+}
+.header-buttons {
+    padding: 5px 0;
+    background: $dark-color;
+    display: flex;
+    align-items: center;
+    min-height: fit-content;
+}
+
+.btn {
+    height: 100%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 3px;
+    border: none;
+    outline: none;
+    color: $light-color;
+    // margin: 0 10px;
+    padding: 5px 10px;
+    background: darken($dark-color, 5%);
+    transition: $cubic1;
+    &:active {
+        border: none;
+        outline: none;
+    }
+    &:hover {
+        transition: $cubic1;
+        background: rgb(7, 7, 7);
+    }
+}
+
+.spinner-container {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* spinner */
+.spinner {
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.spinner div {
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 13px solid transparent;
+    border-top-color: rgb(187, 0, 187);
+    border-radius: 50%;
+    animation: spinnerOne 1.2s linear infinite;
+}
+.spinner div:nth-child(2) {
+    border: 13px solid transparent;
+    border-bottom-color: rgb(187, 0, 187);
+    border-radius: 50%;
+    animation: spinnerTwo 1.2s linear infinite;
+}
+
+@keyframes spinnerOne {
+    0% {
+        transform: rotate(0deg);
+        border-width: 13px;
+    }
+    50% {
+        transform: rotate(180deg);
+        border-width: 3px;
+        border-top-color: rgb(65, 0, 187);
+    }
+    100% {
+        transform: rotate(360deg);
+        border-width: 13px;
+    }
+}
+@keyframes spinnerTwo {
+    0% {
+        transform: rotate(0deg);
+        border-width: 3px;
+    }
+    50% {
+        transform: rotate(180deg);
+        border-width: 13px;
+        border-bottom-color: rgb(65, 0, 187);
+    }
+    100% {
+        transform: rotate(360deg);
+        border-width: 3px;
+    }
+}
+
+// lds-facebook
+.lds-facebook-container {
+    // position: absolute;
+    // top: 0px;
+    // left: 50%;
+    width: fit-content;
+    margin: auto auto;
+    transform: translate(-50%);
+    z-index: 14;
+}
+.lds-facebook {
+    display: block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: rgb(183, 0, 255);
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+}
+@keyframes lds-facebook {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+    50%,
+    100% {
+        top: 24px;
+        height: 32px;
+    }
+}
+.close-btn-spinner {
+    cursor: pointer;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    .close-icon-spinner {
+        color: rgb(202, 0, 0);
+        font-size: 1.5rem;
+    }
+}
+.error-msg-container {
+    width: 100%;
+    height: 45px;
+    position: absolute;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    .error-msg {
+        background-color: rgb(136, 0, 0);
+        width: 100%;
+        text-align: center;
+        color: $light-color;
+        padding: 7px 0;
+        border: 0;
+    }
+}
+
+img {
+    display: block;
+}
+
+.info-modal {
+    position: absolute;
+    z-index: 11;
+    background-color: darkgreen;
+    color: $light-color;
+    box-sizing: border-box;
+    padding: 20px;
+    right: 5%;
+    top: 10%;
+    box-shadow: $shadow;
+}

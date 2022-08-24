@@ -1,0 +1,103 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic);
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "roboto", Arial, Helvetica, sans-serif;
+  --video-width: 840px;
+}
+
+.user-content {
+  margin-top: 50px;
+  background-color: #d9d9d9;
+  min-width: 250px;
+  max-width: 800px;
+  min-height: 200px;
+  padding: 20px;
+}
+
+.user-content .user-data,
+.user-content .user-options {
+  list-style-type: none;
+  margin-top: 10px;
+}
+
+.user-delete button {
+  margin-top: 20px;
+  background: inherit;
+  background: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: #2c2c2c;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.user-delete button:hover {
+  background: inherit;
+  border: 1px solid rgba(146, 0, 0, 0.8);
+}
+
+.user-delete-modal {
+  text-align: center;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background: #ac0000;
+  color: white;
+  position: absolute;
+  top: -130px;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  -webkit-transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  padding: 20px;
+}
+
+.user-delete-modal .user-modal-buttons {
+  margin-top: 20px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.user-delete-modal .user-modal-buttons input {
+  text-indent: 5px;
+}
+
+.user-delete-modal .user-modal-buttons button {
+  height: 30px;
+}
+
+.user-delete-modal .user-modal-buttons button:nth-child(2) {
+  background: white;
+  color: red;
+}
+
+.user-delete-modal .user-modal-buttons button:nth-child(3) {
+  background: #303030;
+}
+
+.show-delete-account-modal {
+  position: absolute;
+  top: 20%;
+  -webkit-transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.delete-user-loader {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.856);
+  margin-left: -20px;
+}

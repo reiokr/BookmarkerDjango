@@ -1,0 +1,57 @@
+.signup-form-container {
+  border-radius: 10px;
+  padding: 10px 50px 60px 50px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  max-width: 400px;
+  height: auto;
+  margin: 100px auto 20px auto;
+  -webkit-box-shadow: 0px 0px 50px 30px #585858, 0 0 3px 1px #7c00c9;
+          box-shadow: 0px 0px 50px 30px #585858, 0 0 3px 1px #7c00c9;
+}
+
+.signup-form-container h1,
+.signup-form-container h2,
+.signup-form-container h3 {
+  margin: 20px;
+  text-align: center;
+  color: #c7c7c7;
+}
+
+.signup-form-container form {
+  width: 100%;
+}
+
+.signup-form-container form input {
+  border: none;
+  background: #dadada;
+  border-radius: 5px;
+  width: 100%;
+  margin: 10px 0;
+  height: 30px;
+  font-size: 1.1rem;
+  text-indent: 5px;
+}
+
+.signup-form-container form .form-buttons input {
+  background: #1d1d1d;
+  color: #b9b9b9;
+  border: none;
+  border-radius: 5px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  float: left;
+  padding: 0 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.signup-form-container form .form-buttons input:hover {
+  -webkit-box-shadow: 0 0 5px 5px gray;
+          box-shadow: 0 0 5px 5px gray;
+  color: white;
+  -webkit-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}

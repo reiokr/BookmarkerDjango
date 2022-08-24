@@ -1,0 +1,136 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic);
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "roboto", Arial, Helvetica, sans-serif;
+  --video-width: 840px;
+}
+
+.login-form {
+  max-width: 500px;
+  margin: 50px auto;
+  position: relative;
+}
+
+.login-form .error-msg {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.login-form h1 {
+  color: #d9d9d9;
+}
+
+.login-form form {
+  margin: 0;
+  padding: 0;
+  max-width: 600px;
+  min-width: 300px;
+}
+
+.login-form form input {
+  background: #b3b3b3;
+  display: block;
+  width: 100%;
+  height: 35px;
+  padding: 0;
+  margin: 15px 0;
+  text-indent: 10px;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+}
+
+.login-form form input:active {
+  outline: none;
+  border: none;
+}
+
+.login-form form input:focus {
+  border: none;
+  outline: none;
+}
+
+.login-form form .rememberme {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 30px;
+}
+
+.login-form form .rememberme input {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-right: 10px;
+}
+
+.login-form form .rememberme input .check-rememberme {
+  height: 15px;
+  width: 15px;
+}
+
+.login-form form textarea {
+  background: #b3b3b3;
+  text-indent: 10px;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+  max-width: 495px;
+  min-width: 300px;
+  min-height: 200px;
+  max-height: 600px;
+}
+
+.login-form form button {
+  margin: 20px auto;
+  margin-bottom: 30px;
+  display: block;
+  padding: 0 20px;
+  height: 40px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 3px;
+  background: #2c2c2c;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  -webkit-box-shadow: 1px 1px 3px #ddc1c1, -1px -1px 3px lightgrey;
+          box-shadow: 1px 1px 3px #ddc1c1, -1px -1px 3px lightgrey;
+}
+
+.login-form form button:hover {
+  background: #6c6c6c;
+}
+
+.login-form form .ref-btn {
+  display: block;
+  text-decoration: none;
+  color: #d9d9d9;
+  margin: 5px 0;
+}
+
+.login-form form .cancel-btn {
+  margin: 20px auto;
+  background: #393939;
+}
+
+.login-form form .delete-btn {
+  margin: 20px auto;
+  background: red;
+}

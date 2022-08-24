@@ -1,0 +1,103 @@
+@import 'config';
+
+.login-form {
+  max-width: 500px;
+  margin: 50px auto;
+  position: relative;
+  .error-msg {
+    align-self: center;
+  }
+  h1 {
+    color: $light-color;
+  }
+  form {
+    margin: 0;
+    padding: 0;
+    max-width: 600px;
+    min-width: 300px;
+    input {
+      background: darken($light-color, 15);
+      display: block;
+      width: 100%;
+      height: 35px;
+      padding: 0;
+      margin: 15px 0;
+      text-indent: 10px;
+      border-radius: 3px;
+      border: none;
+      outline: none;
+      font-size: 1.2rem;
+
+      &:active {
+        outline: none;
+        border: none;
+      }
+
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+    .rememberme {
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      height: 30px;
+      input {
+        width: fit-content;
+        margin-right: 10px;
+        .check-rememberme {
+          height: 15px;
+          width: 15px;
+        }
+      }
+    }
+    textarea {
+      background: darken($light-color, 15);
+      text-indent: 10px;
+      border-radius: 3px;
+      border: none;
+      outline: none;
+      font-size: 1.2rem;
+      max-width: 495px;
+      min-width: 300px;
+      min-height: 200px;
+      max-height: 600px;
+    }
+    button {
+      margin: 20px auto;
+      margin-bottom: 30px;
+      display: block;
+      padding: 0 20px;
+      height: 40px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 3px;
+      background: $dark-color;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: $shadow;
+      &:hover {
+        background: lighten($dark-color, 25);
+      }
+    }
+    .ref-btn {
+      display: block;
+      text-decoration: none;
+      color: $light-color;
+      margin: 5px 0;
+    }
+    .cancel-btn {
+      margin: 20px auto;
+      background: lighten($dark-color, 5%);
+    }
+    .delete-btn {
+      margin: 20px auto;
+      background: red;
+    }
+  }
+}

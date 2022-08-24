@@ -1,0 +1,79 @@
+@import 'config';
+
+.user-content {
+  margin-top: 50px;
+  background-color: $light-color;
+  min-width: 250px;
+  max-width: 800px;
+  min-height: 200px;
+  padding: 20px;
+  .user-data,
+  .user-options {
+    list-style-type: none;
+    margin-top: 10px;
+  }
+}
+
+.user-delete {
+  button {
+    margin-top: 20px;
+    background: inherit;
+    background: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: $dark-color;
+    font-weight: 400;
+    font-size: 0.8rem;
+    &:hover {
+      background: inherit;
+      border: 1px solid rgba(146, 0, 0, 0.8);
+    }
+  }
+}
+
+.user-delete-modal {
+  text-align: center;
+  width: fit-content;
+  height: fit-content;
+  background: rgb(172, 0, 0);
+  color: white;
+  position: absolute;
+  top: -130px;
+  left: 50%;
+  transform: translate(-50%);
+  transition: $cubic1;
+  padding: 20px;
+  .user-modal-buttons {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    input {
+      text-indent: 5px;
+    }
+    button {
+      height: 30px;
+      &:nth-child(2) {
+        background: rgb(255, 255, 255);
+        color: red;
+      }
+      &:nth-child(3) {
+        background: rgb(48, 48, 48);
+      }
+    }
+  }
+}
+
+.show-delete-account-modal {
+  position: absolute;
+  top: 20%;
+  transition: $cubic1;
+}
+.delete-user-loader {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.856);
+  margin-left: -20px;
+}
