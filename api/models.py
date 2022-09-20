@@ -1,7 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+
 from .managers import CustomUserManager
+
 # Create your models here.
 
 
@@ -46,6 +48,7 @@ class Bm(models.Model):
     list_id = models.CharField(
         max_length=200, default="", null=True, blank=True)
     list_index = models.IntegerField(null=True, default=1)
+    list_items_count = models.IntegerField(null=True, default=0)
     channel_id = models.CharField(max_length=200)
     channel_title = models.CharField(max_length=100)
     start_at = models.FloatField(blank=True, default=0, null=True)

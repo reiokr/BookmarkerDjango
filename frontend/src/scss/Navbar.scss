@@ -11,7 +11,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    height: 50px;
+    height: 40px;
     align-items: center;
     z-index: 7;
 
@@ -57,7 +57,7 @@
         font-weight: normal;
         font-size: 1rem;
         text-decoration: none;
-        padding: 20px 15px;
+        padding: 0px 15px;
         color: $light-color;
         &:hover {
             color: lighten($acc-color, 30);

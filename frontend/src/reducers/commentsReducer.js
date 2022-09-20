@@ -10,6 +10,7 @@ import {
 const initialState = {
     loading: false,
     comments: [],
+    pageInfo: null,
     nextPageToken: null,
 };
 
@@ -26,6 +27,7 @@ export default function (state = initialState, action) {
                 ...state,
                 comments: action.payload.items,
                 nextPageToken: action.payload.nextPageToken,
+                pageInfo: action.payload.pageInfo,
                 loading: false,
             };
         case GET_NEXT_COMMENTS:
@@ -33,6 +35,7 @@ export default function (state = initialState, action) {
                 ...state,
                 comments: [...state.comments, ...action.payload.items],
                 nextPageToken: action.payload.nextPageToken,
+                pageInfo: action.payload.pageInfo,
                 loading: false,
             };
         case LOAD_COMMENT_REPLIES:

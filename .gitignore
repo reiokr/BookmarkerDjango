@@ -1,8 +1,8 @@
-.env
-node_modules
-.prettierrc
-BmDjangoVenv
 
+env
+node_modules
+.env
+.prettierrc
 # dependencies
 frontend/node_modules
 frontend/.pnp

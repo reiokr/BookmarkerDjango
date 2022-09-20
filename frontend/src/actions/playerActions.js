@@ -50,13 +50,14 @@ const loadRelatedVideos = (video_id) => async (dispatch, getState) => {
         );
         dispatch({ type: LOAD_RELATED_VIDEOS, payload: res.data });
     } catch (err) {
-        dispatch(
-            returnErrors(
-                err.resp,
-                err.resp.status,
-                'RELATED_VIDEOS_ERROR'
-            )
-        );
+        console.log(err);
+        // dispatch(
+        //     returnErrors(
+        //         err.resp,
+        //         err.resp.status,
+        //         'RELATED_VIDEOS_ERROR'
+        //     )
+        // );
     }
 };
 

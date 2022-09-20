@@ -8,17 +8,18 @@ import { activeCategory } from '../actions/bmActions'
 import PropTypes from 'prop-types'
 import ErrorAlert from './ErrorAlert'
 import { useTranslation } from 'react-i18next'
+import {useStateContext} from '../context/ContextProvider';
 
 const AddCategoryModal = ({
     toggleModal,
     updateCategories,
     err,
     auth,
-    addCategoryModal,
     activeCategory,
     returnErrors,
     clearErrors,
 }) => {
+  const { addCategoryModal, changeActiveCategory,setChangeActiveCategory } = useStateContext();
     const [newCat, setNewCat] = useState('')
     const input = useRef()
     const closemodal = useRef()
@@ -53,13 +54,15 @@ const AddCategoryModal = ({
         // if name is empty string then retur error
         else if (newCat === '')
             returnErrors('category modal', 403, 'CATEGORY_NAME_ERROR')
+        else if (newCat.toLowerCase() === 'category')
+          returnErrors('category modal', 403, 'CATEGORY_NAME_TYPE_ERROR')
         else {
             const currentCategories = auth.user.categories
             const updatedCategories = [...currentCategories, newCat]
             // update user categories in database
-            updateCategories(updatedCategories)
+            updateCategories(updatedCategories,"category")
             // set new category active category
-            activeCategory(newCat)
+            changeActiveCategory && activeCategory(newCat);
             // assign css classes for effect
             closemodal.current.classList.remove('modal-transition')
             addCategory.current.classList.remove('modal-transition-1')
@@ -80,6 +83,7 @@ const AddCategoryModal = ({
         setNewCat('')
         setTimeout(() => {
             toggleModal()
+            setChangeActiveCategory(true)
         }, 500)
     }
 
@@ -117,14 +121,16 @@ const AddCategoryModal = ({
                             autoComplete="off"
                             ref={input}
                             value={newCat}
-                            onChange={(e) => setNewCat(e.target.value.trim())}
+                            onChange={(e) =>
+                                setNewCat(e.target.value.trim().toString())
+                            }
                         />
                         <button type="submit">{t('save_category')}</button>
                     </form>
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 const mapStateToProps = (state) => ({

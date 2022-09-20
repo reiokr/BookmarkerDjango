@@ -15,12 +15,27 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
         videoindex: video?.video?.list_index,
         listid: video?.video?.list_id,
     });
+    const [playerWidth, setPlayerWidth] = useState(
+        localStorage.getItem('ytpw')
+    );
+    const [playerVolume, setPlayerVolume] = useState(
+        localStorage.getItem('playerVolume')
+    );
     const wrapRef = useRef();
     const contRef = useRef();
-    const playerWidth = localStorage.getItem('ytpw') || 840;
+    // const playerWidth = localStorage.getItem('ytpw') || 840;
 
     // create player object
     const loadVideoPlayer = useCallback(() => {
+        if (!playerWidth) {
+            localStorage.setItem('ytpw', 840);
+            setPlayerWidth((prev) => localStorage.getItem('ytpw'));
+        }
+        if (!playerVolume) {
+            localStorage.setItem('playerVolume', 50);
+            setPlayerVolume((prev) => localStorage.getItem('playerVolume'));
+        }
+
         // the Player object is created uniquely based on the id in state
 
         const player = new window.YT.Player(`player`, {
@@ -39,14 +54,14 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
                 cc_load_policy: 0,
                 iv_load_policy: 3,
                 start: videoData?.start_at,
-                origin: 'http://localhost',
+                // origin: 'https://www.youtube.com/',
             },
             events: {
                 onReady: onPlayerReady,
                 onStateChange: onPlayerStateChange,
             },
         });
-        if (player) {
+        if (player && playerWidth && playerVolume) {
             loadPlayer(player);
         }
 

@@ -37,6 +37,7 @@ const Player = ({
     comments,
     load_next_comments,
     saveVideoInterval,
+    clear_comments,
 }) => {
     const {
         commentOrder,
@@ -60,6 +61,7 @@ const Player = ({
     const [description, setDescription] = useState(video?.video?.description);
     const [isPlayerLoaded, setIsPlayerLoaded] = useState(false);
     const [currTime, setCurrTime] = useState(Number(playerInfo?.currentTime));
+    const [currVideoId, setCurrVideoId] = useState(null);
     const video_length = useSecondsTo_HHMMSS(
         moment.duration(video.video.length).asSeconds()
     );
@@ -79,6 +81,7 @@ const Player = ({
                 video_id: vpId,
                 list_id: playerInfo?.playlistId,
                 list_index: playerInfo?.playlistIndex,
+                list_items_count: playerInfo?.playlist?.length || 0,
                 start_at: curr_time,
                 category: currCategory,
                 url: 'https://youtu.be/' + video.video_id,
@@ -94,8 +97,13 @@ const Player = ({
     };
 
     const saveVideo = (start_at) => {
-        if (start_at) {
+        if (start_at && vp?.player?.playerInfo) {
             video.video.start_at = start_at;
+
+            video.video.list_items_count =
+                vp?.player?.playerInfo?.playlist?.length || 0;
+            video.video.video_id = vpId;
+
             const data = {
                 video_data: video.video,
             };
@@ -124,9 +132,6 @@ const Player = ({
             );
             const { scrollTop, clientHeight } = document.documentElement;
             const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-            // console.log(`scrollHeight: ${scrollHeight}`);
-            // console.log(`scrollTop: ${scrollTop}`);
-            // console.log(`clientHeight: ${scrollHeight}`);
             return distanceFromBottom < -100;
         }
     };
@@ -139,7 +144,14 @@ const Player = ({
     };
 
     useEffect(() => {
+        setCurrVideoId((prev) => video.video.video_id);
+    }, [video.video.video_id]);
+
+    useEffect(() => {
         setShowlist(false);
+        if (video?.video?.list_id !== video?.list?.id) {
+            clearList();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -169,8 +181,12 @@ const Player = ({
 
     // if video is in playlist load playlist items
     useEffect(() => {
-        if (video?.video?.list_id && !video.list && showlist) {
-            getList(video.video.list_id);
+        if (
+            video?.video?.list_id &&
+            !video?.list | (video?.video?.list_id !== video?.list?.id) &&
+            showlist
+        ) {
+            getList(video?.video?.list_id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getList, video.video.list_id, showlist]);
@@ -183,24 +199,41 @@ const Player = ({
 
     // if video id changes update bookmark in database and change video description and load comments
     useEffect(() => {
-        if (vpId && vId) {
+        if (vpId && currVideoId) {
             setIsPlayerLoaded(true);
-
-            if (vpId !== vId) {
-                clear_comments();
+            if (vpId !== currVideoId) {
+                console.log(vpId);
                 updateVideoData();
                 setDescription(video.video.description);
-            }
-            if (vpId !== comments?.comments[0]?.snippet?.videoId) {
-                load_video_comments(vpId, commentOrder);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vpId]);
 
+    useEffect(() => {
+        if (vpId && showComments) {
+            if (
+                vpId === currVideoId &&
+                showComments &&
+                comments.comments.length === 0
+            ) {
+                load_video_comments(vpId, commentOrder);
+            } else {
+                if (
+                    showComments &&
+                    comments.comments.length > 0 &&
+                    comments.comments[0].snippet.videoId !== currVideoId
+                ) {
+                    load_video_comments(vpId, commentOrder);
+                }
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [vpId, showComments, currVideoId, comments.comments]);
+
     // if changed order then load comments in new order
     useEffect(() => {
-        load_video_comments(vpId, commentOrder);
+        showComments && load_video_comments(vpId, commentOrder);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentOrder]);
 

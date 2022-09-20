@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { MdSkipNext, MdSkipPrevious } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
@@ -33,8 +34,22 @@ const PlayerOptions = ({
         }
         vp?.player && vp?.player?.seekTo(start_at, true);
     };
-    // console.log(video?.video)
+    // console.log(video)
+    // console.log(video?.video?.list_index)
     // console.log(vp?.player?.playerInfo?.playlist?.length);
+    // console.log(isLastIndex());
+
+    useEffect(() => {
+        if (
+            !video?.video?.list_index &&
+            vp?.player?.playerInfo?.playlist?.length > 0
+        ) {
+            video.video.list_index = 0;
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [video?.video?.list_index, vp?.player?.playerInfo?.playlist]);
+
     return (
         <div className="video-player-options video" ref={btnRef}>
             <button

@@ -110,8 +110,7 @@
                     cursor: pointer;
                     display: flex;
                     flex-direction: column;
-                    p {
-                    }
+
                     div {
                         align-self: flex-end;
                         font-size: 0.7rem;
@@ -206,6 +205,11 @@
                 }
                 &:hover::before {
                     display: block;
+                }
+                .list-items-count {
+                    margin-left: 8px;
+                    color: $light-color;
+                    font-size: 1rem;
                 }
             }
         }

@@ -41,6 +41,7 @@ const FormatText = ({
           setCurrDesc(video.video.description);
         }
       
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [video?.video?.description]);
 
     const handleTimestampPrevTime = useCallback(() => {

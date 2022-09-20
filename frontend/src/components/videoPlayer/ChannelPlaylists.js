@@ -7,53 +7,50 @@ import {
 import { addPlaylistToBookmarks } from '../../actions/bmActions';
 import InfoModal from '../../components/InfoModal';
 import moment from 'moment';
+import CategoriesModal from './CategoriesModal';
+import { useStateContext } from '../../context/ContextProvider';
 
 const ChannelPlaylists = ({
     vp,
     video,
     loadChannelPlaylists,
     loadMoreChannelPlaylists,
-    addPlaylistToBookmarks,
-    currCategory,
 }) => {
+    const {
+        showCategories,
+        activeId,
+        setActiveId,
+        showInfoModal,
+        handleGoToYouTube,
+        handleCategoriesModal,
+        bookmarkType,
+        related_videos_btn_click,
+    } = useStateContext();
     const [channelPlaylists, setChannelPlaylists] = useState(null);
-    const tooltipText = 'Save to bookmarks?';
-    const [showInfoModal, setShowInfoModal] = useState(false);
 
     useEffect(() => {
-      if (!vp?.channel_playlists) {
-          video?.video?.channel_id &&
-              loadChannelPlaylists(video?.video?.channel_id);
-      } else {
-          if (
-              video.video.channel_id !==
-              vp.channel_playlists.items[0].snippet.channelId
-          ) {
-              video?.video?.channel_id &&
-                  loadChannelPlaylists(video?.video?.channel_id);
-          }
-      }
+        if (!vp?.channel_playlists) {
+            video?.video?.channel_id &&
+                loadChannelPlaylists(video?.video?.channel_id);
+        } else {
+            if (vp?.channel_playlists?.items?.length > 0) {
+                if (
+                    video?.video?.channel_id !==
+                    vp?.channel_playlists?.items[0]?.snippet?.channelId
+                ) {
+                    video?.video?.channel_id &&
+                        loadChannelPlaylists(video?.video?.channel_id);
+                }
+            }
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [video.video.channel_id]);
+    }, [video?.video?.channel_id]);
 
     useEffect(() => {
-        if (vp?.channel_playlists) {
+        if (vp?.channel_playlists?.items?.length > 0) {
             setChannelPlaylists(vp.channel_playlists);
         }
-    }, [vp.channel_playlists]);
-    // console.log(vp.channel_playlists.items[0].snippet.channelId)
-    // console.log(video.video.channel_id)
-    const handleSavePlaylistToBookmarks = (pl_id) => {
-        addPlaylistToBookmarks(pl_id, currCategory);
-        setShowInfoModal(true);
-        const show_modal = setTimeout(() => {
-            setShowInfoModal(false);
-        }, 3000);
-        return () => {
-            clearTimeout(show_modal);
-        };
-        // closeCurrentVideo();
-    };
+    }, [vp?.channel_playlists]);
 
     const handleLoadMorePlaylists = () => {
         channelPlaylists?.nextPageToken &&
@@ -63,72 +60,131 @@ const ChannelPlaylists = ({
             );
     };
 
-    // console.log(channelPlaylists);
     return (
         <>
-            {showInfoModal && (
-                <InfoModal content={'Playlist saved to bookmarks'} />
+            {showInfoModal && bookmarkType === 'playlist' && (
+                <InfoModal content={'Playlist saved to '} />
             )}
-            <div className="channel-playlists">
-                <h4>Playlists in {video.video.channel_title} channel</h4>
-                {channelPlaylists?.items &&
-                    channelPlaylists.items.map((playlist) => {
-                        // console.log(playlist);
-                        return (
-                            playlist.contentDetails.itemCount !== 0 && (
-                                <div
-                                    key={playlist.id}
-                                    className="ch-pl-container"
-                                >
-                                    <div
-                                        className="ch-pl-image-container"
-                                        data-text={tooltipText}
-                                        onClick={() => {
-                                            handleSavePlaylistToBookmarks(
-                                                playlist.id
-                                            );
-                                        }}
-                                    >
-                                        <p className="ch-pl-count">
-                                            {playlist.contentDetails.itemCount}
-                                            {playlist.contentDetails
-                                                .itemCount === 1
-                                                ? ' video'
-                                                : ' videos'}
-                                        </p>
-                                        <img
-                                            src={
-                                                playlist.snippet.thumbnails
-                                                    ?.medium?.url
-                                            }
-                                            alt={''}
-                                        />
-                                    </div>
-                                    <div className="ch-pl-body">
-                                        <p className="ch-pl-title">
-                                            {playlist.snippet.title}
-                                        </p>
-                                        <p className="ch-pl-published">
-                                            Published:{' '}
-                                            {moment(
-                                                playlist.snippet.publishedAt
-                                            ).format('MMM Do YYYY')}
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                        );
-                    })}
-                {channelPlaylists?.nextPageToken && (
-                    <h4
-                        className="ch-pl-load-more"
-                        onClick={handleLoadMorePlaylists}
-                    >
-                        Load more...
-                    </h4>
-                )}
-                <div className="ch-pl-padding"></div>
-            </div>
+            {vp?.channel_playlists?.items?.length > 0 && (
+                <div className="channel-playlists">
+                    <h4>Playlists in {video.video.channel_title} channel</h4>
+                    <div className="channel-playlists-body">
+                        {channelPlaylists?.items &&
+                            channelPlaylists.items.map((playlist) => {
+                                return (
+                                    playlist.contentDetails.itemCount !== 0 && (
+                                        <div
+                                            key={playlist.id}
+                                            className="ch-pl-container"
+                                        >
+                                            {showCategories &&
+                                                activeId === playlist.id && (
+                                                    <CategoriesModal />
+                                                )}
+                                            <div
+                                                className="ch-pl-image-container"
+                                                // data-text={tooltipText}
+                                            >
+                                                <div
+                                                    className="related-videos-btn"
+                                                    id={playlist.id}
+                                                    onClick={
+                                                        related_videos_btn_click
+                                                    }
+                                                    onMouseLeave={(e) => {
+                                                        e.target.classList.remove(
+                                                            'active'
+                                                        );
+                                                    }}
+                                                >
+                                                    <span id="h">
+                                                        <p
+                                                            className="icon"
+                                                            onClick={() => {
+                                                                handleCategoriesModal(
+                                                                    playlist.id,
+                                                                    'playlist'
+                                                                );
+                                                            }}
+                                                        >
+                                                            Bookmark
+                                                        </p>
+                                                    </span>
+                                                    <span id="e">
+                                                        <p
+                                                            className="icon"
+                                                            onClick={() => {
+                                                                setActiveId(
+                                                                    null
+                                                                );
+                                                                handleGoToYouTube(
+                                                                    playlist.id,
+                                                                    'https://www.youtube.com/playlist?list='
+                                                                );
+                                                            }}
+                                                        >
+                                                            YouTube
+                                                        </p>
+                                                    </span>
+                                                    <span
+                                                        id="o"
+                                                        onClick={() => {
+                                                            setActiveId(null);
+                                                        }}
+                                                    >
+                                                        <p className="icon">
+                                                            Play
+                                                        </p>
+                                                    </span>
+                                                </div>
+                                                <img
+                                                    src={
+                                                        playlist.snippet
+                                                            .thumbnails?.medium
+                                                            ?.url
+                                                    }
+                                                    alt={''}
+                                                />
+                                            </div>
+                                            <div className="ch-pl-body">
+                                                <p className="ch-pl-title">
+                                                    {playlist.snippet.title}
+                                                </p>
+                                                <div className="ch-pl-footer">
+                                                    <span className="ch-pl-published">
+                                                        {moment(
+                                                            playlist.snippet
+                                                                .publishedAt
+                                                        ).format('MMM Do YYYY')}
+                                                    </span>
+                                                    <span className="ch-pl-count">
+                                                        {
+                                                            playlist
+                                                                .contentDetails
+                                                                .itemCount
+                                                        }
+                                                        {playlist.contentDetails
+                                                            .itemCount === 1
+                                                            ? ' video'
+                                                            : ' videos'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                );
+                            })}
+                        {channelPlaylists?.nextPageToken && (
+                            <h4
+                                className="ch-pl-load-more"
+                                onClick={handleLoadMorePlaylists}
+                            >
+                                Load more...
+                            </h4>
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 };

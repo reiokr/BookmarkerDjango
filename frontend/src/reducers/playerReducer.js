@@ -9,7 +9,7 @@ import {
 const initialState = {
     player: null,
     channel_playlists: null,
-    related_videos: null,
+    related_videos:{},
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

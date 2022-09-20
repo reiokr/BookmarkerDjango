@@ -1,10 +1,11 @@
-from rest_framework import serializers
-from .models import CustomUser, Bm, Bml, UserOptions
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.validators import UniqueValidator
-from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from .models import Bm, Bml, CustomUser, UserOptions
 
 
 class UserOptionsSerializer(serializers.ModelSerializer):
@@ -101,7 +102,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         # Add custom claims
-        token['email'] = user.email
         # token['email'] = user.email
         # ...
         return token
@@ -148,7 +148,7 @@ class BmSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bm
-        fields = ['id', 'title', 'category', 'bm_type', 'description', 'thumbnails', 'url', 'video_id', 'list_id', 'list_index', 'channel_id', 'channel_title', 'start_at',
+        fields = ['id', 'title', 'category', 'bm_type', 'description', 'thumbnails', 'url', 'video_id', 'list_id', 'list_index','list_items_count', 'channel_id', 'channel_title', 'start_at',
                   'keywords', 'length', 'view_count', 'like_count', 'comment_count', 'privacy_status', 'publish_date', 'original_category', 'created_at', 'updated_at', 'owner']
 
     def create(self, validated_data):
@@ -172,6 +172,7 @@ class BmSerializer(serializers.ModelSerializer):
         instance.list_index = validated_data.get(
             'list_index', instance.list_index)
         instance.list_id = validated_data.get('list_id', instance.list_id)
+        instance.list_items_count = validated_data.get('list_items_count', instance.list_items_count)
         instance.channel_title = validated_data.get(
             'channel_title', instance.channel_title)
         instance.channel_id = validated_data.get(

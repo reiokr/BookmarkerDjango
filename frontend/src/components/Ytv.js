@@ -1,24 +1,24 @@
-import '../css/Bm.css'
-import '../css/Description.css'
-import { useState, useEffect } from 'react'
-import Fade from '@mui/material/Fade'
-import { CgCloseO } from 'react-icons/cg'
-import { FcStart } from 'react-icons/fc'
-import { MdVideoLibrary } from 'react-icons/md'
-import { connect } from 'react-redux'
-import { clearList } from '../actions/ytvActions'
+import '../css/Bm.css';
+import '../css/Description.css';
+import { useState, useEffect } from 'react';
+import Fade from '@mui/material/Fade';
+import { CgCloseO } from 'react-icons/cg';
+import { FcStart } from 'react-icons/fc';
+import { MdVideoLibrary } from 'react-icons/md';
+import { connect } from 'react-redux';
+import { clearList } from '../actions/ytvActions';
 import {
     useToHHMMSS,
     useSecondsTo_HHMMSS,
-} from './videoPlayer/script/timeConverter'
-import { deleteItem, getVideo } from '../actions/bmActions'
-import { loadVideo } from '../actions/ytvActions'
-import DescModal from './videoPlayer/DescModal'
-import DeleteModal from './videoPlayer/DeleteModal'
-import PlaylistModal from './videoPlayer/PlaylistModal'
-import PropTypes from 'prop-types'
-import moment from 'moment'
-import { useTranslation } from 'react-i18next'
+} from './videoPlayer/script/timeConverter';
+import { deleteItem, getVideo } from '../actions/bmActions';
+import { loadVideo } from '../actions/ytvActions';
+import DescModal from './videoPlayer/DescModal';
+import DeleteModal from './videoPlayer/DeleteModal';
+import PlaylistModal from './videoPlayer/PlaylistModal';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 
 const Ytv = ({ item, deleteItem, loadVideo, data, clearList, getVideo }) => {
     const {
@@ -32,42 +32,43 @@ const Ytv = ({ item, deleteItem, loadVideo, data, clearList, getVideo }) => {
         thumbnails,
         video_id,
         length,
-    } = item
+        list_items_count,
+    } = item;
 
-    const [showmodal, setShowmodal] = useState(false)
-    const [showPlaylist, setShowPlaylist] = useState(false)
-    const [deleteModal, setDeleteModal] = useState(false)
-    const [titleLoaded, setTitleLoaded] = useState(false)
-    const time = useToHHMMSS(start_at)
+    const [showmodal, setShowmodal] = useState(false);
+    const [showPlaylist, setShowPlaylist] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [titleLoaded, setTitleLoaded] = useState(false);
+    const time = useToHHMMSS(start_at);
     const video_length = useSecondsTo_HHMMSS(
         moment.duration(length).asSeconds()
-    )
-    const { t } = useTranslation()
+    );
+    const { t } = useTranslation();
 
     const handleVideo = () => {
-        loadVideo(id)
-    }
+        loadVideo(id);
+    };
 
     const handleTitle = () => {
-        if (!showmodal) getVideo(id)
-        setShowmodal((prev) => !prev)
-    }
+        if (!showmodal) getVideo(id);
+        setShowmodal((prev) => !prev);
+    };
 
     const handlePlaylist = () => {
-        clearList()
-        setShowPlaylist((prev) => !prev)
-    }
+        clearList();
+        setShowPlaylist((prev) => !prev);
+    };
 
     const handleDelete = () => {
-        setDeleteModal((prev) => !prev)
-        deleteItem(id, data.activeCategory)
-    }
+        setDeleteModal((prev) => !prev);
+        deleteItem(id, data.activeCategory);
+    };
 
     useEffect(() => {
         if (title) {
-            setTitleLoaded(true)
-        } else setTitleLoaded(false)
-    }, [title])
+            setTitleLoaded(true);
+        } else setTitleLoaded(false);
+    }, [title]);
 
     return (
         <>
@@ -122,6 +123,9 @@ const Ytv = ({ item, deleteItem, loadVideo, data, clearList, getVideo }) => {
                             >
                                 <MdVideoLibrary />
                                 {t('Playlist')}
+                                <span className="list-items-count">
+                                    {list_items_count !== 0 && list_items_count}
+                                </span>
                             </div>
                         )}
                         <img
@@ -155,23 +159,23 @@ const Ytv = ({ item, deleteItem, loadVideo, data, clearList, getVideo }) => {
                 </div>
             </Fade>
         </>
-    )
-}
+    );
+};
 
 const mapStateToProps = (state) => ({
     data: state.bm,
     videoData: state.bm.videoData,
-})
+});
 
 Ytv.propTypes = {
     data: PropTypes.object.isRequired,
     deleteItem: PropTypes.func.isRequired,
     loadVideo: PropTypes.func.isRequired,
-}
+};
 
 export default connect(mapStateToProps, {
     deleteItem,
     loadVideo,
     clearList,
     getVideo,
-})(Ytv)
+})(Ytv);

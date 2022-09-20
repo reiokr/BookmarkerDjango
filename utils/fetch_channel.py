@@ -1,6 +1,5 @@
-from googleapiclient.discovery import build
 from django.conf import settings
-
+from googleapiclient.discovery import build
 
 api_key = settings.YOUTUBE_API_KEY
 
@@ -23,7 +22,7 @@ def fetch_channel_playlists(channel_id):
     request = youtube.playlists().list(
         part='contentDetails, id, localizations, snippet, status,player',
         channelId=channel_id,
-        maxResults=50
+        maxResults=20
     )
     response = request.execute()
     youtube.close()
@@ -35,7 +34,7 @@ def fetch_channel_next_playlists(channel_id, token):
     request = youtube.playlists().list(
         part='contentDetails, id, localizations, snippet, status,player',
         channelId=channel_id,
-        maxResults=50,
+        maxResults=20,
         pageToken=token
     )
     response = request.execute()

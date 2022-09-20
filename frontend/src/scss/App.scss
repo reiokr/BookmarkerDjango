@@ -32,7 +32,7 @@ body {
     background: $dark-color;
     display: flex;
     align-items: center;
-    min-height: fit-content;
+    max-height: fit-content;
 }
 
 .btn {
@@ -207,13 +207,20 @@ img {
 }
 
 .info-modal {
-    position: absolute;
+    position: fixed;
     z-index: 11;
-    background-color: darkgreen;
-    color: $light-color;
+    background-color: $acc-color;
+    color: $dark-color;
+    font-weight: bold;
+    font-size: 1rem;
     box-sizing: border-box;
     padding: 20px;
     right: 5%;
     top: 10%;
-    box-shadow: $shadow;
+    box-shadow: $shadow-dark;
+    border-radius: 5px;
+    .info-modal-category {
+        text-transform: capitalize;
+    }
 }
+

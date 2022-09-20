@@ -22,6 +22,8 @@ const PlaylistModal = ({
 }) => {
     const [playlist, setPlaylist] = useState([])
 
+// TODO load playlist only once
+
     useEffect(() => {
         getList(list_id)
         // eslint-disable-next-line react-hooks/exhaustive-deps

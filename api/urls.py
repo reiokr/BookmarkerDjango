@@ -1,8 +1,15 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import MyObtainTokenPairView, RegisterView, UserDetail, UpdateUserCategories, BmListView, BmDetailView, BmListSearchView, AddBookmark, YouTubeList, GetVideoData, OptionsView, VideoCommentsView, RateVideoView, NextPageCommentsView, getRoutes,  RepliesView, RepliesNextPageView,  activate, ChannelPlaylistsView, AddPlaylistTOBookmarksView, LoadRelatedVideosView, ChannelNextPlaylistsView
-from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
+from .views import (AddBookmark, AddPlaylistTOBookmarksView, BmDetailView,
+                    BmListSearchView, BmListView, ChannelNextPlaylistsView,
+                    ChannelPlaylistsView, GetVideoData, LoadRelatedVideosView,
+                    MyObtainTokenPairView, NextPageCommentsView, OptionsView,
+                    RateVideoView, RegisterView, RepliesNextPageView,
+                    RepliesView, UpdateUserCategories, UserDetail,
+                    VideoCommentsView, YouTubeList, activate, getRoutes)
 
 urlpatterns = [
     path('', getRoutes),
@@ -13,7 +20,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('users/<int:pk>', UserDetail.as_view(), name='user_detail'),
     path('user/options', OptionsView.as_view(), name='options'),
-    path('users/categories/<int:pk>',
+    path('user/categories/<int:pk>',
          UpdateUserCategories.as_view(), name='user_categories'),
     path('bm', AddBookmark.as_view(), name='add_bookmark'),
     path('bm/video/<str:video_id>', GetVideoData.as_view()),
@@ -27,8 +34,8 @@ urlpatterns = [
     path('bm/comment/nextreplies/<str:parent_id>/<str:page_token>',
          RepliesNextPageView.as_view()),
     path('bm/rate/<str:video_id>', RateVideoView.as_view()),
-    path('bm/<str:category>', BmListView.as_view(), name='bm_list'),
-    path('bm/<str:category>/<search>',
+    path('bm/category/<category>', BmListView.as_view(), name='bm_list'),
+    path('bm/category/<category>/<search>',
          BmListSearchView.as_view(), name='bm_listsearch'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('channel/playlists/<str:channel_id>',

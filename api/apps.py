@@ -6,8 +6,9 @@ class ApiConfig(AppConfig):
     name = 'api'
 
     def ready(self):
-        from api.models import CustomUser
         from django.db.models.signals import post_save
+
+        from api.models import CustomUser
 
         def addCategory(sender, **kwargs):
             user = kwargs['instance']

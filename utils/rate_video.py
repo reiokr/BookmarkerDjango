@@ -1,9 +1,9 @@
-from googleapiclient.discovery import build
+import os
+
 import google_auth_oauthlib.flow
 import googleapiclient.errors
-import os
 from django.conf import settings
-
+from googleapiclient.discovery import build
 
 api_key = settings.YOUTUBE_API_KEY
 scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]

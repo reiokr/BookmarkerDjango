@@ -310,6 +310,17 @@
 
         .btn-description {
             box-shadow: $shadow;
+            display: flex;
+            align-items: center;
+            .playlist-length {
+                background-color: $acc-color;
+                color: $dark-color;
+                border-radius: 999px;
+                margin-left: 10px;
+                font-size: 0.8rem;
+                padding: 1px 5px;
+                box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
+            }
         }
         .btn-active {
             background-color: $light-color;

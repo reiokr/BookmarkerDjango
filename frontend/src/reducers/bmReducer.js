@@ -19,7 +19,6 @@ const initialState = {
     bm: [],
     sort: true,
     loading: false,
-    bmCount: 0,
     isEmptyCategory: true,
     activeCategory: localStorageCategory || '',
     urlError: false,
@@ -42,7 +41,7 @@ export default function (state = initialState, action) {
                 ...state,
                 activeCategory: action.payload,
                 loading: false,
-                bmCount: state.bm.length,
+
             }
 
         case GET_BOOKMARKS:

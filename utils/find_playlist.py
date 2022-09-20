@@ -1,6 +1,5 @@
-from googleapiclient.discovery import build
 from django.conf import settings
-
+from googleapiclient.discovery import build
 
 api_key = settings.YOUTUBE_API_KEY
 

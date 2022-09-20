@@ -1,6 +1,5 @@
-from googleapiclient.discovery import build
 from django.conf import settings
-
+from googleapiclient.discovery import build
 
 api_key = settings.YOUTUBE_API_KEY
 
@@ -24,7 +23,7 @@ def fetch_next_comments(video_id,  pageToken, order='relevance'):
         videoId=video_id,
         order=order,
         pageToken=pageToken,
-        maxResults=100
+        maxResults=50
     )
     response = request.execute()
     youtube.close()
@@ -35,7 +34,7 @@ def get_replies(top_comment_id):
     youtube = build('youtube', 'v3', developerKey=api_key)
     request = youtube.comments().list(
         part='snippet',
-        maxResults=100,
+        maxResults=50,
         parentId=top_comment_id,
 
     )
@@ -48,7 +47,7 @@ def get_next_replies(top_comment_id, token):
     youtube = build('youtube', 'v3', developerKey=api_key)
     request = youtube.comments().list(
         part='snippet',
-        maxResults=100,
+        maxResults=50,
         parentId=top_comment_id,
         pageToken=token,
 

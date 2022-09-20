@@ -1,16 +1,11 @@
 """Scrape metadata from target URL."""
+import pprint
+
 import requests
 from bs4 import BeautifulSoup
 
-import pprint
-from .scrape import (
-    get_title,
-    get_description,
-    get_image,
-    get_site_name,
-    # get_favicon,
-    # get_theme_color
-)
+from .scrape import (get_description,  # get_favicon,; get_theme_color
+                     get_image, get_site_name, get_title)
 
 
 def scrape_page_metadata(url):

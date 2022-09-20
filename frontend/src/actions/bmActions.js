@@ -17,6 +17,7 @@ import { returnErrors } from './errorActions'
 import axios from 'axios'
 import defaultImage from '../default-img.gif'
 
+
 const stopLoading = () => (dispatch) => {
     dispatch({ type: STOP_LOADING })
 }
@@ -26,7 +27,7 @@ const getBookmarks = (category) => async (dispatch, getState) => {
         dispatch({ type: ITEMS_LOADING })
         if (category) {
             const res = await axios(
-                `/api/bm/${category}`,
+                `/api/bm/category/${category}`,
                 tokenConfig(getState, 'get')
             )
             if (res.data.image_url === null) {
@@ -98,9 +99,9 @@ const filterBookmarks = (word, category) => async (dispatch, getState) => {
         dispatch({ type: ITEMS_LOADING })
         let url = ''
         if (word === '') {
-            url = `/api/bm/${category}`
+            url = `/api/bm/category/${category}`
         } else {
-            url = `/api/bm/${category}/${word}`
+            url = `/api/bm/category/${category}/${word}`
         }
         const res = await axios(url, tokenConfig(getState, 'get'))
 
@@ -125,7 +126,6 @@ const filterBookmarks = (word, category) => async (dispatch, getState) => {
         )
     }
 }
-
 const activeCategory = (category) => async (dispatch, getState) => {
     try {
         if (category) {

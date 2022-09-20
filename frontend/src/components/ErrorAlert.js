@@ -43,6 +43,7 @@ const ErrorAlert = ({ err, clearErrors, data }) => {
                 setErrmsg(err.msg.password2[0]);
             if (err.id === 'FILTER_ERROR') setErrmsg(err.msg.detail)
             if (err.id === 'CATEGORY_NAME_ERROR') setErrmsg(t('Category name required'))
+            if (err.id === 'CATEGORY_NAME_TYPE_ERROR') setErrmsg(t("Category name cant't be category"));
             if (err.id === 'VERIFY_EMAIL_ERROR') setErrmsg(t('Please provide correct email'))
             if (err.id === 'DEL_USER_ERROR') setErrmsg(err.msg.detail)
             if (err.id === 'LOGIN_FAIL') setErrmsg(err.msg)

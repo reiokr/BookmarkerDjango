@@ -30,7 +30,6 @@ const tokenConfig = (getState, method, data) => {
                 'et-EE,et;q=0.9,en-EE;q=0.8,en;q=0.7,en-US;q=0.6',
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-
         },
     };
     // if token true, add to header
@@ -40,7 +39,6 @@ const tokenConfig = (getState, method, data) => {
 
 const loadUser = () => async (dispatch, getState) => {
     const accessToken = getState().auth.token?.access;
-
     if (accessToken) {
         const user = jwt(accessToken);
         // User loading in process
@@ -53,6 +51,21 @@ const loadUser = () => async (dispatch, getState) => {
             );
             // console.log(res.data)
             dispatch(returnSuccess(res.data, res.status, 'SIGNUP_SUCCESS'));
+            if (res.data) {
+                const data = {
+                    refresh:
+                        JSON.parse(localStorage.getItem('token')).refresh ||
+                        getState().auth.token?.refresh,
+                };
+                const refreshResult = await axios(
+                    `/api/login/refresh/`,
+                    tokenConfig(getState, 'post', JSON.stringify(data))
+                );
+                localStorage.setItem(
+                    'token',
+                    JSON.stringify(refreshResult.data)
+                );
+            }
             dispatch({ type: USER_LOADED, payload: res.data });
             if ((await res.data.categories.length) === 0) {
                 dispatch(updateCategories(['MyCategory']));
@@ -88,6 +101,8 @@ const signUpUser = (data) => async (dispatch) => {
         console.log(res.data);
         dispatch({ type: SIGN_UP });
         dispatch(returnSuccess(res.data, res.status, 'SIGNUP_SUCCESS'));
+        // localStorage.setItem('ytpw', 840);
+        // localStorage.setItem('playerVolume', 50);
         window.location = '/login';
     } catch (err) {
         dispatch(
@@ -143,28 +158,29 @@ const updateUserOptions = (data) => async (dispatch, getState) => {
     }
 };
 
-const updateCategories = (updatedCategories) => async (dispatch, getState) => {
-    const token = getState().auth.token?.access;
-    const user = jwt(token);
-    const data = { categories: updatedCategories };
+const updateCategories =
+    (updatedCategories, category) => async (dispatch, getState) => {
+        const token = getState().auth.token?.access;
+        const user = jwt(token);
+        const data = { categories: updatedCategories, category: category };
 
-    try {
-        const res = await axios(
-            `/api/users/categories/${user.user_id}`,
-            tokenConfig(getState, 'put', JSON.stringify(data))
-        );
-        dispatch({ type: ADD_CATEGORY, payload: res.data });
-        dispatch(clearErrors());
-    } catch (err) {
-        dispatch(
-            returnErrors(
-                err.response.data,
-                err.response.status,
-                'CATEGORY_ERROR'
-            )
-        );
-    }
-};
+        try {
+            const res = await axios(
+                `/api/user/categories/${user.user_id}`,
+                tokenConfig(getState, 'put', JSON.stringify(data))
+            );
+            dispatch({ type: ADD_CATEGORY, payload: res.data });
+            dispatch(clearErrors());
+        } catch (err) {
+            dispatch(
+                returnErrors(
+                    err.response.data,
+                    err.response.status,
+                    'CATEGORY_ERROR'
+                )
+            );
+        }
+    };
 
 const updateUserData = (userdata) => async (dispatch, getState) => {
     const token = getState().auth.token?.access;

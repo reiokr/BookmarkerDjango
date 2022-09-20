@@ -1,35 +1,45 @@
+from itertools import chain
 from urllib.error import HTTPError
-from django.utils import timezone
+
 from django.conf import settings
-from rest_framework import status, generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, JsonResponse)
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.encoding import force_bytes, force_str
+from django.utils.html import strip_tags
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import CustomUser, Bm, Bml, UserOptions
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, UserSerializer, CategorySerializer, BmSerializer, BmlSerializer, UserOptionsSerializer
-from django.http import Http404, JsonResponse
-from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User
-from .permissions import IsOwnerOrReadOnly
-from utils.urlutils import formaturl, checkUrlType, extractVideoId, getStartTime, extractPlaylistId, getUrl
+
 from utils import fetch_youtube, find_playlist
-from utils.fetch_video_comments import fetch_video_comments, fetch_next_comments, get_replies, get_next_replies
+from utils.fetch_channel import (fetch_channel_next_playlists,
+                                 fetch_channel_playlists,
+                                 search_related_videos)
+from utils.fetch_video_comments import (fetch_next_comments,
+                                        fetch_video_comments, get_next_replies,
+                                        get_replies)
+from utils.find_playlist import get_playlist_item
 from utils.rate_video import rate_video
 from utils.scraper import scrape_page_metadata
-from utils.fetch_channel import fetch_channel_playlists, fetch_channel_next_playlists, search_related_videos
-from utils.find_playlist import get_playlist_item
-from .tokens import account_activation_token
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from itertools import chain
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.core.mail import send_mail
+from utils.urlutils import (checkUrlType, extractPlaylistId, extractVideoId,
+                            formaturl, getStartTime, getUrl)
 
+from .models import Bm, Bml, CustomUser, UserOptions
+from .permissions import IsOwnerOrReadOnly
+from .serializers import (BmlSerializer, BmSerializer, CategorySerializer,
+                          MyTokenObtainPairSerializer, RegisterSerializer,
+                          UserOptionsSerializer, UserSerializer)
+from .tokens import account_activation_token
+import pprint
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -152,6 +162,13 @@ class UpdateUserCategories(APIView):
     def put(self, request, pk, format=None):
         user = self.get_object(self.request.user.id)
         serializer = CategorySerializer(user, data=request.data)
+        # print(request.data['category'])
+        if request.data['category'] != 'category':
+            bookmarks = Bm.objects.filter(
+                category__iexact = request.data['category'])
+            if len(bookmarks)>0:
+                if serializer.is_valid():
+                    return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -236,12 +253,14 @@ class AddBookmark(APIView):
             if list_id:
                 playlist = find_playlist.get_playlist_items(list_id, '')
                 # find list item playlist index
+                list_items_count = playlist['pageInfo']['totalResults']
                 for item in playlist['items']:
                     if item["contentDetails"]['videoId'] == video_id:
                         list_index = item['snippet']['position']
             else:
                 list_index = None
                 list_id = None
+                list_items_count = 0
             # create youtube video bookmark object
             data = {
                 'title': snip['title'],
@@ -253,6 +272,7 @@ class AddBookmark(APIView):
                 "video_id": video_id,
                 "list_id": list_id,
                 "list_index": list_index,
+                "list_items_count": list_items_count,
                 "channel_id": snip['channelId'],
                 "channel_title": snip['channelTitle'],
                 "start_at": startAt,

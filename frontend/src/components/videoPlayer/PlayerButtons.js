@@ -1,3 +1,4 @@
+import { useState,useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getList } from '../../actions/ytvActions';
 import { load_video_comments } from '../../actions/commentsActions';
@@ -31,7 +32,18 @@ const PlayerButtons = ({
         setShowtimestamps,
     } = useStateContext();
     const { t } = useTranslation();
+    const [commentCount, setCommentCount] = useState(null);
 
+useEffect(() => {
+  if(comments?.pageInfo?.totalResults){
+    setCommentCount((prev) => comments?.pageInfo?.totalResults);
+  }else{
+    if(video?.video?.comment_count) setCommentCount(video?.video?.comment_count);
+  }
+}, [
+    comments?.pageInfo?.totalResults,
+    video?.video?.comment_count,
+]);
 
     const handleDescription = () => {
         setShowdesc((prev) => !prev);
@@ -74,6 +86,9 @@ const PlayerButtons = ({
                     onClick={() => setShowlist((prev) => !prev)}
                 >
                     {showlist ? t('Hide playlist') : t('Show playlist')}
+                    <span className="playlist-length">
+                        {vp?.player?.playerInfo?.playlist?.length} videos
+                    </span>
                 </button>
             )}
             {timestampBtn && (
@@ -127,7 +142,7 @@ const PlayerButtons = ({
                 onClick={handleLoadComments}
             >
                 <AiOutlineComment />
-                <span> {video?.video?.comment_count}</span>
+                <span> {commentCount}</span>
             </span>
             <span className="video-info-text" data-text={t('Views')}>
                 <MdOutlinePreview />

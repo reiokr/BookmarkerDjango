@@ -7,14 +7,34 @@ $body-bg: rgb(65, 65, 65);
 $main-font: 'roboto';
 
 $cubic1: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-$shadow: 1px 1px 3px rgb(221, 193, 193), -1px -1px 3px lightgrey;
-$shadow-dark: 0px 0px 6px rgb(0, 0, 0), -0px -0px 6px rgb(0, 0, 0);
+$shadow: 0px 0px 1px 1px rgba(216, 216, 216, 0.3);
+$shadow-dark: 0px 0px 2px 1px rgb(0, 0, 0, 0.5);
 
 $font-z: 1rem;
 
 * {
-  margin: 0;
-  padding: 0;
-  font-family: $main-font, Arial, Helvetica, sans-serif;
-  --video-width: 840px;
+    margin: 0;
+    padding: 0;
+    font-family: $main-font, Arial, Helvetica, sans-serif;
+    --video-width: 840px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

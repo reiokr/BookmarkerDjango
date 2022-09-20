@@ -10,12 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
-import environ
-import os
 from threading import local
 
+import environ
 
 env = environ.Env(
     # set casting, default value
@@ -80,7 +80,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': True,
+    'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
     # 'SIGNING_KEY': SECRET_KEY,
