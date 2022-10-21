@@ -1,0 +1,422 @@
+[
+    {
+        "model": "api.bm",
+        "pk": 11,
+        "fields": {
+            "title": "So many Missions - XCOM 2 Long War of the Chosen Steam Release - 44",
+            "category": "games",
+            "bm_type": "yt",
+            "description": "Welcome back to a new Long War of the Chosen campaign with the vanilla Steam Release version of LWotC.\n\nCharacter's can be submitted to the pool using the dedicated channel on the discard server: https://discord.gg/Em8FjKZ9tK\nAnd while you're there, stop by for a chat.\n\nIf you like XCOM 2 then make sure to catch my streams on Twitch: https://www.twitch.tv/derava\n\n\nMod List:  https://docs.google.com/spreadsheets/d/1PqP44yyzqeo_BQFiMNeXEBJ1jEhTpMgZOidZjj5klcU/edit?usp=sharing\n\n\nThe full Playlist can be found here:  https://www.youtube.com/playlist?list=PLtdFbHeD9CNxh8skSUfGdYkaruUyE6WXf\n\nHere are some other XCOM playlists you may enjoy:\nLWotC Mod Jam:  https://www.youtube.com/playlist?list=PLtdFbHeD9CNwoiUIAcbgAdCvsJ54pHcP8\nLong War of the Chosen 2021- Legend: https://www.youtube.com/playlist?list=PLtdFbHeD9CNxqzVYZuB_El2WPvKi8GiZx\nWar of the Chosen: Legend Ironman: https://www.youtube.com/playlist?list=PLtdFbHeD9CNxSSbpP7jC2K6eKvAQXdCNb\nCovert Infiltration 2021: https://www.youtube.com/playlist?list=PLtdFbHeD9CNwo0sEasxlToPRRmikvXq2g\nLet's Play XCOM 2: Long War 2, Patch 1.5 - Global Liberation: https://www.youtube.com/playlist?list=PLtdFbHeD9CNy1nk-UyVKSWaveGRTInOS_ \nLet's Play XCOM 2: A Better Advent Two - Legend: https://www.youtube.com/playlist?list=PLtdFbHeD9CNw9-DGDPM-nETPemnstYBGW\nLet's Play XCOM 2: Army of Two - Commander Edition: https://www.youtube.com/playlist?list=PLtdFbHeD9CNwPiBrQUL2dtRlEzeWvz-IA\n\n\nMore about War of the Chosen:\n\nXCOM 2: War of the Chosen, is the expansion to the 2016 award-winning strategy game of the year.\n\nXCOM 2: War of the Chosen adds extensive new content in the fight against ADVENT when additional resistance factions form in order to eliminate the alien threat on Earth. In response, a new enemy, known as the �Chosen,� emerges with one goal: recapture the Commander. This expansion includes new Hero classes to counter the �Chosen�, new enemies,missions, environments and increased depth in strategic gameplay.\n\n#xcom2 #lwotc #longwar",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/-0ToDa646vg/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/-0ToDa646vg/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/-0ToDa646vg/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/-0ToDa646vg/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/-0ToDa646vg/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "wwww",
+            "video_id": "-0ToDa646vg",
+            "list_id": "PLtdFbHeD9CNxh8skSUfGdYkaruUyE6WXf",
+            "list_index": 43,
+            "list_items_count": 135,
+            "channel_id": "UCUUWtzmEzTVN6rreX-0XaGQ",
+            "channel_title": "DerAva",
+            "start_at": 2117.140746824524,
+            "keywords": [
+                "DerAva",
+                "war of the chosen",
+                "wotc",
+                "xcom2 war of the chosen",
+                "let's play war of the chosen",
+                "reaper",
+                "templar",
+                "skirmisher",
+                "challenge mode",
+                "xcom 2 walkthrough",
+                "xcom 2 game",
+                "xcom 2 ironman",
+                "xcom",
+                "xcom2",
+                "xcom 2 2016",
+                "xcom 2 lets play",
+                "xcom 2",
+                "xcom 2 gameplay",
+                "xcom 2 LP",
+                "Lets play xcom 2",
+                "xcom 2 army of two",
+                "xcom2 mod",
+                "army of two",
+                "lw2",
+                "long war 2",
+                "long war of the chose",
+                "lwotc",
+                "modjam",
+                "bio division",
+                "frost legion",
+                "mec soldiers",
+                "psi overhaul",
+                "custodians",
+                "legend"
+            ],
+            "length": "PT54M17S",
+            "view_count": 1318,
+            "like_count": 72,
+            "comment_count": 7,
+            "privacy_status": "public",
+            "publish_date": "2022-06-11T14:00:00Z",
+            "original_category": "20",
+            "created_at": "2022-08-21T15:47:54.553Z",
+            "updated_at": "2022-09-15T19:54:16.904Z",
+            "owner": 47
+        }
+    },
+    {
+        "model": "api.bm",
+        "pk": 12,
+        "fields": {
+            "title": "There can only be one - LWotC Mod Jam+ - Legend - 05 A",
+            "category": "games",
+            "bm_type": "yt",
+            "description": "From the August 20th Livestream - Part A -- Watch live at https://www.twitch.tv/derava",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/nVir-3cLjas/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/nVir-3cLjas/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/nVir-3cLjas/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/nVir-3cLjas/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/nVir-3cLjas/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "https://www.youtube.com/watch?list=PLUJ5BpFKQMZP7PcCMilzbp4EtHJee1kG8&t=11410&v=nVir-3cLjas",
+            "video_id": "nVir-3cLjas",
+            "list_id": "PLUJ5BpFKQMZP7PcCMilzbp4EtHJee1kG8",
+            "list_index": 4,
+            "list_items_count": 16,
+            "channel_id": "UCldIAToXDzjxrJU-tXAcxQQ",
+            "channel_title": "DerAva - Livestream Archives",
+            "start_at": 11410.0,
+            "keywords": ["games", "twitch"],
+            "length": "PT5H6M12S",
+            "view_count": 330,
+            "like_count": 10,
+            "comment_count": 0,
+            "privacy_status": "public",
+            "publish_date": "2022-08-24T06:00:24Z",
+            "original_category": "20",
+            "created_at": "2022-08-21T15:48:08.490Z",
+            "updated_at": "2022-09-27T08:24:41.566Z",
+            "owner": 47
+        }
+    },
+    {
+        "model": "api.bm",
+        "pk": 15,
+        "fields": {
+            "title": "Learn React useReducer Hook with Examples",
+            "category": "react",
+            "bm_type": "yt",
+            "description": "React useReducer tutorial. How to use useReducer? When to use useReducer? useState vs useReducer. useReducer best practices and more.\n\nFor more projects you can support Lama Dev:\n\nJoin: https://www.youtube.com/channel/UCOxWrX5MIdXIeRNaXC3sqIg/join\nBuy me a coffee: https://www.buymeacoffee.com/lamadev\n\nJoin Lama Dev groups\nFacebook: https://www.facebook.com/groups/lamadev\nInstagram: https://www.instagram.com/lamawebdev\nDiscord: https://discord.gg/yKremu4mPr\nTwitter: https://twitter.com/lamawebdev\n\nSource Code: https://github.com/safak/youtube2022/tree/useReducer\n\n0:00 What is useReducer Hook?\n01:03 useState vs useReducer\n03:23 useReducer Tutorial\n09:03 useReducer Form Example",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/RZPAQV7JvNU/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/RZPAQV7JvNU/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/RZPAQV7JvNU/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/RZPAQV7JvNU/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/RZPAQV7JvNU/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "https://youtu.be/RZPAQV7JvNU",
+            "video_id": "RZPAQV7JvNU",
+            "list_id": null,
+            "list_index": null,
+            "list_items_count": 0,
+            "channel_id": "UCOxWrX5MIdXIeRNaXC3sqIg",
+            "channel_title": "Lama Dev",
+            "start_at": 858.801,
+            "keywords": [
+                "react",
+                "useReducer",
+                "react useReducer",
+                "useReducer hook",
+                "useReducer tutorial",
+                "learn useReducer",
+                "how to use useReducer",
+                "useState vs useReducer",
+                "when to use useReducer",
+                "react state management",
+                "react reducer",
+                "useReducer mistakes",
+                "lama dev"
+            ],
+            "length": "PT14M19S",
+            "view_count": 16365,
+            "like_count": 1274,
+            "comment_count": 94,
+            "privacy_status": "public",
+            "publish_date": "2022-08-17T12:35:29Z",
+            "original_category": "28",
+            "created_at": "2022-08-22T05:38:44.564Z",
+            "updated_at": "2022-08-24T19:59:15.331Z",
+            "owner": 47
+        }
+    },
+    {
+        "model": "api.bm",
+        "pk": 21,
+        "fields": {
+            "title": "Django Rest Framework | Serializers & CRUD",
+            "category": "django-RestApi",
+            "bm_type": "yt",
+            "description": "Checkout my new Django Course!\nhttps://dennisivy.teachable.com/p/django-beginners-course\n\nBuilding REST API's with the Django REST Framework. Introduction to DRF and serializing data along with CREATE, UPDATE and DELETE functionality.\n\nFollow me on Twitter: https://twitter.com/dennisivy11\n\nSource code: https://github.com/divanov11/serailization-and-crud-django-rest-framework\n\nDjango REST Framework documentation: https://www.django-rest-framework.org/",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/TmsD8QExZ84/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/TmsD8QExZ84/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/TmsD8QExZ84/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/TmsD8QExZ84/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/TmsD8QExZ84/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "https://youtu.be/TmsD8QExZ84",
+            "video_id": "TmsD8QExZ84",
+            "list_id": null,
+            "list_index": -1,
+            "list_items_count": 0,
+            "channel_id": "UCTZRcDjjkVajGL6wd76UnGg",
+            "channel_title": "Dennis Ivy",
+            "start_at": 122.423564,
+            "keywords": [
+                "Programming",
+                "Software Developer",
+                "Dennis Ivy",
+                "Dennis Ivanov",
+                "DRF",
+                "Django REST Framework",
+                "Rest API",
+                "Django",
+                "Serialization",
+                "CRUD"
+            ],
+            "length": "PT22M40S",
+            "view_count": 284654,
+            "like_count": 5770,
+            "comment_count": 324,
+            "privacy_status": "public",
+            "publish_date": "2020-02-11T05:39:18Z",
+            "original_category": "27",
+            "created_at": "2022-08-22T13:41:57.410Z",
+            "updated_at": "2022-08-24T06:45:17.562Z",
+            "owner": 47
+        }
+    },
+    {
+        "model": "api.bm",
+        "pk": 24,
+        "fields": {
+            "title": "Don't Use a Mouse Anymore! VSCode Shortcuts Tips and Tricks",
+            "category": "VsCode",
+            "bm_type": "yt",
+            "description": "VSCode keyboard shortcuts. How to code faster in VsCode? Must know vscode productivity tips and tricks. Windows and Mac VSCode shortcuts.\n\nFavorite VSCode Extensions: https://youtu.be/ZqW8JT1gt4U\n\nSupport the channel: https://www.youtube.com/channel/UCOxWrX5MIdXIeRNaXC3sqIg/join\nBuy me a coffee: https://www.buymeacoffee.com/lamadev\n\nJoin Lama Dev groups\nFacebook: https://www.facebook.com/groups/lamadev\nInstagram: https://www.instagram.com/lamawebdev\nDiscord: https://discord.gg/yKremu4mPr\n\n00:00 Introduction\n00:26 Opening Project Shortcut\n01:36 VsCode Tab Shortcuts\n03:45 Creating Folder and File Shortcuts\n04:18 Appearance Shortcuts\n05:42 Terminal Shortcuts\n06:20 How to code faster (VsCode shortcuts you must know)\n12:55 VsCode Productivity Tips\n15:40 Touch Typing for Developers\n16:58 Outro",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/jsZoR1kkq6s/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/jsZoR1kkq6s/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/jsZoR1kkq6s/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/jsZoR1kkq6s/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/jsZoR1kkq6s/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "https://www.youtube.com/watch?v=jsZoR1kkq6s",
+            "video_id": "jsZoR1kkq6s",
+            "list_id": null,
+            "list_index": null,
+            "list_items_count": 0,
+            "channel_id": "UCOxWrX5MIdXIeRNaXC3sqIg",
+            "channel_title": "Lama Dev",
+            "start_at": 53.0,
+            "keywords": [
+                "vscode. vscode tips",
+                "vscode shortcuts",
+                "vscode faster",
+                "how to code faster",
+                "vscode tricks",
+                "vscode keyboard shortcuts",
+                "vscode mac",
+                "vscode windows",
+                "vscode productivity",
+                "vscode increase speed",
+                "coding speed",
+                "vscode frontend developer",
+                "vscode js shortcuts",
+                "vscode snippets"
+            ],
+            "length": "PT17M24S",
+            "view_count": 106592,
+            "like_count": 4405,
+            "comment_count": 104,
+            "privacy_status": "public",
+            "publish_date": "2022-02-03T16:52:53Z",
+            "original_category": "28",
+            "created_at": "2022-08-22T20:35:22.780Z",
+            "updated_at": "2022-08-22T20:52:10.271Z",
+            "owner": 47
+        }
+    },
+    {
+        "model": "api.bm",
+        "pk": 38,
+        "fields": {
+            "title": "Django Ecommerce Website | Setup & Templates | Part 1",
+            "category": "django-RestApi",
+            "bm_type": "yt",
+            "description": "Checkout my new Django Course!\nhttps://dennisivy.teachable.com/p/django-beginners-course\n\nFully functional ecommerce website with user and guest checkout capabilities.\n\nDjango + React Ecommerce Course Availible on udemy: https://www.udemy.com/course/django-with-react-an-ecommerce-website/\n\nSource code: \nhttps://codewithsteps.herokuapp.com/project/cd0492f3-ee93-471a-9dbc-b047233336c3/\n\nFollow me on Twitter for updates and more personalized content:\nhttps://twitter.com/dennisivy11\n\nTime Stamps:\n\n00:00 - Introduction\n00:53 - Product Overview\n2:30 - Course Overview\n4:25 - Project Setup\n5:30 - Create Templates\n7:45 - Views/URL's\n12:20 - Static Files\n17:45 - Main Template Setup\n22:50 - Navbar\n28:25 - Style Products Page\n35:25 - Style Cart Page\n48:35 - Style Checkout Page",
+            "thumbnails": {
+                "high": {
+                    "url": "https://i.ytimg.com/vi/_ELCMngbM0E/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                },
+                "maxres": {
+                    "url": "https://i.ytimg.com/vi/_ELCMngbM0E/maxresdefault.jpg",
+                    "width": 1280,
+                    "height": 720
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/_ELCMngbM0E/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "default": {
+                    "url": "https://i.ytimg.com/vi/_ELCMngbM0E/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "standard": {
+                    "url": "https://i.ytimg.com/vi/_ELCMngbM0E/sddefault.jpg",
+                    "width": 640,
+                    "height": 480
+                }
+            },
+            "url": "wwww",
+            "video_id": "_ELCMngbM0E",
+            "list_id": "PL-51WBLyFTg0omnamUjL1TCVov7yDTRng",
+            "list_index": null,
+            "list_items_count": 6,
+            "channel_id": "UCTZRcDjjkVajGL6wd76UnGg",
+            "channel_title": "Dennis Ivy",
+            "start_at": 200.6479028817444,
+            "keywords": [
+                "Programming",
+                "Software Developer",
+                "Dennis Ivy",
+                "Dennis Ivanov",
+                "Django",
+                "Ecommerce",
+                "Website",
+                "python"
+            ],
+            "length": "PT59M36S",
+            "view_count": 453390,
+            "like_count": 8013,
+            "comment_count": 546,
+            "privacy_status": "public",
+            "publish_date": "2020-05-01T01:20:58Z",
+            "original_category": "27",
+            "created_at": "2022-08-23T11:48:46.680Z",
+            "updated_at": "2022-09-15T21:00:50.925Z",
+            "owner": 47
+        }
+    }
+]

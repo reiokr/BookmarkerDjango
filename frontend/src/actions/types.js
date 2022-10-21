@@ -32,6 +32,8 @@ export const STOP_LOADING = 'STOP_LOADING'
 export const DELETE_USER = 'DELETE_USER'
 export const UPDATE_USER_DATA = 'UPDATE_USER_DATA'
 export const UPDATE_USER_OPTIONS = 'UPDATE_USER_OPTIONS'
+export const SENDING_EMAIL = 'SENDING_EMAIL'
+export const EMAIL_ERROR = 'EMAIL_ERROR'
 
 // categories actions
 export const GET_CATEGORIES = 'GET_CATEGORIES'

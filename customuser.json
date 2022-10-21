@@ -1,0 +1,21 @@
+[
+    {
+        "model": "api.customuser",
+        "pk": 47,
+        "fields": {
+            "password": "pbkdf2_sha256$390000$WU2Vz8lU8zFu0KdJuccCC4$WpYoelgMJTiXjPafCy7d2evVZtf5esg6patPCPXEvU0=",
+            "last_login": "2022-09-20T19:07:10.233Z",
+            "is_superuser": true,
+            "is_staff": true,
+            "first_name": null,
+            "last_name": null,
+            "email": "reiokr@gmail.com",
+            "is_active": true,
+            "categories": "[\"games\", \"python\", \"react\", \"django-RestApi\", \"VsCode\", \"css\", \"JavaScript\", \"JavaScript_Animation\", \"Rust\", \"Mern_Stack\", \"NodeJs\", \"HtmlCssJs\", \"PyTorch\", \"JQuery\", \"java\", \"AWS\", \"Authentication\", \"bash\", \"angular\", \"TypeScript\", \"django\", \"PhP\", \"Git\", \"Flask\", \"flutter\", \"hack\", \"DataBase\", \"varia\"]",
+            "date_joined": "2022-08-21T15:36:21.243Z",
+            "date_updated": "2022-09-23T14:00:52.702Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

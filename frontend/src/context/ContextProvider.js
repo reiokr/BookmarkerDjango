@@ -54,16 +54,17 @@ const ContextProvider = ({
         setPreviousTimestamp(prevTime);
     };
 
-
     // closes player and saves bookmark data
     const closeCurrentVideo = () => {
         if (playerInfo) {
             localStorage.setItem('playerVolume', playerInfo?.volume || 50);
             video.video.start_at =
                 playerInfo && Number(vp?.player?.getCurrentTime());
-            if (playerInfo?.playlist?.length){
-                video.video.list_items_count = playerInfo?.playlist?.length||0;
+            if (playerInfo?.playlist?.length) {
+                video.video.list_items_count =
+                    playerInfo?.playlist?.length || 0;
             }
+            video.video.url = playerInfo?.videoUrl;
             const data = {
                 video_data: video?.video,
             };
@@ -75,6 +76,8 @@ const ContextProvider = ({
             setPreviousTimestamp(null);
             setShowtimestamps(false);
             setShowCategories(false);
+            // console.log(playerInfo);
+            // console.log(video.video);
         }
     };
 
@@ -108,7 +111,7 @@ const ContextProvider = ({
         const show_modal = setTimeout(() => {
             setShowInfoModal(false);
             setSaveToCategory(null);
-            setChangeActiveCategory(true)
+            setChangeActiveCategory(true);
         }, 5000);
         return () => {
             clearTimeout(show_modal);

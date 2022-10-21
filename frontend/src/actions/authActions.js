@@ -11,6 +11,8 @@ import {
     SIGN_UP,
     UPDATE_USER_DATA,
     AUTH_ERROR,
+    SENDING_EMAIL,
+    EMAIL_ERROR
 } from './types';
 import { returnErrors, clearErrors } from './errorActions';
 import { returnSuccess } from './successActions';
@@ -97,14 +99,17 @@ const signUpUser = (data) => async (dispatch) => {
     // console.table([...data])
     try {
         dispatch({ type: 'USER_LOADING' });
+        dispatch({ type: SENDING_EMAIL });
         const res = await axios(config);
-        console.log(res.data);
-        dispatch({ type: SIGN_UP });
-        dispatch(returnSuccess(res.data, res.status, 'SIGNUP_SUCCESS'));
-        // localStorage.setItem('ytpw', 840);
-        // localStorage.setItem('playerVolume', 50);
-        window.location = '/login';
+        if (res.data) {
+            dispatch({ type: SIGN_UP });
+            dispatch(returnSuccess(res.data, res.status, 'SIGNUP_SUCCESS'));
+            // localStorage.setItem('ytpw', 840);
+            // localStorage.setItem('playerVolume', 50);
+            // window.location = '/login';
+        }
     } catch (err) {
+        dispatch({ type: EMAIL_ERROR });
         dispatch(
             returnErrors(err.response.data, err.response.status, 'SIGNUP_ERROR')
         );

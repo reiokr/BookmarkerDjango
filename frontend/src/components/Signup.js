@@ -1,35 +1,40 @@
-import { useEffect } from 'react'
-import { connect } from 'react-redux'
-import '../css/signup.css'
-import { useNavigate } from 'react-router'
-import { signUpUser } from '../actions/authActions'
-import ErrorAlert from './ErrorAlert'
-import { clearErrors } from '../actions/errorActions'
-import { clearSuccess } from '../actions/successActions'
-import {useTranslation} from 'react-i18next'
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import '../css/signup.css';
+import { useNavigate } from 'react-router';
+import { signUpUser } from '../actions/authActions';
+import ErrorAlert from './ErrorAlert';
+import { clearErrors } from '../actions/errorActions';
+import { clearSuccess } from '../actions/successActions';
+import { useTranslation } from 'react-i18next';
+import EmailError from './EmailError';
+import SendingEmail from './SendingEmail';
+import SuccessAlert from './SuccessAlert';
 
 const Signup = ({ signUpUser, auth, success, err }) => {
-    let navigate = useNavigate()
-    const {t} = useTranslation()
+    let navigate = useNavigate();
+    const { t } = useTranslation();
     const handleSubmit = (e) => {
-        e.preventDefault()
-        const data = new FormData(e.currentTarget)
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
         // data.append('username', data.get('username'))
-        data.append('email', data.get('email'))
-        data.append('password', data.get('password'))
-        data.append('password2', data.get('password2'))
+        data.append('email', data.get('email'));
+        data.append('password', data.get('password'));
+        data.append('password2', data.get('password2'));
 
-        signUpUser(data)
-    }
+        signUpUser(data);
+    };
 
     useEffect(() => {
-        if (auth.isAuthenticated) navigate('/login')
-    }, [auth.isAuthenticated, navigate])
-// console.log(err)
+        if (auth.isAuthenticated) navigate('/login');
+    }, [auth.isAuthenticated, navigate]);
+    // console.log(err)
     return (
         <>
             <div className="signup-form-container">
-                {/* <SuccessAlert /> */}
+                {success.id==='SIGNUP_SUCCESS' && <SuccessAlert />}
+                {auth.emailError && <EmailError />}
+                {auth.sendingEmail && <SendingEmail />}
                 <h1>{t('Sign Up')}</h1>
                 <form onSubmit={handleSubmit}>
                     {/* <input
@@ -39,7 +44,9 @@ const Signup = ({ signUpUser, auth, success, err }) => {
                         id="username"
                         placeholder="Username"
                       /> */}
-                      {err.id === 'SIGNUP_ERROR' && err.msg.email&& <ErrorAlert />}
+                    {err.id === 'SIGNUP_ERROR' && err.msg.email && (
+                        <ErrorAlert />
+                    )}
                     <input
                         autoComplete="off"
                         type="email"
@@ -47,16 +54,20 @@ const Signup = ({ signUpUser, auth, success, err }) => {
                         id="email"
                         placeholder={t('Email')}
                         required
-                        />
-                        {err.id === 'SIGNUP_ERROR' && err.msg.password &&<ErrorAlert />}
+                    />
+                    {err.id === 'SIGNUP_ERROR' && err.msg.password && (
+                        <ErrorAlert />
+                    )}
                     <input
                         type="password"
                         name="password"
                         id="password"
-                        placeholder={t("Password")}
+                        placeholder={t('Password')}
                         required
-                        />
-                        {err.id === 'SIGNUP_ERROR' && err.msg.password2 && <ErrorAlert />}
+                    />
+                    {err.id === 'SIGNUP_ERROR' && err.msg.password2 && (
+                        <ErrorAlert />
+                    )}
                     <input
                         type="password"
                         name="password2"
@@ -75,15 +86,15 @@ const Signup = ({ signUpUser, auth, success, err }) => {
                 </form>
             </div>
         </>
-    )
-}
+    );
+};
 const mapStateToProps = (state) => ({
     auth: state.auth,
     success: state.success,
     err: state.error,
-})
+});
 export default connect(mapStateToProps, {
     signUpUser,
     clearErrors,
     clearSuccess,
-})(Signup)
+})(Signup);

@@ -6,12 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, JsonResponse)
+from django.http import (Http404, HttpResponse, JsonResponse)
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
-from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
@@ -66,7 +64,7 @@ class RegisterView(generics.CreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
-
+            
             user = CustomUser.objects.get(email=request.data['email'])
             # to get the domain of the current site
             if user:
@@ -86,7 +84,7 @@ class RegisterView(generics.CreateAPIView):
                 return Response({'msg': 'Verification link sent to your email'}, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def activate(request, uidb64, token):
     try:
@@ -246,6 +244,10 @@ class AddBookmark(APIView):
                     commentCount = statistics['commentCount']
                 except KeyError:
                     commentCount = 0
+                try:
+                    viewCount = statistics['viewCount']
+                except KeyError:
+                    viewCount = 0
             # find list id from url
             list_id = extractPlaylistId(format_url)
             # if list id exists fetch playlist items from youtube API
@@ -278,7 +280,7 @@ class AddBookmark(APIView):
                 "start_at": startAt,
                 "keywords": tags,
                 "length": detail['duration'],
-                "view_count": statistics['viewCount'],
+                "view_count": viewCount,
                 "like_count": statistics['likeCount'],
                 "comment_count": commentCount,
                 "privacy_status": bm_status['privacyStatus'],
@@ -531,7 +533,7 @@ class GetVideoData(APIView):
             "category": "default",
             "bm_type": "yt",
             "thumbnails": snip['thumbnails'],
-            "url": 'wwww',
+            "url": 'https://www.youtube.com/watch?v='+video_id,
             "video_id": video_id,
             "list_id": '',
             "list_index": 0,

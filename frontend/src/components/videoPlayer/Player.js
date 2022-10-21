@@ -84,7 +84,7 @@ const Player = ({
                 list_items_count: playerInfo?.playlist?.length || 0,
                 start_at: curr_time,
                 category: currCategory,
-                url: 'https://youtu.be/' + video.video_id,
+                url: playerInfo?.videoUrl,
             };
             if (ytvideo.video_id !== vpId) {
                 setShowlist(false);
@@ -164,7 +164,7 @@ const Player = ({
                     saveVideo(vp?.player?.getCurrentTime());
                 } catch (error) {}
             }
-        }, 20000);
+        }, 5000);
         return () => clearInterval(interval);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

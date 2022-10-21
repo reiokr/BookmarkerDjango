@@ -21,7 +21,7 @@ const SuccessAlert = ({ success, clearSuccess }) => {
         setSuccessmsg('')
         clearSuccess()
         if (success.id === 'SIGNUP_SUCCESS') {
-            setSuccessmsg("Your account created successfully, please log in now")
+            setSuccessmsg("Account created successfully, please check your email for further instructions")
             navigate('/login')
         }
         if (success.id === 204)

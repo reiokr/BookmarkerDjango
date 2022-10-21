@@ -24,6 +24,7 @@ const closeVideo = (id, video, category) => async (dispatch, getState) => {
             video_data.category = category;
             video_data.start_at = video.video_data.start_at;
             video_data.list_items_count = video.video_data.list_items_count;
+            video_data.url = video.video_data.url;
             const data = {
                 video_data: await video_data,
             };
@@ -49,7 +50,7 @@ const updateVideo = (id, video, category) => async (dispatch, getState) => {
             const video_data = response.data;
             video_data.list_id = video.list_id;
             video_data.list_index = video.list_index;
-            video_data.url = 'https://youtu.be/' + video.video_id;
+            video_data.url = video.url;
             video_data.category = category;
             video_data.start_at = video.start_at;
             video_data.list_items_count = video.list_items_count;
