@@ -56,10 +56,11 @@ const ContextProvider = ({
 
     // closes player and saves bookmark data
     const closeCurrentVideo = () => {
+
         if (playerInfo) {
             localStorage.setItem('playerVolume', playerInfo?.volume || 50);
             video.video.start_at =
-                playerInfo && Number(vp?.player?.getCurrentTime());
+                playerInfo && Number(playerInfo.currentTime);
             if (playerInfo?.playlist?.length) {
                 video.video.list_items_count =
                     playerInfo?.playlist?.length || 0;

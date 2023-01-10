@@ -3,8 +3,8 @@ import '../../css/YTvideoPlayer.css';
 import { connect } from 'react-redux';
 import { loadPlayer } from '../../actions/playerActions';
 import Player from './Player';
-import ChannelPlaylists from './ChannelPlaylists';
-import RelatedVideos from './RelatedVideos';
+// import ChannelPlaylists from './ChannelPlaylists';
+// import RelatedVideos from './RelatedVideos';
 import PropTypes from 'prop-types';
 
 const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
@@ -54,7 +54,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
                 cc_load_policy: 0,
                 iv_load_policy: 3,
                 start: videoData?.start_at,
-                // origin: 'https://www.youtube.com/',
+                origin: 'http://localhost:3000',
             },
             events: {
                 onReady: onPlayerReady,
@@ -63,6 +63,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
         });
         if (player && playerWidth && playerVolume) {
             loadPlayer(player);
+            
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +84,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
         } else {
             loadVideoPlayer();
         }
-    }, [loadVideoPlayer]);
+    }, [loadVideoPlayer, videoData]);
 
     // if player state changes start the script
     const onPlayerStateChange = (event) => {
@@ -115,8 +116,8 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
                     {auth.isAuthenticated && <Player ytvideo={video.video} />}
                 </div>
             </div>
-            <ChannelPlaylists />
-            <RelatedVideos />
+            {/* <ChannelPlaylists /> */}
+            {/* <RelatedVideos /> */}
         </div>
     );
 };

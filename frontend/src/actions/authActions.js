@@ -85,7 +85,7 @@ const loadUser = () => async (dispatch, getState) => {
                 dispatch(updateUserOptions(data));
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 };

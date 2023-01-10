@@ -260,9 +260,11 @@ const Player = ({
 
     // if player volume changes save the value to local storage
     useEffect(() => {
-        playerInfo?.volume &&
-            playerInfo?.volume !== null &&
-            localStorage.setItem('playerVolume', vp?.player?.getVolume());
+        if(vp?.player?.v && playerInfo?.volume){
+            playerInfo.volume &&
+            playerInfo.volume !== null &&
+            localStorage.setItem('playerVolume', vp.player.getVolume());
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playerInfo?.volume]);
 

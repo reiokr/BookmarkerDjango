@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import '../css/Categories.css';
 import BmContainer from './BmContainer';
 import PropTypes from 'prop-types';
