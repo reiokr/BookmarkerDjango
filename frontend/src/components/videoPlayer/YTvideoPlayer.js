@@ -15,6 +15,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
         videoindex: video?.video?.list_index,
         listid: video?.video?.list_id,
     });
+
     const [playerWidth, setPlayerWidth] = useState(
         localStorage.getItem('ytpw')
     );

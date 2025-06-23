@@ -26,3 +26,7 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/.env
 frontend/yarn.lock
+utils/__pycache__
+api/__pycache__
+api/migrations
+*.pyc

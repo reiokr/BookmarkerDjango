@@ -260,7 +260,8 @@ const Player = ({
 
     // if player volume changes save the value to local storage
     useEffect(() => {
-        if(vp?.player?.v && playerInfo?.volume){
+        console.log(vp)
+        if(vp?.player?.getVolume && playerInfo?.volume){
             playerInfo.volume &&
             playerInfo.volume !== null &&
             localStorage.setItem('playerVolume', vp.player.getVolume());
