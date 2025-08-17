@@ -256,7 +256,21 @@
 }
 .description-container-player .playlist .private-video {
   pointer-events: none;
+  display: none;
 }
+.description-container-player .playlist .reverse-list {
+  position: absolute;
+  background-color: #d12ff5;
+  z-index: 1000;
+  height: 30px;
+  margin: 5px 0;
+  top: -30px;
+  right: 0;
+}
+.description-container-player .playlist .reverse-list:hover {
+  background-color: #9b5a00;
+}
+
 .description-container-player .playlist > li {
   list-style-type: none;
   position: relative;

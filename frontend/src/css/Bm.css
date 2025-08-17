@@ -113,7 +113,7 @@
 }
 .bm-container .bm-main .bookmark .bm-img {
   -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
   height: inherit;
   width: inherit;
   margin: 0 auto auto auto;
@@ -298,6 +298,7 @@
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   position: absolute;
   bottom: 0;
+  white-space: nowrap;
 }
 .bm-container .bm-main .video-start:hover {
   background: #2c2c2c;
@@ -404,7 +405,11 @@
   gap: 15px;
   margin-bottom: 20px;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text {
   position: relative;
   cursor: default;
   display: flex;
@@ -418,7 +423,11 @@
   transition: 0.3s ease all;
   font-size: 0.9rem;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text::after {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text::after {
   content: "";
   white-space: nowrap;
   position: absolute;
@@ -429,7 +438,11 @@
   font-size: 0.1rem;
   z-index: 11;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text::before {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text::before {
   content: "";
   margin-top: 8px;
   border-left: 5px solid transparent;
@@ -439,25 +452,52 @@
   top: -13px;
   display: none;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text:hover::after {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text:hover::after {
   content: attr(data-text);
   padding: 3px 5px;
   color: #2c2c2c;
   font-size: 0.8rem;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text:hover::before {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text:hover::before {
   display: block;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text span,
-.description-container .description-modal .modal-body .video-info .video-info-text a {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text
+  span,
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text
+  a {
   text-decoration: none;
   color: #f89406;
 }
-.description-container .description-modal .modal-body .video-info .video-info-text svg {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .video-info-text
+  svg {
   margin-right: 5px;
   font-size: 1.2rem;
 }
-.description-container .description-modal .modal-body .video-info .descmodal-link {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .descmodal-link {
   height: 25px;
   color: #d9d9d9;
   display: flex;
@@ -469,7 +509,12 @@
   width: fit-content;
   margin-right: 49px;
 }
-.description-container .description-modal .modal-body .video-info .descmodal-link a {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .descmodal-link
+  a {
   position: relative;
   height: 25px;
   color: #d9d9d9;
@@ -478,11 +523,22 @@
   text-decoration: none;
   align-self: flex-start;
 }
-.description-container .description-modal .modal-body .video-info .descmodal-link a svg {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .descmodal-link
+  a
+  svg {
   position: absolute;
   height: inherit;
 }
-.description-container .description-modal .modal-body .video-info .descmodal-link .youtube-icon {
+.description-container
+  .description-modal
+  .modal-body
+  .video-info
+  .descmodal-link
+  .youtube-icon {
   color: #d9d9d9;
 }
 .description-container .description-modal .modal-body a {
@@ -525,7 +581,7 @@
   max-width: 300px;
   height: auto;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .modal_playlist {

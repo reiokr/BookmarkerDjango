@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.http import (Http404, HttpResponse, JsonResponse)
+from django.http import Http404, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
@@ -19,32 +19,47 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from utils import fetch_youtube, find_playlist
-from utils.fetch_channel import (fetch_channel_next_playlists,
-                                 fetch_channel_playlists,
-                                 search_related_videos)
-from utils.fetch_video_comments import (fetch_next_comments,
-                                        fetch_video_comments, get_next_replies,
-                                        get_replies)
+from utils.fetch_channel import (
+    fetch_channel_next_playlists,
+    fetch_channel_playlists,
+    search_related_videos,
+)
+from utils.fetch_video_comments import (
+    fetch_next_comments,
+    fetch_video_comments,
+    get_next_replies,
+    get_replies,
+)
 from utils.find_playlist import get_playlist_item
 from utils.rate_video import rate_video
 from utils.scraper import scrape_page_metadata
-from utils.urlutils import (checkUrlType, extractPlaylistId, extractVideoId,
-                            formaturl, getStartTime, getUrl)
+from utils.urlutils import (
+    checkUrlType,
+    extractPlaylistId,
+    extractVideoId,
+    formaturl,
+    getStartTime,
+    getUrl,
+)
 
 from .models import Bm, Bml, CustomUser, UserOptions
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (BmlSerializer, BmSerializer, CategorySerializer,
-                          MyTokenObtainPairSerializer, RegisterSerializer,
-                          UserOptionsSerializer, UserSerializer)
+from .serializers import (
+    BmlSerializer,
+    BmSerializer,
+    CategorySerializer,
+    MyTokenObtainPairSerializer,
+    RegisterSerializer,
+    UserOptionsSerializer,
+    UserSerializer,
+)
 from .tokens import account_activation_token
 import pprint
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def getRoutes(request):
-    routes = [
-        '/main/login',
-        '/main/login/refresh'
-    ]
+    routes = ["/main/login", "/main/login/refresh"]
     return Response(routes)
 
 
@@ -64,40 +79,53 @@ class RegisterView(generics.CreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
-            
-            user = CustomUser.objects.get(email=request.data['email'])
+
+            user = CustomUser.objects.get(email=request.data["email"])
             # to get the domain of the current site
             if user:
                 current_site = get_current_site(request)
-                mail_subject = 'Activation link has been sent to your email id'
-                msg = render_to_string('api/acc_active_email.html', {
-                    'user': f'{user.first_name} {user.last_name}',
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                })
+                mail_subject = "Activation link has been sent to your email id"
+                msg = render_to_string(
+                    "api/acc_active_email.html",
+                    {
+                        "user": f"{user.first_name} {user.last_name}",
+                        "domain": current_site.domain,
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "token": account_activation_token.make_token(user),
+                    },
+                )
                 to_email = [user.email]
 
-                send_mail(subject=mail_subject, message=msg,
-                          from_email=settings.EMAIL_HOST_USER, recipient_list=to_email)
+                send_mail(
+                    subject=mail_subject,
+                    message=msg,
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=to_email,
+                )
 
-                return Response({'msg': 'Verification link sent to your email'}, status=status.HTTP_201_CREATED)
+                return Response(
+                    {"msg": "Verification link sent to your email"},
+                    status=status.HTTP_201_CREATED,
+                )
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = CustomUser.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return HttpResponse(
+            "Thank you for your email confirmation. Now you can login your account."
+        )
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse("Activation link is invalid!")
 
 
 class UserList(generics.ListAPIView):
@@ -109,6 +137,7 @@ class UserDetail(APIView):
     """
     Retrieve, update or delete a user instance.
     """
+
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
@@ -161,10 +190,9 @@ class UpdateUserCategories(APIView):
         user = self.get_object(self.request.user.id)
         serializer = CategorySerializer(user, data=request.data)
         # print(request.data['category'])
-        if request.data['category'] != 'category':
-            bookmarks = Bm.objects.filter(
-                category__iexact = request.data['category'])
-            if len(bookmarks)>0:
+        if request.data["category"] != "category":
+            bookmarks = Bm.objects.filter(category__iexact=request.data["category"])
+            if len(bookmarks) > 0:
                 if serializer.is_valid():
                     return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
         if serializer.is_valid():
@@ -212,14 +240,14 @@ class AddBookmark(APIView):
 
     def post(self, request, format=None):
         # validate url
-        format_url = formaturl(request.data['url'])
+        format_url = formaturl(request.data["url"])
         # check the url type
         url_type = checkUrlType(format_url)
         # if youtube video url, get video id
         video_id = extractVideoId(format_url)
         # if youtube video url with time indicator, get time
         startAt = getStartTime(format_url)
-    # if bookmark type is 'yt' fetch video data from youtube API
+        # if bookmark type is 'yt' fetch video data from youtube API
         # if format_url and url_type == "bm":
         #     return
 
@@ -227,25 +255,25 @@ class AddBookmark(APIView):
             if video_id:
                 video_data = fetch_youtube.fetch_Video(video_id)
                 # pprint(video_data)
-                snip = video_data['items'][0]['snippet']
-                detail = video_data['items'][0]['contentDetails']
-                bm_status = video_data['items'][0]['status']
-                statistics = video_data['items'][0]['statistics']
+                snip = video_data["items"][0]["snippet"]
+                detail = video_data["items"][0]["contentDetails"]
+                bm_status = video_data["items"][0]["status"]
+                statistics = video_data["items"][0]["statistics"]
                 # if no tags attribute set tags []
-                if 'tags' in snip:
-                    tags = snip['tags']
+                if "tags" in snip:
+                    tags = snip["tags"]
                 else:
                     tags = []
                 try:
-                    dislikeCount = statistics['dislikeCount']
+                    dislikeCount = statistics["dislikeCount"]
                 except KeyError:
                     dislikeCount = 0
                 try:
-                    commentCount = statistics['commentCount']
+                    commentCount = statistics["commentCount"]
                 except KeyError:
                     commentCount = 0
                 try:
-                    viewCount = statistics['viewCount']
+                    viewCount = statistics["viewCount"]
                 except KeyError:
                     viewCount = 0
             # find list id from url
@@ -253,39 +281,39 @@ class AddBookmark(APIView):
             # if list id exists fetch playlist items from youtube API
             # print(list_id)
             if list_id:
-                playlist = find_playlist.get_playlist_items(list_id, '')
+                playlist = find_playlist.get_playlist_items(list_id, "")
                 # find list item playlist index
-                list_items_count = playlist['pageInfo']['totalResults']
-                for item in playlist['items']:
-                    if item["contentDetails"]['videoId'] == video_id:
-                        list_index = item['snippet']['position']
+                list_items_count = playlist["pageInfo"]["totalResults"]
+                for item in playlist["items"]:
+                    if item["contentDetails"]["videoId"] == video_id:
+                        list_index = item["snippet"]["position"]
             else:
                 list_index = None
                 list_id = None
                 list_items_count = 0
             # create youtube video bookmark object
             data = {
-                'title': snip['title'],
-                'description': snip['description'],
-                "category": request.data['category'],
+                "title": snip["title"],
+                "description": snip["description"],
+                "category": request.data["category"],
                 "bm_type": "yt",
-                "thumbnails": snip['thumbnails'],
-                "url": getUrl(request.data['url']),
+                "thumbnails": snip["thumbnails"],
+                "url": getUrl(request.data["url"]),
                 "video_id": video_id,
                 "list_id": list_id,
                 "list_index": list_index,
                 "list_items_count": list_items_count,
-                "channel_id": snip['channelId'],
-                "channel_title": snip['channelTitle'],
+                "channel_id": snip["channelId"],
+                "channel_title": snip["channelTitle"],
                 "start_at": startAt,
                 "keywords": tags,
-                "length": detail['duration'],
+                "length": detail["duration"],
                 "view_count": viewCount,
-                "like_count": statistics['likeCount'],
+                "like_count": statistics["likeCount"],
                 "comment_count": commentCount,
-                "privacy_status": bm_status['privacyStatus'],
-                "publish_date": snip['publishedAt'],
-                "original_category": snip['categoryId']
+                "privacy_status": bm_status["privacyStatus"],
+                "publish_date": snip["publishedAt"],
+                "original_category": snip["categoryId"],
             }
 
             serializer = BmSerializer(data=data)
@@ -293,23 +321,22 @@ class AddBookmark(APIView):
                 serializer.save(owner=self.request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if format_url and url_type == 'bm':
+        if format_url and url_type == "bm":
             try:
                 # Scrape bookmark data from html
                 bookmark_meta = scrape_page_metadata(format_url)
                 data = {
-                    'title': bookmark_meta['title'],
-                    'description': bookmark_meta['description'],
-                    "category": request.data['category'],
+                    "title": bookmark_meta["title"],
+                    "description": bookmark_meta["description"],
+                    "category": request.data["category"],
                     "bm_type": "bm",
-                    "image_url": bookmark_meta['image_url'],
-                    "url": bookmark_meta['url'],
-
+                    "image_url": bookmark_meta["image_url"],
+                    "url": bookmark_meta["url"],
                 }
-                if not bookmark_meta['title']:
-                    data['title'] = bookmark_meta['sitename']
+                if not bookmark_meta["title"]:
+                    data["title"] = bookmark_meta["sitename"]
 
-                if url_type == 'bm':
+                if url_type == "bm":
                     serializer = BmlSerializer(data=data)
                     if serializer.is_valid():
                         serializer.save(owner=self.request.user)
@@ -317,8 +344,9 @@ class AddBookmark(APIView):
 
             # if connection with provided url filed, raise connection error
             except ConnectionError:
-                return Response(serializer.errors,
-                                status=status.HTTP_504_GATEWAY_TIMEOUT)
+                return Response(
+                    serializer.errors, status=status.HTTP_504_GATEWAY_TIMEOUT
+                )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -327,33 +355,39 @@ class YouTubeList(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self, list_id):
-
-        data = find_playlist.get_playlist_items(list_id, '')
+        data = find_playlist.get_playlist_items(list_id, "")
 
         try:
-            pageToken = data['nextPageToken']
+            pageToken = data["nextPageToken"]
         except:
             pageToken = None
-            items = data['items']
+            items = data["items"]
         while True:
             if not pageToken:
                 break
-            newdata = find_playlist.get_playlist_items(
-                list_id, pageToken)
-            items = data['items']
-            items.extend(newdata['items'])
+            newdata = find_playlist.get_playlist_items(list_id, pageToken)
+            items = data["items"]
+            items.extend(newdata["items"])
             try:
-                pageToken = newdata['nextPageToken']
+                pageToken = newdata["nextPageToken"]
             except:
                 pageToken = None
         playlist = []
         for item in items:
             # duration = fetch_youtube.get_video_duration(item["contentDetails"]['videoId'])
 
-            playlist.append({'list_item_id': item['id'], 'published_at': item['snippet']['publishedAt'],
-                            'title': item['snippet']['title'], 'description': item['snippet']['description'],
-                             'thumbnails': item['snippet']['thumbnails'], 'list_id': list_id,
-                             'list_index': item['snippet']['position'], 'video_id': item["contentDetails"]['videoId']})
+            playlist.append(
+                {
+                    "list_item_id": item["id"],
+                    "published_at": item["snippet"]["publishedAt"],
+                    "title": item["snippet"]["title"],
+                    "description": item["snippet"]["description"],
+                    "thumbnails": item["snippet"]["thumbnails"],
+                    "list_id": list_id,
+                    "list_index": item["snippet"]["position"],
+                    "video_id": item["contentDetails"]["videoId"],
+                }
+            )
         return playlist
 
     def get(self, request, list_id, format=None):
@@ -365,13 +399,13 @@ class VideoCommentsView(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self, video_id):
-        order = self.kwargs.get('order')
+        order = self.kwargs.get("order")
         data = fetch_video_comments(video_id, order)
         return data
 
     def get(self, request, *args, **kwargs):
         try:
-            comments = self.get_object(kwargs.get('video_id'))
+            comments = self.get_object(kwargs.get("video_id"))
             return JsonResponse(comments, safe=False)
         except PermissionDenied:
             raise HTTPError()
@@ -385,7 +419,7 @@ class RepliesView(APIView):
         return data
 
     def get(self, request, *args, **kwargs):
-        comments = self.get_object(kwargs.get('parent_id'))
+        comments = self.get_object(kwargs.get("parent_id"))
         return JsonResponse(comments, safe=False)
 
 
@@ -393,13 +427,13 @@ class RepliesNextPageView(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self, parent_id):
-        page_token = self.kwargs.get('page_token')
+        page_token = self.kwargs.get("page_token")
         data = get_next_replies(parent_id, page_token)
 
         return data
 
     def get(self, request, *args, **kwargs):
-        comments = self.get_object(kwargs.get('parent_id'))
+        comments = self.get_object(kwargs.get("parent_id"))
         return JsonResponse(comments, safe=False)
 
 
@@ -407,14 +441,14 @@ class NextPageCommentsView(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self, video_id):
-        order = self.kwargs.get('order')
-        page_token = self.kwargs.get('page_token')
+        order = self.kwargs.get("order")
+        page_token = self.kwargs.get("page_token")
         data = fetch_next_comments(video_id, page_token, order)
 
         return data
 
     def get(self, request, *args, **kwargs):
-        comments = self.get_object(kwargs.get('video_id'))
+        comments = self.get_object(kwargs.get("video_id"))
         return JsonResponse(comments, safe=False)
 
 
@@ -432,12 +466,14 @@ class BmListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-
-        category = self.kwargs['category']
+        category = self.kwargs["category"]
         if not category:
             return
-        queryset = Bm.objects.filter(category__iexact=category).filter(
-            owner_id=self.request.user.id).order_by('updated_at')
+        queryset = (
+            Bm.objects.filter(category__iexact=category)
+            .filter(owner_id=self.request.user.id)
+            .order_by("updated_at")
+        )
         return queryset
 
     def perform_create(self, serializer):
@@ -450,16 +486,18 @@ class BmListSearchView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        category = self.kwargs['category']
+        category = self.kwargs["category"]
         if not category:
             user = CustomUser.objects.all(pk=self.request.user.id)
             print(user.name)
-        search = self.kwargs['search']
+        search = self.kwargs["search"]
         queryset = Bm.objects.filter(category__iexact=category).filter(
-            owner_id=self.request.user.id)
+            owner_id=self.request.user.id
+        )
 
         qs = queryset.filter(title__icontains=search) | queryset.filter(
-            description__icontains=search)
+            description__icontains=search
+        )
         return qs
 
     def perform_create(self, serializer):
@@ -485,12 +523,12 @@ class BmDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
-        data = request.data['video_data']
+        data = request.data["video_data"]
         # data['start_at'] = request.data['start_at']
-        if not data['list_id']:
-            data['list_id'] = None
-        if not data['list_index']:
-            data['list_index'] = None
+        if not data["list_id"]:
+            data["list_id"] = None
+        if not data["list_index"]:
+            data["list_index"] = None
         bm = self.get_object(pk)
         serializer = BmSerializer(bm, data=data)
         if serializer.is_valid():
@@ -512,42 +550,42 @@ class GetVideoData(APIView):
 
     def get(self, request, video_id, format=None):
         video_data = self.get_object(video_id)
-        snip = video_data['items'][0]['snippet']
-        detail = video_data['items'][0]['contentDetails']
-        bm_status = video_data['items'][0]['status']
-        statistics = video_data['items'][0]['statistics']
+        snip = video_data["items"][0]["snippet"]
+        detail = video_data["items"][0]["contentDetails"]
+        bm_status = video_data["items"][0]["status"]
+        statistics = video_data["items"][0]["statistics"]
         # print(video_data)
 
-        if 'tags' in snip:
-            tags = snip['tags']
+        if "tags" in snip:
+            tags = snip["tags"]
         else:
             tags = []
         try:
-            commentCount = statistics['commentCount']
+            commentCount = statistics["commentCount"]
         except KeyError:
             commentCount = 0
 
         data = {
-            'title': snip['title'],
-            'description': snip['description'],
+            "title": snip["title"],
+            "description": snip["description"],
             "category": "default",
             "bm_type": "yt",
-            "thumbnails": snip['thumbnails'],
-            "url": 'https://www.youtube.com/watch?v='+video_id,
+            "thumbnails": snip["thumbnails"],
+            "url": "https://www.youtube.com/watch?v=" + video_id,
             "video_id": video_id,
-            "list_id": '',
+            "list_id": "",
             "list_index": 0,
-            "channel_id": snip['channelId'],
-            "channel_title": snip['channelTitle'],
+            "channel_id": snip["channelId"],
+            "channel_title": snip["channelTitle"],
             "start_at": 0,
             "keywords": tags,
-            "length": detail['duration'],
-            "view_count": statistics['viewCount'],
-            "like_count": statistics['likeCount'],
+            "length": detail["duration"],
+            "view_count": statistics["viewCount"],
+            "like_count": statistics["likeCount"],
             "comment_count": commentCount,
-            "privacy_status": bm_status['privacyStatus'],
-            "publish_date": snip['publishedAt'],
-            "original_category": snip['categoryId'],
+            "privacy_status": bm_status["privacyStatus"],
+            "publish_date": snip["publishedAt"],
+            "original_category": snip["categoryId"],
         }
         serializer = BmSerializer(data=data)
         if serializer.is_valid():
@@ -570,7 +608,7 @@ class ChannelNextPlaylistsView(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get(self, request, channel_id, *args, **kwargs):
-        token = kwargs.get('token')
+        token = kwargs.get("token")
         next_playlists = fetch_channel_next_playlists(channel_id, token)
         return JsonResponse(next_playlists, safe=False)
 

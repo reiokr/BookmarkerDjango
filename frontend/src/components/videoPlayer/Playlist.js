@@ -19,12 +19,17 @@ const Playlist = ({
     const { showlist } = useStateContext();
     const [playlist, setPlaylist] = useState(pl?.items);
     const [videoid] = useState(video.video.id);
+    const reverseList = () => {
+        const reversed = playlist?.reverse();
+        setPlaylist(reversed);
+        //  console.log(video.list);
 
+    };
     useEffect(() => {
         if (video?.list !== null) {
             setPlaylist(video.list.items);
         }
-    }, [video.list]);
+    }, [video.list, reverseList]);
 
     const handleListItem = (index) => {
         if (vp?.player.playVideoAt && index) {
@@ -34,6 +39,8 @@ const Playlist = ({
         }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+
 
     const updateVideoData = useCallback(() => {
         // update database
@@ -62,11 +69,13 @@ const Playlist = ({
         vp?.player?.playerInfo?.videoData?.video_id,
     ]);
 
+
     return (
         <>
             {video.list === null && showlist && <LdsFacebook />}
             {showlist && video.list !== null ? (
                 <div className="playlist playlist-visible">
+                    <button className='reverse-list btn' onClick={reverseList}>Reverse List</button>
                     {playlist !== null &&
                         showlist &&
                         vp?.player?.playerInfo &&
@@ -86,6 +95,7 @@ const Playlist = ({
                                     key={index}
                                     onClick={() => {
                                         if (item.title === 'Private video') {
+                                            
                                         } else {
                                             handleListItem(item.list_index);
                                             setCurrIndex(item.list_index);

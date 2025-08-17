@@ -21,6 +21,7 @@ const Bm = ({ item, deleteItem, data }) => {
   };
 
   useEffect(() => {
+
     if (title) {
       setTitleLoaded(true);
     } else setTitleLoaded(false);
