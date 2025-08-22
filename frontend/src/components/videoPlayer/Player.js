@@ -145,6 +145,7 @@ const Player = ({
 
     useEffect(() => {
         setCurrVideoId((prev) => video.video.video_id);
+        
     }, [video.video.video_id]);
 
     useEffect(() => {
