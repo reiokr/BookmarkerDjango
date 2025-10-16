@@ -107,10 +107,6 @@ To run tests:
 python manage.py test
 ```
 
-## Contributing
-
-Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
