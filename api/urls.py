@@ -9,7 +9,8 @@ from .views import (AddBookmark, AddPlaylistTOBookmarksView, BmDetailView,
                     MyObtainTokenPairView, NextPageCommentsView, OptionsView,
                     RateVideoView, RegisterView, RepliesNextPageView,
                     RepliesView, UpdateUserCategories, UserDetail,
-                    VideoCommentsView, YouTubeList, activate, getRoutes)
+                    VideoCommentsView, YouTubeList, activate, getCurrentUser,
+                    getRoutes)
 
 urlpatterns = [
     path('', getRoutes),
@@ -20,6 +21,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('users/<int:pk>', UserDetail.as_view(), name='user_detail'),
     path('user/options', OptionsView.as_view(), name='options'),
+    path('user/me', getCurrentUser, name='current_user'),
     path('user/categories/<int:pk>',
          UpdateUserCategories.as_view(), name='user_categories'),
     path('bm', AddBookmark.as_view(), name='add_bookmark'),

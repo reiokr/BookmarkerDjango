@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,6 +58,13 @@ from .tokens import account_activation_token
 def getRoutes(request):
     routes = ["/main/login", "/main/login/refresh"]
     return Response(routes)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getCurrentUser(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
