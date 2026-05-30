@@ -32,7 +32,7 @@ class CustomUser(AbstractUser):
 class UserOptions(models.Model):
     theme = models.IntegerField(default=0)
     localization = models.CharField(max_length=2, default='en')
-    settings = models.JSONField()
+    settings = models.JSONField(default=dict)
     owner = models.OneToOneField(
         'CustomUser', related_name='options', on_delete=models.CASCADE)
 
@@ -54,9 +54,9 @@ class Bm(models.Model):
     start_at = models.FloatField(blank=True, default=0, null=True)
     keywords = models.JSONField()
     length = models.CharField(max_length=50)
-    view_count = models.IntegerField()
-    like_count = models.IntegerField()
-    comment_count = models.IntegerField()
+    view_count = models.IntegerField(default=0)
+    like_count = models.IntegerField(default=0)
+    comment_count = models.IntegerField(default=0)
     privacy_status = models.CharField(max_length=50)
     publish_date = models.DateTimeField(auto_now=False, auto_now_add=False)
     original_category = models.CharField(max_length=50)

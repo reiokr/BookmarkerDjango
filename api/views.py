@@ -1,8 +1,6 @@
-from itertools import chain
 from urllib.error import HTTPError
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -54,7 +52,6 @@ from .serializers import (
     UserSerializer,
 )
 from .tokens import account_activation_token
-import pprint
 
 
 @api_view(["GET"])
@@ -116,7 +113,7 @@ def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = CustomUser.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
@@ -144,7 +141,7 @@ class UserDetail(APIView):
         if self.request.user.id == pk:
             try:
                 return CustomUser.objects.get(pk=pk)
-            except User.DoesNotExist:
+            except CustomUser.DoesNotExist:
                 raise Http404
         else:
             raise PermissionDenied()
@@ -176,7 +173,7 @@ class UpdateUserCategories(APIView):
         if self.request.user.id == pk:
             try:
                 return CustomUser.objects.get(pk=pk)
-            except User.DoesNotExist:
+            except CustomUser.DoesNotExist:
                 raise Http404
         else:
             raise PermissionDenied()
@@ -208,8 +205,8 @@ class OptionsView(APIView):
         serializer.save(owner=self.request.user)
 
     def get(self, request, format=None):
-        options = UserOptions.objects.all()
-        serializer = UserOptionsSerializer(options)
+        options = UserOptions.objects.filter(owner=request.user.id)
+        serializer = UserOptionsSerializer(options, many=True)
         return Response(serializer.data)
 
     def put(self, request, format=None):
@@ -232,11 +229,8 @@ class AddBookmark(APIView):
 
     def get(self, request, format=None):
         bookmarks = Bm.objects.all()
-        # bookmark_link = Bml.objects.all()
-        serializer = BmSerializer(bookmarks)
-        # bml_serializer = BmlSerializer(bookmark_link)
-        # return Response(list(chain(serializer.data, bml_serializer.data)))
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = BmSerializer(bookmarks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         # validate url
@@ -391,8 +385,8 @@ class YouTubeList(APIView):
         return playlist
 
     def get(self, request, list_id, format=None):
-        list = self.get_object(list_id)
-        return JsonResponse(list, safe=False)
+        playlist_data = self.get_object(list_id)
+        return JsonResponse(playlist_data, safe=False)
 
 
 class VideoCommentsView(APIView):
@@ -408,7 +402,7 @@ class VideoCommentsView(APIView):
             comments = self.get_object(kwargs.get("video_id"))
             return JsonResponse(comments, safe=False)
         except PermissionDenied:
-            raise HTTPError()
+            raise Http404
 
 
 class RepliesView(APIView):
@@ -466,9 +460,9 @@ class BmListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        category = self.kwargs["category"]
+        category = self.kwargs.get("category")
         if not category:
-            return
+            return Bm.objects.none()
         queryset = (
             Bm.objects.filter(category__iexact=category)
             .filter(owner_id=self.request.user.id)
@@ -488,8 +482,7 @@ class BmListSearchView(generics.ListCreateAPIView):
     def get_queryset(self):
         category = self.kwargs["category"]
         if not category:
-            user = CustomUser.objects.all(pk=self.request.user.id)
-            print(user.name)
+            user = CustomUser.objects.get(pk=self.request.user.id)
         search = self.kwargs["search"]
         queryset = Bm.objects.filter(category__iexact=category).filter(
             owner_id=self.request.user.id
@@ -601,7 +594,7 @@ class ChannelPlaylistsView(APIView):
             playlists = fetch_channel_playlists(channel_id)
             return JsonResponse(playlists, safe=False)
         except PermissionDenied:
-            raise HTTPError()
+            raise Http404
 
 
 class ChannelNextPlaylistsView(APIView):
@@ -621,7 +614,7 @@ class AddPlaylistTOBookmarksView(APIView):
             bookmark = get_playlist_item(pl_id)
             return JsonResponse(bookmark, safe=False)
         except PermissionDenied:
-            raise HTTPError()
+            raise Http404
 
 
 class LoadRelatedVideosView(APIView):
@@ -632,4 +625,4 @@ class LoadRelatedVideosView(APIView):
             relatedVideos = search_related_videos(video_id)
             return JsonResponse(relatedVideos, safe=False)
         except PermissionDenied:
-            raise HTTPError()
+            raise Http404

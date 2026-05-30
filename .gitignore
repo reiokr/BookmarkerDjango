@@ -30,3 +30,5 @@ utils/__pycache__
 api/__pycache__
 api/migrations
 *.pyc
+django.log
+react.log

@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from threading import local
-
 import environ
 
 env = environ.Env(
@@ -37,7 +35,7 @@ SECRET_KEY = env('SECRET_KEY')
 YOUTUBE_API_KEY = env('YOUTUBE_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
     'localhost',

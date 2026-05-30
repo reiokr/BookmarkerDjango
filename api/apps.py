@@ -12,7 +12,6 @@ class ApiConfig(AppConfig):
 
         def addCategory(sender, **kwargs):
             user = kwargs['instance']
-            if kwargs['created']:
-                user['categories'].append('default')
-
-        return
+            if kwargs.get('created'):
+                user.categories.append('default')
+                user.save()
