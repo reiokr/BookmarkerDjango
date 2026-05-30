@@ -7,8 +7,8 @@ set -Euo pipefail
 
 # Funktsioon veateadete jaoks
 error() {
-    local exit_code=$?
-    echo "❌ Viga reas $BASH_LINENO: $BASH_COMMAND (kood: $exit_code)" >&2
+  local exit_code=$?
+  printf "${RED}❌ Viga reas $BASH_LINENO: $BASH_COMMAND (kood: $exit_code)\n" >&2
 }
 
 # Püüame vead kinni, aga ei tapa skripti kohe
@@ -19,17 +19,17 @@ trap error ERR
 LANG_CODE=""
 for arg in "$@"; do
   case "$arg" in
-    --lang=*) LANG_CODE="${arg#*=}";;
+  --lang=*) LANG_CODE="${arg#*=}" ;;
   esac
 done
 if [[ -z "$LANG_CODE" ]]; then
   if [[ -n "${RUN_LANG:-}" ]]; then
     LANG_CODE="$RUN_LANG"
   else
-    LANG_CODE="${LANG%%_*}"   # nt en_US.UTF-8 -> en
+    LANG_CODE="${LANG%%_*}" # nt en_US.UTF-8 -> en
   fi
 fi
-case "$LANG_CODE" in et|en|fr) ;; *) LANG_CODE="en";; esac
+case "$LANG_CODE" in et | en | fr) ;; *) LANG_CODE="en" ;; esac
 
 # --- Tõlked ---
 # Kasutame võtmeid (nt start_django, wait_react_url) ja lühikesi lauseid.
@@ -74,7 +74,7 @@ declare -A T_fr=(
 )
 
 # --- Tõlkefunktsioonid ---
-t() {  # t KEY -> tekst
+t() { # t KEY -> tekst
   local key="$1"
   declare -n map="T_${LANG_CODE}"
   local val="${map[$key]}"
@@ -85,7 +85,8 @@ t() {  # t KEY -> tekst
   printf "%s" "$val"
 }
 tf() { # tf KEY args... -> vormindatud tekst (printf-stiilis)
-  local key="$1"; shift
+  local key="$1"
+  shift
   printf "$(t "$key")" "$@"
 }
 
@@ -93,7 +94,7 @@ tf() { # tf KEY args... -> vormindatud tekst (printf-stiilis)
 PROJECT_DIR="/home/rk/projektid/BookmarkerDjango"
 DJANGO_LOG="$PROJECT_DIR/django.log"
 REACT_LOG="$PROJECT_DIR/react.log"
-REACT_URL="http://192.168.0.103:3000"
+REACT_URL="http://localhost:3000"
 
 # === Värvid ===
 GREEN="\033[32m"
@@ -104,32 +105,36 @@ RESET="\033[0m"
 
 # kui terminal ei toeta värve siis lülitab välja
 if [[ ! -t 1 ]]; then
-    GREEN=""; YELLOW=""; RED=""; BLUE=""; RESET=""
+  GREEN=""
+  YELLOW=""
+  RED=""
+  BLUE=""
+  RESET=""
 fi
 
 # Kontrollime kas paketid on olemas, et skript ja rakendus töötaks
 for cmd in python3 npm curl xdg-open; do
-    command -v "$cmd" >/dev/null 2>&1 || {
-        printf "${RED}❌ Viga: Käsk '%s' puudub PATH-ist.${RESET}\n" "$cmd"
-        exit 1
-    }
+  command -v "$cmd" >/dev/null 2>&1 || {
+    printf "${RED}❌ Viga: Käsk '%s' puudub PATH-ist.${RESET}\n" "$cmd"
+    exit 1
+  }
 done
 
 # ---Protsessigrupi ID ja Cleanup: tapame kogu protsessigrupi, kui terminal sulgub ---
 PGID="$$"
 CLEANED=0
 cleanup() {
-  echo "⚠️ cleanup käivitati, põhjus: $reason"
+  printf "${YELLOW}⚠️ cleanup käivitati, põhjus: $reason\n"
   jobs -l
   local reason="${1:-EXIT}"
-  if (( CLEANED )); then exit 0; fi
+  if ((CLEANED)); then exit 0; fi
   CLEANED=1
   # Väldi rekursiooni
   trap - HUP INT TERM EXIT
 
-  echo -e "\n⏹ Peatan serverid (põhjus: $reason)..."
-    echo "   Django PID: $DJANGO_PID"
-    echo "   React  PID: $REACT_PID"
+  printf -e "${RED}\n⏹ Peatan serverid (põhjus: $reason)...\n"
+  printf "   Django PID: $DJANGO_PID\n"
+  printf "   React  PID: $REACT_PID\n"
 
   # Saada esmalt viisakas lõpetamine
   kill -TERM -"$PGID" 2>/dev/null || true
@@ -151,7 +156,7 @@ cd "$PROJECT_DIR" || exit
 source .venv/bin/activate
 
 # Django serveri logi ainult faili salvestatuna
-python3 manage.py runserver > "$DJANGO_LOG" 2>&1 &
+python3 manage.py runserver >"$DJANGO_LOG" 2>&1 &
 
 # Django serveri logi faili salvestatuna ja terminalis reaalajas
 #python3 manage.py runserver 2>&1 \
@@ -163,28 +168,28 @@ DJANGO_PID=$!
 # --- React käivitamine ---
 printf "${BLUE} %s\n" "$(t start_react)"
 cd "$PROJECT_DIR/frontend" || exit
-npm start > "$REACT_LOG" 2>&1 &
+npm start >"$REACT_LOG" 2>&1 &
 REACT_PID=$!
 
 # --- Ootame Reacti valmimist ---
 printf "${YELLOW} %s\n" "$(tf wait_react_url "$REACT_URL")"
 
-set +e  # lubame mitte-null koodid ilma skripti peatamata
+set +e # lubame mitte-null koodid ilma skripti peatamata
 timeout=60
 elapsed=0
 
 until curl -s -o /dev/null -w "%{http_code}" "$REACT_URL" | grep -qE "200|30[0-9]"; do
-    sleep 1
-    ((++elapsed))  # pre-increment, ei anna esimesel korral exit code 1
-    printf "${BLUE} %s %s %s\n" "$(t waited)" "$elapsed" "$(t seconds)"
+  sleep 1
+  ((++elapsed)) # pre-increment, ei anna esimesel korral exit code 1
+  printf "${BLUE} %s %s %s\n" "$(t waited)" "$elapsed" "$(t seconds)"
 
-    if (( elapsed >= timeout )); then
-        printf "${RED}❌ React ei käivitunud %s sekundi jooksul.${RESET}\n" "$timeout"
-        set -e  # taastame range režiimi enne cleanup'i
-        cleanup "React timeout"
-    fi
+  if ((elapsed >= timeout)); then
+    printf "${RED}❌ React ei käivitunud %s sekundi jooksul.${RESET}\n" "$timeout"
+    set -e # taastame range režiimi enne cleanup'i
+    cleanup "React timeout"
+  fi
 done
-set -e  # taastame range režiimi
+set -e # taastame range režiimi
 
 # --- Ava brauser ---
 printf "${GREEN} %s\n" "$(t react_ready)"
@@ -199,5 +204,5 @@ printf "${YELLOW} %s\n" "$(t stop_hint)"
 # Hoia skript elus kuni mõni protsess lõpeb; trap hoolitseb sulgemise eest
 printf "${BLUE} %s\n" "$(t waiting_all)"
 while true; do
-    wait -n || break
+  wait -n || break
 done
