@@ -1,34 +1,38 @@
-
-env
-node_modules
+# Environment
 .env
-.prettierrc
-# dependencies
-frontend/node_modules
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# Frontend
+frontend/build/
+frontend/coverage/
 frontend/.pnp
 frontend/.pnp.js
 
-# testing
-frontend/coverage
-
-# production
-frontend/build
-
-# misc
-frontend/.DS_Store
+# Frontend env
 frontend/.env.local
 frontend/.env.development.local
 frontend/.env.test.local
 frontend/.env.production.local
 
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/.env
-frontend/yarn.lock
-utils/__pycache__
-api/__pycache__
-api/migrations
-*.pyc
-django.log
-react.log
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

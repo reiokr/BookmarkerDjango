@@ -1,112 +1,147 @@
 # BookmarkerDjango
 
-BookmarkerDjango is a Django-based web application designed to manage and organize your bookmarks efficiently. It allows users to save, categorize, and retrieve their favorite links with ease.
+BookmarkerDjango on Django-põhine veebirakendus järjehoidjate haldamiseks. Salvesta, kategoriseeri ja lemmikute oma lemmiklinke lihtsalt.
 
-## Features
+## Funktsioonid
 
-- User authentication and registration
-- Add, edit, and delete bookmarks
-- Categorize bookmarks into folders
-- Search bookmarks by title or URL
-- Responsive design for mobile and desktop
+- Kasutaja autentimine ja registreerimine
+- Järjehoidjate lisamine, muutmine ja kustutamine
+- Järjehoidjate kategoriseerimine kaustadesse
+- Otsing pealkirja või URL-i järgi
+- YouTube videote integreerimine ja kommentaarid
+- Reageeriv disain mobiili ja lauaarvuti jaoks
 
-## Installation
+## Paigaldus
 
-### Prerequisites
+### Eeldused
 
-- Python 3.8+
-- Django 3.2+
-- Node.js and npm (for frontend dependencies)
+- Python 3.14+
+- Django 6.0+
+- PostgreSQL
+- Node.js ja npm (frontend sõltuvuste jaoks)
+- YouTube Data API võti
 
-### Clone the repository
+### Repo kloonimine
 
 ```bash
 git clone https://github.com/reiokr/BookmarkerDjango.git
 cd BookmarkerDjango
 ```
 
-### Backend setup
+### .env seadistus
 
-1. Create a virtual environment:
+Kopeeri mall ja täida oma andmed:
+
+```bash
+cp .env.example .env
+```
+
+Redigeeri `.env` faili ja täida:
+- `SECRET_KEY` - Django saladusvõti
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD` - andmebaasi andmed
+- `YOUTUBE_API_KEY` - YouTube Data API võti
+- `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` - e-posti konto andmed
+
+### Backend seadistus
+
+1. Loo virtuaalkeskkond:
 
    ```bash
-   python -m venv venv
+   python -m venv .venv
    ```
 
-2. Activate the virtual environment:
+2. Aktiveeri virtuaalkeskkond:
 
-   - On Windows:
-
-     ```bash
-     venv\Scripts\activate
-     ```
-
-   - On macOS/Linux:
+   - Windows:
 
      ```bash
-     source venv/bin/activate
+     .venv\Scripts\activate
      ```
 
-3. Install backend dependencies:
+   - macOS/Linux:
+
+     ```bash
+     source .venv/bin/activate
+     ```
+
+3. Paigalda backend sõltuvused:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Apply database migrations:
+4. Rakenda andmebaasi migratsioonid:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Create a superuser to access the admin panel:
+5. Loo superkasutaja admin paneeli jaoks:
 
    ```bash
    python manage.py createsuperuser
    ```
 
-### Frontend setup
+### Frontend seadistus
 
-1. Navigate to the `frontend` directory:
+1. Mine `frontend` kataloogi:
 
    ```bash
    cd frontend
    ```
 
-2. Install frontend dependencies:
+2. Paigalda frontend sõltuvused:
 
    ```bash
    npm install
    ```
 
-3. Build the frontend assets:
+3. Kompileeri frontend varad:
 
    ```bash
    npm run build
    ```
 
-4. Return to the root directory:
+4. Naase juurkataloogi:
 
    ```bash
    cd ..
    ```
 
-### Run the development server
+## Käivitamine
+
+### Tootmine
 
 ```bash
 python manage.py runserver
 ```
 
-Visit `http://127.0.0.1:8000/` in your browser to access the application.
+Külasta `http://127.0.0.1:8000/` oma brauseris.
 
-## Testing
+### Arendus
 
-To run tests:
+Ava kaks terminali akent:
+
+**Terminal 1 - Django server:**
+```bash
+source .venv/bin/activate
+python manage.py runserver
+```
+
+**Terminal 2 - React dev server:**
+```bash
+cd frontend
+npm start
+```
+
+## testimine
+
+Testide käivitamiseks:
 
 ```bash
 python manage.py test
 ```
 
-## License
+## Litsents
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+See projekt on litsentseeritud MIT litsentsi alla - vaata [LICENSE](LICENSE) faili üksikasju.

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
+    'django.contrib.postgres',
     'bookmarker.apps.BookmarkerConfig',
     'frontend',
     'rest_framework',
