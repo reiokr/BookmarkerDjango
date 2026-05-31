@@ -34,6 +34,9 @@ SECRET_KEY = env('SECRET_KEY')
 
 YOUTUBE_API_KEY = env('YOUTUBE_API_KEY')
 
+# Mitu playlisti kontrollida automaatsel playlisti tuvastusel (0 = keelatud)
+YT_PLAYLIST_AUTO_DETECT_MAX = 5
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
@@ -60,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'api.apps.ApiConfig',
+    'django_extensions',
 ]
 
 REST_FRAMEWORK = {
@@ -107,6 +111,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'bookmarker.middleware.SimpleCorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

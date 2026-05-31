@@ -62,7 +62,7 @@ const TimestampModal = ({ vp, video }) => {
                 if (start_at === 0) {
                     start_at = 0.1
                 }
-                vp?.player && vp?.player?.seekTo(start_at, true)
+                typeof vp?.player?.seekTo === 'function' && vp?.player?.seekTo(start_at, true)
             })
         })
     })

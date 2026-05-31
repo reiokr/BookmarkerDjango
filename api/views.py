@@ -289,9 +289,16 @@ class AddBookmark(APIView):
                     if item["contentDetails"]["videoId"] == video_id:
                         list_index = item["snippet"]["position"]
             else:
-                list_index = None
-                list_id = None
-                list_items_count = 0
+                found = find_playlist.findPlaylistId(video_id) if video_id else None
+                if found:
+                    list_id = found["playlist_id"]
+                    list_index = found["position"]
+                    pl_items = find_playlist.get_playlist_items(list_id, "")
+                    list_items_count = pl_items["pageInfo"]["totalResults"]
+                else:
+                    list_index = None
+                    list_id = None
+                    list_items_count = 0
             # create youtube video bookmark object
             data = {
                 "title": snip["title"],
@@ -319,6 +326,10 @@ class AddBookmark(APIView):
 
             serializer = BmSerializer(data=data)
             if serializer.is_valid():
+                cat = request.data.get("category", "").strip()
+                if cat and cat.lower() not in [c.lower() for c in request.user.categories]:
+                    request.user.categories.append(cat)
+                    request.user.save(update_fields=["categories"])
                 serializer.save(owner=self.request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -340,6 +351,10 @@ class AddBookmark(APIView):
                 if url_type == "bm":
                     serializer = BmlSerializer(data=data)
                     if serializer.is_valid():
+                        cat = request.data.get("category", "").strip()
+                        if cat and cat.lower() not in [c.lower() for c in request.user.categories]:
+                            request.user.categories.append(cat)
+                            request.user.save(update_fields=["categories"])
                         serializer.save(owner=self.request.user)
                         return Response(status=status.HTTP_201_CREATED)
 
@@ -633,3 +648,34 @@ class LoadRelatedVideosView(APIView):
             return JsonResponse(relatedVideos, safe=False)
         except PermissionDenied:
             raise Http404
+
+
+def extensionLogin(request):
+    email = request.GET.get("email", "")
+    password = request.GET.get("password", "")
+    html = f"""<!DOCTYPE html>
+<html><body><script>
+(async function(){{
+  var r = await fetch('/api/login/', {{
+    method:'POST',
+    headers:{{'Content-Type':'application/json'}},
+    body: JSON.stringify({{email:{email and '"'+email.replace('"','')+'"' or '""'}, password:{password and '"'+password.replace('"','')+'"' or '""'}}})
+  }});
+  var result = {{}};
+  if(!r.ok) {{
+    result = {{_loginResult:{{ok:false, error:'HTTP '+r.status}}}};
+  }} else {{
+    var d = await r.json();
+    if(!d.access) {{
+      result = {{_loginResult:{{ok:false, error:'No access token'}}}};
+    }} else {{
+      var m = await fetch('/api/user/me', {{headers:{{Authorization:'Bearer '+d.access}}}});
+      var user=null, cats=[];
+      if(m.ok) {{ var md = await m.json(); user = md.first_name||md.email; cats = md.categories||[]; }}
+      result = {{_loginResult:{{ok:true, user:user, categories:cats, accessToken:d.access, serverUrl:window.location.origin}}}};
+    }}
+  }}
+  window.parent.postMessage(result, '*');
+}})();
+</script></body></html>"""
+    return HttpResponse(html)

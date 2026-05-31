@@ -9,13 +9,14 @@ from .views import (AddBookmark, AddPlaylistTOBookmarksView, BmDetailView,
                     MyObtainTokenPairView, NextPageCommentsView, OptionsView,
                     RateVideoView, RegisterView, RepliesNextPageView,
                     RepliesView, UpdateUserCategories, UserDetail,
-                    VideoCommentsView, YouTubeList, activate, getCurrentUser,
-                    getRoutes)
+                    VideoCommentsView, YouTubeList, activate, extensionLogin,
+                    getCurrentUser, getRoutes)
 
 urlpatterns = [
     path('', getRoutes),
     # path('token', TokenObtainPairView. as_view(), name='token_obtain_pair'),
     # path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('extension-login/', extensionLogin, name='extension_login'),
     path('login/',  MyObtainTokenPairView.as_view(), name='my_token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegisterView.as_view(), name='auth_register'),

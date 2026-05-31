@@ -18,6 +18,9 @@ import ContextProvider from './context/ContextProvider'
 function App() {
     useEffect(() => {
         store.dispatch(loadUser())
+        const onFocus = () => store.dispatch(loadUser())
+        window.addEventListener('focus', onFocus)
+        return () => window.removeEventListener('focus', onFocus)
     })
 
     return (

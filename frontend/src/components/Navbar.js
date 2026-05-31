@@ -40,13 +40,16 @@ const Navbar = ({
     ]
 
     // if video player is active close video and update
+    const playerInfo = vp?.player?.playerInfo
     const closeCurrentVideo = () => {
-        if (vp.player.playerInfo) {
-            localStorage.setItem('playerVolume', vp?.player?.playerInfo?.volume)
-            const startAt = Number(vp?.player?.playerInfo?.currentTime)
+        if (playerInfo) {
+            localStorage.setItem('playerVolume', playerInfo?.volume)
+            const startAt = Number(playerInfo?.currentTime)
             const data = {
-                video_data: video.video,
-                start_at: startAt,
+                video_data: {
+                    ...video.video,
+                    start_at: startAt,
+                },
             }
 
             closeVideo(video.video.id, data, currCategory)
@@ -63,8 +66,8 @@ const Navbar = ({
                     <Link
                         key={link.text}
                         to={link.link}
-                        onClick={() => {
-                            if (vp.isPlayerReady) closeCurrentVideo()
+                            onClick={() => {
+                            if (playerInfo) closeCurrentVideo()
                             if (link.link === '/logout') logout()
                             setActive(link.link)
                         }}

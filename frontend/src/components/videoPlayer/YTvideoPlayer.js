@@ -63,8 +63,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
             },
         });
         if (player && playerWidth && playerVolume) {
-            loadPlayer(player);
-            
+            // player stored in onReady
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +96,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
 
     // if player is ready start the video or playlist
     const onPlayerReady = (event) => {
+        loadPlayer(event.target);
         event.target.setVolume(Number(localStorage.getItem('playerVolume')));
         if (videoData.listid !== null) {
             event.target.loadPlaylist({
