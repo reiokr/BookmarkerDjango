@@ -70,8 +70,8 @@ const Playlist = ({
 
     return (
         <>
-            {video.list === null && showlist && <LdsFacebook />}
-            {showlist && video.list !== null ? (
+            {(video.list === null || video?.list?.id !== video?.video?.list_id) && showlist && <LdsFacebook />}
+            {showlist && video.list !== null && video?.list?.id === video?.video?.list_id ? (
                 <div className="playlist playlist-visible">
                     <button className='reverse-list btn' onClick={reverseList}>Reverse List</button>
                     {playlist !== null &&
