@@ -32,7 +32,6 @@
   color: rgb(185, 185, 185);
   border: none;
   border-radius: 5px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   float: left;
@@ -44,4 +43,4 @@
   box-shadow: 0 0 5px 5px rgb(128, 128, 128);
   color: white;
   transition: all 0.3s linear;
-}
+}/*# sourceMappingURL=signup.css.map */

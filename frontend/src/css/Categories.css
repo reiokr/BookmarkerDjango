@@ -40,40 +40,59 @@
   flex-direction: row;
   flex-wrap: wrap;
   height: 100%;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   align-items: center;
   margin: 0 5px 0 0;
 }
+.tab-buttons .btn-container .add-cat,
+.tab-buttons .btn-container .del-cat {
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+  justify-self: flex-end;
+  width: -moz-max-content;
+  width: max-content;
+  background-color: transparent;
+  color: #d47c01;
+  cursor: pointer;
+}
+.tab-buttons .btn-container .add-cat .add-cat-icon,
+.tab-buttons .btn-container .add-cat .del-cat-icon,
+.tab-buttons .btn-container .del-cat .add-cat-icon,
+.tab-buttons .btn-container .del-cat .del-cat-icon {
+  font-size: 1.8rem;
+}
 .tab-buttons .btn-container .tab-btn {
   text-transform: capitalize;
+  color: rgb(191.5, 191.5, 191.5);
   font-size: 1rem;
   padding: 5px 10px;
   cursor: pointer;
   outline: none;
   border: none;
   border-right: 3px solid #2c2c2c;
-  background-color: silver;
+  background-color: rgb(69.5, 69.5, 69.5);
   margin: 5px 0;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .tab-buttons .btn-container .tab-btn:hover {
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  background-color: #d9d9d9;
+  background-color: #737373;
+  color: black;
 }
 .tab-buttons .btn-container .active-btn {
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  background-color: #f89406;
+  background-color: #d47c01;
+  color: #2c2c2c;
 }
 .tab-buttons .btn-container .active-btn:hover {
-  background-color: #f89406;
+  background-color: #d47c01;
 }
 .tab-buttons .control-bar-container {
   margin: 0 5px 0 auto;
   height: 100%;
   background-color: #2c2c2c;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   display: grid;
@@ -86,13 +105,13 @@
 }
 .tab-buttons .control-bar-container form input {
   height: 90%;
-  background-color: silver;
+  background: rgb(89.5, 89.5, 89.5);
   border: 0;
   outline: none;
   text-indent: 5px;
 }
 .tab-buttons .control-bar-container form button {
-  background-color: silver;
+  background-color: rgb(89.5, 89.5, 89.5);
   border: none;
   outline: none;
   height: 90%;
@@ -105,9 +124,8 @@
   color: #2c2c2c;
 }
 .tab-buttons .control-bar-container .controlBar-icon {
-  border: 1px solid #797979;
+  border: 1px solid rgb(120.5, 120.5, 120.5);
   max-height: 80%;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   display: flex;
@@ -118,32 +136,13 @@
 }
 .tab-buttons .control-bar-container .controlBar-icon .sort-icon {
   font-size: 1.5rem;
-  color: #f89406;
+  color: #d47c01;
   padding: 0 5px;
 }
 .tab-buttons .cat-buttons {
   margin: 0 0 0 auto;
   display: flex;
   align-items: center;
-}
-.tab-buttons .cat-buttons .add-cat,
-.tab-buttons .cat-buttons .del-cat {
-  display: flex;
-  align-items: center;
-  margin: 0 8px;
-  justify-self: flex-end;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  background-color: transparent;
-  color: #f89406;
-  cursor: pointer;
-}
-.tab-buttons .cat-buttons .add-cat .add-cat-icon,
-.tab-buttons .cat-buttons .add-cat .del-cat-icon,
-.tab-buttons .cat-buttons .del-cat .add-cat-icon,
-.tab-buttons .cat-buttons .del-cat .del-cat-icon {
-  font-size: 1.8rem;
 }
 .tab-buttons .cat-buttons .del-cat {
   right: 50px;
@@ -165,7 +164,6 @@
   min-width: 200px;
   min-height: 100px;
   width: 300px;
-  height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
   background-color: #2c2c2c;
@@ -201,7 +199,7 @@
   padding: 5px 10px;
   outline: none;
   border: none;
-  background-color: #f89406;
+  background-color: #d47c01;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -231,4 +229,4 @@
 .modal-transition {
   background-color: rgba(0, 0, 0, 0.6);
   transition: background-color 0.3s linear;
-}
+}/*# sourceMappingURL=Categories.css.map */

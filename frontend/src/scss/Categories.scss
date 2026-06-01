@@ -1,4 +1,4 @@
-@import 'config';
+@import "config";
 
 .tab-buttons {
   height: 100%;
@@ -17,26 +17,45 @@
     width: fit-content;
     align-items: center;
     margin: 0 5px 0 0;
+    
+    .add-cat,
+    .del-cat {
+      display: flex;
+      align-items: center;
+      margin: 0 8px;
+      justify-self: flex-end;
+      width: max-content;
+      background-color: transparent;
+      color: $acc-color;
+      cursor: pointer;
+      .add-cat-icon,
+      .del-cat-icon {
+        font-size: 1.8rem;
+      }
+    }
 
     .tab-btn {
       text-transform: capitalize;
+      color: darken($light-color, 10);
       font-size: 1rem;
       padding: 5px 10px;
       cursor: pointer;
       outline: none;
       border: none;
       border-right: 3px solid $dark-color;
-      background-color: darken($light-color, 10);
+      background-color: lighten($dark-color, 10);
       margin: 5px 0;
       transition: $cubic1;
       &:hover {
         transition: $cubic1;
-        background-color: $light-color;
+        background-color: darken($light-color, 40);
+        color: darken($dark-color, 30);
       }
     }
     .active-btn {
       transition: $cubic1;
       background-color: $acc-color;
+      color: $dark-color;
       &:hover {
         background-color: $acc-color;
       }
@@ -59,13 +78,13 @@
 
       input {
         height: 90%;
-        background-color: darken($light-color, 10);
+        background: darken($light-color, 50);
         border: 0;
         outline: none;
         text-indent: 5px;
       }
       button {
-        background-color: darken($light-color, 10);
+        background-color: darken($light-color, 50);
         border: none;
         outline: none;
         height: 90%;
@@ -101,22 +120,6 @@
     margin: 0 0 0 auto;
     display: flex;
     align-items: center;
-
-    .add-cat,
-    .del-cat {
-      display: flex;
-      align-items: center;
-      margin: 0 8px;
-      justify-self: flex-end;
-      width: max-content;
-      background-color: transparent;
-      color: $acc-color;
-      cursor: pointer;
-      .add-cat-icon,
-      .del-cat-icon {
-        font-size: 1.8rem;
-      }
-    }
 
     .del-cat {
       right: 50px;

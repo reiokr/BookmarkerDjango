@@ -242,6 +242,17 @@
     }
     .reverse-list {
       position: absolute;
+      margin-top: -35px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: $shadow;
+      top: 0;
+      right: 0;
+      display:  block;
+      cursor: pointer;
+      z-index: 12;
+      height: 30px;
+      background-color: $dark-color;
     }
 
     & > li {

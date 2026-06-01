@@ -65,7 +65,7 @@
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 10px; /* Slider handle height */
-  background: #f89406; /* Green background */
+  background: #d47c01; /* Green background */
   box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
   cursor: pointer; /* Cursor on hover */
 }
@@ -76,6 +76,6 @@
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #f89406; /* Green background */
+  background: #d47c01; /* Green background */
   cursor: pointer; /* Cursor on hover */
-}
+}/*# sourceMappingURL=ControlBar.css.map */

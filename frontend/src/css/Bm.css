@@ -34,7 +34,6 @@
 .error-alert {
   margin: 0 auto;
   font-size: 1rem;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   padding: 0 10px;
@@ -71,13 +70,12 @@
   width: 100%;
   height: auto;
   max-height: 360px;
-  max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
   min-height: 200px;
   min-width: 300px;
   margin: 0;
-  background: #1f1f1f;
+  background: rgb(31.25, 31.25, 31.25);
 }
 .bm-container .bm-main .bookmark {
   position: relative;
@@ -107,13 +105,13 @@
   top: 0;
   left: 0;
   background-color: black;
-  color: #f89406;
+  color: #d47c01;
   padding: 5px;
   height: auto;
 }
 .bm-container .bm-main .bookmark .bm-img {
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
   height: inherit;
   width: inherit;
   margin: 0 auto auto auto;
@@ -151,7 +149,7 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  background-color: #1f1f1f;
+  background-color: rgb(31.25, 31.25, 31.25);
   z-index: 5;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
@@ -166,9 +164,8 @@
 .bm-container .bm-main .bookmark .title-container .title::before {
   content: "";
   font-size: 0;
-  color: #f89406;
+  color: #d47c01;
   position: absolute;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   bottom: 40%;
@@ -189,7 +186,7 @@
   justify-content: center;
   width: 100%;
   background: black;
-  color: #f89406;
+  color: #d47c01;
   text-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
   font-size: 1rem;
   font-weight: bold;
@@ -248,7 +245,7 @@
 .bm-container .bm-main .go-to-web {
   position: absolute;
   font-size: 1rem;
-  color: #f89406;
+  color: #d47c01;
   text-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   width: auto;
@@ -264,7 +261,7 @@
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .bm-container .bm-main .go-to-web:hover {
-  background-color: #1f1f1f;
+  background-color: rgb(31.25, 31.25, 31.25);
   padding: 30px;
   font-size: 1rem;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -272,7 +269,7 @@
 .bm-container .bm-main .video-start {
   position: absolute;
   font-size: 1rem;
-  color: #f89406;
+  color: #d47c01;
   font-weight: bold;
   text-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
   width: auto;
@@ -298,7 +295,6 @@
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   position: absolute;
   bottom: 0;
-  white-space: nowrap;
 }
 .bm-container .bm-main .video-start:hover {
   background: #2c2c2c;
@@ -313,7 +309,7 @@
   position: absolute;
   bottom: 10px;
   z-index: 2;
-  color: #f3f3f3;
+  color: rgb(242.5, 242.5, 242.5);
   font-size: 1rem;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
@@ -367,7 +363,6 @@
   display: flex;
   flex-direction: column;
   position: fixed;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   max-width: 95vw;
@@ -382,12 +377,10 @@
   box-shadow: 0 0 25px rgb(0, 0, 0);
 }
 .description-container .description-modal .close-btn-bm {
-  position: -webkit-sticky;
   position: sticky;
   top: 10px;
   left: 10px;
   margin: 5px 10px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -405,11 +398,7 @@
   gap: 15px;
   margin-bottom: 20px;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text {
+.description-container .description-modal .modal-body .video-info .video-info-text {
   position: relative;
   cursor: default;
   display: flex;
@@ -423,11 +412,7 @@
   transition: 0.3s ease all;
   font-size: 0.9rem;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text::after {
+.description-container .description-modal .modal-body .video-info .video-info-text::after {
   content: "";
   white-space: nowrap;
   position: absolute;
@@ -438,11 +423,7 @@
   font-size: 0.1rem;
   z-index: 11;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text::before {
+.description-container .description-modal .modal-body .video-info .video-info-text::before {
   content: "";
   margin-top: 8px;
   border-left: 5px solid transparent;
@@ -452,69 +433,36 @@
   top: -13px;
   display: none;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text:hover::after {
+.description-container .description-modal .modal-body .video-info .video-info-text:hover::after {
   content: attr(data-text);
   padding: 3px 5px;
   color: #2c2c2c;
   font-size: 0.8rem;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text:hover::before {
+.description-container .description-modal .modal-body .video-info .video-info-text:hover::before {
   display: block;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text
-  span,
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text
-  a {
+.description-container .description-modal .modal-body .video-info .video-info-text span,
+.description-container .description-modal .modal-body .video-info .video-info-text a {
   text-decoration: none;
-  color: #f89406;
+  color: #d47c01;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .video-info-text
-  svg {
+.description-container .description-modal .modal-body .video-info .video-info-text svg {
   margin-right: 5px;
   font-size: 1.2rem;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .descmodal-link {
+.description-container .description-modal .modal-body .video-info .descmodal-link {
   height: 25px;
   color: #d9d9d9;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin-right: 49px;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .descmodal-link
-  a {
+.description-container .description-modal .modal-body .video-info .descmodal-link a {
   position: relative;
   height: 25px;
   color: #d9d9d9;
@@ -523,27 +471,16 @@
   text-decoration: none;
   align-self: flex-start;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .descmodal-link
-  a
-  svg {
+.description-container .description-modal .modal-body .video-info .descmodal-link a svg {
   position: absolute;
   height: inherit;
 }
-.description-container
-  .description-modal
-  .modal-body
-  .video-info
-  .descmodal-link
-  .youtube-icon {
+.description-container .description-modal .modal-body .video-info .descmodal-link .youtube-icon {
   color: #d9d9d9;
 }
 .description-container .description-modal .modal-body a {
   text-decoration: none;
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container .description-modal .modal-body a:hover {
   text-decoration: underline;
@@ -566,7 +503,6 @@
   width: 100%;
   height: auto;
   max-height: 360px;
-  max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
   min-height: 200px;
@@ -581,7 +517,7 @@
   max-width: 300px;
   height: auto;
   -o-object-fit: cover;
-  object-fit: cover;
+     object-fit: cover;
 }
 
 .modal_playlist {
@@ -600,14 +536,14 @@
   gap: 15px;
 }
 .modal_playlist .modal_playlist_item .video-info-playlist p {
-  color: #f89406;
+  color: #d47c01;
   font-size: 0.9rem;
 }
 .modal_playlist .modal_playlist_item:hover {
-  background: #6c6c6c;
+  background: rgb(107.75, 107.75, 107.75);
 }
 .modal_playlist .active {
-  background: #6c6c6c;
+  background: rgb(107.75, 107.75, 107.75);
 }
 
 .private {
@@ -618,7 +554,6 @@
   display: flex;
   flex-direction: column;
   position: fixed;
-  width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   max-width: 95vw;
@@ -647,23 +582,23 @@
   font-weight: bold;
   cursor: pointer;
   padding: 20px;
-  background: #f89406;
+  background: #d47c01;
   color: #2c2c2c;
   margin-right: 40px;
   font-size: 1.3rem;
 }
 .delete-modal .delete-item :nth-child(2) {
   font-weight: bold;
-  background: #f89406;
+  background: #d47c01;
   cursor: pointer;
   padding: 20px;
   font-size: 1.3rem;
 }
 
 .info-text {
-  color: #f89406;
+  color: #d47c01;
   margin: 50px auto 0 auto;
 }
 .info-text a {
   color: #d9d9d9;
-}
+}/*# sourceMappingURL=Bm.css.map */

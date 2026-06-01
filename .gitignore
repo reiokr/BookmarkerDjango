@@ -16,6 +16,7 @@ frontend/build/
 frontend/coverage/
 frontend/.pnp
 frontend/.pnp.js
+frontend/src/scss/
 
 # Frontend env
 frontend/.env.local

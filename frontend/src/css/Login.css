@@ -44,7 +44,7 @@
   min-width: 300px;
 }
 .login-form form input {
-  background: #b3b3b3;
+  background: rgb(178.75, 178.75, 178.75);
   display: block;
   width: 100%;
   height: 35px;
@@ -74,7 +74,6 @@
   height: 30px;
 }
 .login-form form .rememberme input {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin-right: 10px;
@@ -84,7 +83,7 @@
   width: 15px;
 }
 .login-form form textarea {
-  background: #b3b3b3;
+  background: rgb(178.75, 178.75, 178.75);
   text-indent: 10px;
   border-radius: 3px;
   border: none;
@@ -111,7 +110,7 @@
   box-shadow: 0px 0px 1px 1px rgba(216, 216, 216, 0.3);
 }
 .login-form form button:hover {
-  background: #6c6c6c;
+  background: rgb(107.75, 107.75, 107.75);
 }
 .login-form form .ref-btn {
   display: block;
@@ -121,9 +120,9 @@
 }
 .login-form form .cancel-btn {
   margin: 20px auto;
-  background: #393939;
+  background: rgb(56.75, 56.75, 56.75);
 }
 .login-form form .delete-btn {
   margin: 20px auto;
   background: red;
-}
+}/*# sourceMappingURL=Login.css.map */

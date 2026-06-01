@@ -32,7 +32,6 @@
   box-sizing: border-box;
   padding: 0;
   color: #d9d9d9;
-  height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
   width: 840px;
@@ -49,7 +48,7 @@
 }
 .description-container-player .modal-body a {
   text-decoration: none;
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container-player .modal-body a:hover {
   text-decoration: underline;
@@ -65,11 +64,9 @@
   margin-top: -10px;
 }
 .description-container-player .comment-modal .comment-order {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   align-self: center;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
@@ -129,10 +126,9 @@
 }
 .description-container-player .comment-modal .comment-body .comment .comment-author .author-name {
   margin: 0;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-author .comment-published {
   margin-left: 10px;
@@ -147,7 +143,7 @@
   font-size: 0.9rem;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-text a {
-  color: #f89406;
+  color: #d47c01;
   text-decoration: none;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-info {
@@ -161,7 +157,6 @@
 .description-container-player .comment-modal .comment-body .comment .comment-info .comment-replies-btn {
   position: absolute;
   font-size: 0.8rem;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   white-space: nowrap;
@@ -185,7 +180,6 @@
   align-items: center;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-info .comment-replies-btn .comment-replies-count .comment-count .comment-replies-icon {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
@@ -203,7 +197,7 @@
   cursor: pointer;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-info .comment-replies-btn:hover .comment-icon-arrow {
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-replies {
   margin-top: 15px;
@@ -216,7 +210,6 @@
 .description-container-player .comment-modal .comment-body .comment .comment-replies .comment-replies-hide-btn .hide-replies {
   display: flex;
   align-items: flex-start;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   white-space: nowrap;
@@ -233,14 +226,14 @@
   cursor: pointer;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-replies .comment-replies-hide-btn .hide-replies:hover .comment-icon-arrow {
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-replies .comment-replies-hide-btn .more-replies {
   margin-left: 50px;
   cursor: pointer;
 }
 .description-container-player .comment-modal .comment-body .comment .comment-replies .comment-replies-hide-btn .more-replies:hover {
-  color: #f89406;
+  color: #d47c01;
 }
 .description-container-player .playlist {
   position: relative;
@@ -256,21 +249,21 @@
 }
 .description-container-player .playlist .private-video {
   pointer-events: none;
-  display: none;
 }
 .description-container-player .playlist .reverse-list {
   position: absolute;
-  background-color: #d12ff5;
-  z-index: 1000;
-  height: 30px;
-  margin: 5px 0;
-  top: -30px;
+  margin-top: -35px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0px 1px 1px rgba(216, 216, 216, 0.3);
+  top: 0;
   right: 0;
+  display: block;
+  cursor: pointer;
+  z-index: 12;
+  height: 30px;
+  background-color: #2c2c2c;
 }
-.description-container-player .playlist .reverse-list:hover {
-  background-color: #9b5a00;
-}
-
 .description-container-player .playlist > li {
   list-style-type: none;
   position: relative;
@@ -278,12 +271,11 @@
   width: 100%;
   height: auto;
   max-height: 360px;
-  max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
   margin: 0;
   display: grid;
-  background: #1f1f1f;
+  background: rgb(31.25, 31.25, 31.25);
   grid-template-rows: auto auto;
   cursor: pointer;
 }
@@ -320,8 +312,7 @@
 .description-container-player .playlist > .li-active::after {
   box-shadow: 0 0 0 0 rgb(0, 0, 0);
   transform: scale(1);
-  -webkit-animation: pulse 1.5s infinite cubic-bezier(0.47, 0, 0.745, 0.715);
-          animation: pulse 1.5s infinite cubic-bezier(0.47, 0, 0.745, 0.715);
+  animation: pulse 1.5s infinite cubic-bezier(0.47, 0, 0.745, 0.715);
   position: absolute;
   content: "";
   top: 0;
@@ -344,7 +335,7 @@
   align-items: center;
 }
 .description-container-player .buttons .btn-description .playlist-length {
-  background-color: #f89406;
+  background-color: #d47c01;
   color: #2c2c2c;
   border-radius: 999px;
   margin-left: 10px;
@@ -408,7 +399,7 @@
 }
 .description-container-player .buttons .video-info-text span,
 .description-container-player .buttons .video-info-text a {
-  color: #f89406;
+  color: #d47c01;
   text-decoration: none;
 }
 .description-container-player .buttons .video-info-text svg {
@@ -426,7 +417,6 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin-right: 60px;
@@ -454,20 +444,6 @@
   transition: height 1s;
 }
 
-@-webkit-keyframes pulse {
-  40% {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 6px rgba(139, 32, 226, 0.6);
-  }
-  80% {
-    transform: scale(1);
-    box-shadow: 0 0 0 12px rgba(89, 2, 250, 0.1);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(88, 8, 199, 0);
-  }
-}
-
 @keyframes pulse {
   40% {
     transform: scale(1.02);
@@ -491,14 +467,14 @@
   padding: 15px 20px 20px 20px;
   background: #2c2c2c;
   color: #d9d9d9;
-  border: 1px solid #f89406;
+  border: 1px solid #d47c01;
   border-radius: 10px;
   box-shadow: 0px 0px 1px 1px rgba(216, 216, 216, 0.3);
   z-index: 11;
 }
 .timestamps-modal a {
   text-decoration: none;
-  color: #f89406;
+  color: #d47c01;
 }
 .timestamps-modal a:hover {
   text-decoration: underline;
@@ -519,5 +495,5 @@
   font-size: 1.4rem;
 }
 .timestamps-modal .move-icon:hover svg {
-  color: #464646;
-}
+  color: rgb(69.5, 69.5, 69.5);
+}/*# sourceMappingURL=Description.css.map */
