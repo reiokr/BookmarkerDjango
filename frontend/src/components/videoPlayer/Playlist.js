@@ -19,6 +19,9 @@ const Playlist = ({
     const { showlist } = useStateContext();
     const [playlist, setPlaylist] = useState(pl?.items);
     const [videoid] = useState(video.video.id);
+    const reverseList = useCallback(() => {
+        setPlaylist(prev => prev ? [...prev].reverse() : prev);
+    }, []);
 
     useEffect(() => {
         if (video?.list !== null) {
@@ -70,7 +73,7 @@ const Playlist = ({
             {video.list === null && showlist && <LdsFacebook />}
             {showlist && video.list !== null ? (
                 <div className="playlist playlist-visible">
-                    
+                    <button className='reverse-list btn' onClick={reverseList}>Reverse List</button>
                     {playlist !== null &&
                         showlist &&
                         vp?.player?.playerInfo &&
@@ -79,7 +82,7 @@ const Playlist = ({
                                 <li
                                     className={`${
                                         vp?.player?.playerInfo
-                                            ?.playlistIndex === index
+                                            ?.playlistIndex === item.list_index
                                             ? 'li-active'
                                             : ''
                                     } ${
