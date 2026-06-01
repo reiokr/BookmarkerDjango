@@ -87,7 +87,6 @@ const Player = ({
                 url: playerInfo?.videoUrl,
             };
             if (ytvideo.video_id !== vpId) {
-                setShowlist(false);
                 updateVideo(vId, data, currCategory);
                 setCurrIndex(playerInfo?.playlistIndex);
                 setDescription(video.video.description);

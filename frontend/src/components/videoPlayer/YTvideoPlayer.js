@@ -24,6 +24,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
     );
     const wrapRef = useRef();
     const contRef = useRef();
+    const playerRefInner = useRef(null);
     // const playerWidth = localStorage.getItem('ytpw') || 840;
 
     // create player object
@@ -62,6 +63,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
                 onStateChange: onPlayerStateChange,
             },
         });
+        playerRefInner.current = player;
         if (player && playerWidth && playerVolume) {
             // player stored in onReady
         }
@@ -84,6 +86,13 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
         } else {
             loadVideoPlayer();
         }
+
+        return () => {
+            if (playerRefInner.current) {
+                playerRefInner.current.destroy();
+                playerRefInner.current = null;
+            }
+        };
     }, [loadVideoPlayer, videoData]);
 
     // if player state changes start the script

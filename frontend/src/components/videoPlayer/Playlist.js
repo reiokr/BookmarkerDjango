@@ -19,20 +19,15 @@ const Playlist = ({
     const { showlist } = useStateContext();
     const [playlist, setPlaylist] = useState(pl?.items);
     const [videoid] = useState(video.video.id);
-    const reverseList = () => {
-        const reversed = playlist?.reverse();
-        setPlaylist(reversed);
-        //  console.log(video.list);
 
-    };
     useEffect(() => {
         if (video?.list !== null) {
             setPlaylist(video.list.items);
         }
-    }, [video.list, reverseList]);
+    }, [video.list]);
 
     const handleListItem = (index) => {
-        if (vp?.player.playVideoAt && index) {
+        if (vp?.player.playVideoAt && index != null) {
             // using youtube api player object start video at index
             const newVideo = vp?.player?.playVideoAt(Number(index));
             if (newVideo) updateVideoData();
@@ -75,7 +70,7 @@ const Playlist = ({
             {video.list === null && showlist && <LdsFacebook />}
             {showlist && video.list !== null ? (
                 <div className="playlist playlist-visible">
-                    <button className='reverse-list btn' onClick={reverseList}>Reverse List</button>
+                    
                     {playlist !== null &&
                         showlist &&
                         vp?.player?.playerInfo &&
