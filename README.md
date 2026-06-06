@@ -1,56 +1,56 @@
 # BookmarkerDjango
 
-BookmarkerDjango on Django-põhine veebirakendus järjehoidjate haldamiseks. Salvesta, kategoriseeri ja lemmikute oma lemmiklinke lihtsalt.
+BookmarkerDjango is a Django-based web application for managing bookmarks. Save, categorize, and mark your favorite links with ease.
 
-## Funktsioonid
+## Features
 
-- Kasutaja autentimine ja registreerimine
-- Järjehoidjate lisamine, muutmine ja kustutamine
-- Järjehoidjate kategoriseerimine kaustadesse
-- Otsing pealkirja või URL-i järgi
-- YouTube videote integreerimine ja kommentaarid
-- Reageeriv disain mobiili ja lauaarvuti jaoks
+- User authentication and registration
+- Add, edit, and delete bookmarks
+- Organize bookmarks into folders by category
+- Search by title or URL
+- YouTube video integration and comments
+- Responsive design for mobile and desktop
 
-## Paigaldus
+## Installation
 
-### Eeldused
+### Prerequisites
 
 - Python 3.14+
 - Django 6.0+
 - PostgreSQL
-- Node.js ja npm (frontend sõltuvuste jaoks)
-- YouTube Data API võti
+- Node.js and npm (for frontend dependencies)
+- YouTube Data API key
 
-### Repo kloonimine
+### Clone the Repository
 
 ```bash
 git clone https://github.com/reiokr/BookmarkerDjango.git
 cd BookmarkerDjango
 ```
 
-### .env seadistus
+### Environment Setup
 
-Kopeeri mall ja täida oma andmed:
+Copy the template and fill in your data:
 
 ```bash
 cp .env.example .env
 ```
 
-Redigeeri `.env` faili ja täida:
-- `SECRET_KEY` - Django saladusvõti
-- `DB_NAME`, `DB_USER`, `DB_PASSWORD` - andmebaasi andmed
-- `YOUTUBE_API_KEY` - YouTube Data API võti
-- `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` - e-posti konto andmed
+Edit the `.env` file and fill in:
+- `SECRET_KEY` - Django secret key
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD` - Database credentials
+- `YOUTUBE_API_KEY` - YouTube Data API key
+- `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` - Email account credentials
 
-### Backend seadistus
+### Backend Setup
 
-1. Loo virtuaalkeskkond:
+1. Create a virtual environment:
 
    ```bash
    python -m venv .venv
    ```
 
-2. Aktiveeri virtuaalkeskkond:
+2. Activate the virtual environment:
 
    - Windows:
 
@@ -64,63 +64,63 @@ Redigeeri `.env` faili ja täida:
      source .venv/bin/activate
      ```
 
-3. Paigalda backend sõltuvused:
+3. Install backend dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Rakenda andmebaasi migratsioonid:
+4. Apply database migrations:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Loo superkasutaja admin paneeli jaoks:
+5. Create a superuser for the admin panel:
 
    ```bash
    python manage.py createsuperuser
    ```
 
-### Frontend seadistus
+### Frontend Setup
 
-1. Mine `frontend` kataloogi:
+1. Navigate to the `frontend` directory:
 
    ```bash
    cd frontend
    ```
 
-2. Paigalda frontend sõltuvused:
+2. Install frontend dependencies:
 
    ```bash
    npm install
    ```
 
-3. Kompileeri frontend varad:
+3. Build frontend assets:
 
    ```bash
    npm run build
    ```
 
-4. Naase juurkataloogi:
+4. Return to the root directory:
 
    ```bash
    cd ..
    ```
 
-## Käivitamine
+## Running the Application
 
-### Tootmine
+### Production
 
 ```bash
 python manage.py runserver
 ```
 
-Külasta `http://127.0.0.1:8000/` oma brauseris.
+Visit `http://127.0.0.1:8000/` in your browser.
 
-### Arendus
+### Development
 
-Ava kaks terminali akent:
+Open two terminal windows:
 
 **Terminal 1 - Django server:**
 ```bash
@@ -134,14 +134,14 @@ cd frontend
 npm start
 ```
 
-## testimine
+## Testing
 
-Testide käivitamiseks:
+To run tests:
 
 ```bash
 python manage.py test
 ```
 
-## Litsents
+## License
 
-See projekt on litsentseeritud MIT litsentsi alla - vaata [LICENSE](LICENSE) faili üksikasju.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
