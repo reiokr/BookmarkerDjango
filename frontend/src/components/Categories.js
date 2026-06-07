@@ -67,30 +67,28 @@ const Categories = ({
                       </button>
                     );
                   })}
-                  <div className="add-cat" onClick={toggleModal}>
-                    <BsFolderPlus className="add-cat-icon" />
+                  <div className="cat-buttons">
+                    <div className="add-cat" onClick={toggleModal}>
+                      <BsFolderPlus className="add-cat-icon" />
+                    </div>
+                    {addCategoryModal && (
+                      <AddCategoryModal
+                        toggleModal={toggleModal}
+                        addCategoryModal={addCategoryModal}
+                      />
+                    )}
+                    {isEmptyCategory && data.isEmptyCategory && (
+                      <div className="del-cat" onClick={handleDelCategory}>
+                        {isEmptyCategory && data?.bm?.length === 0 && (
+                          <BsFolderMinus className="del-cat-icon" />
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
               <ControlBar />
-              {!video.video && (
-                <div className="cat-buttons">
-                  {isEmptyCategory && data.isEmptyCategory && (
-                    <div className="del-cat" onClick={handleDelCategory}>
-                      {isEmptyCategory && data?.bm?.length === 0 && (
-                        <BsFolderMinus className="del-cat-icon" />
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
-            {addCategoryModal && (
-              <AddCategoryModal
-                toggleModal={toggleModal}
-                addCategoryModal={addCategoryModal}
-              />
-            )}
           </div>
         </div>
         {auth.isAuthenticated && <BmContainer />}
