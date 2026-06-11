@@ -118,6 +118,7 @@
   width: 30px;
   border-left: 1px solid #2c2c2c;
   margin-right: 5px;
+  pointer-events: none;
 }
 .tab-buttons .control-bar-container form button .search-icon {
   font-size: 1.5rem;

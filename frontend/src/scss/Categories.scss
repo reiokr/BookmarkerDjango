@@ -91,6 +91,7 @@
         width: 30px;
         border-left: 1px solid $dark-color;
         margin-right: 5px;
+        pointer-events: none;
         // cursor: pointer;
         .search-icon {
           font-size: 1.5rem;
