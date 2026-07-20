@@ -1,0 +1,36 @@
+@import 'config';
+
+.homepage {
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: calc(100vh - 120px);
+  padding: 4rem 1.5rem;
+  text-align: center;
+
+  h2 {
+    font-family: $display-font;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    background: linear-gradient(135deg, $text-primary 0%, $acc-color 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    max-width: 28ch;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 42ch;
+    line-height: 1.6;
+  }
+}
+
+.container.homepage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

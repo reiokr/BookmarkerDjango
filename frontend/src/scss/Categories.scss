@@ -1,4 +1,4 @@
-@import "config";
+@import 'config';
 
 .tab-buttons {
   height: 100%;
@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 8px;
 
   .btn-container {
     display: flex;
@@ -16,103 +17,145 @@
     height: 100%;
     width: fit-content;
     align-items: center;
-    margin: 0 5px 0 0;
-    
+    margin: 0 4px 0 0;
+    gap: 4px;
+
     .add-cat,
     .del-cat {
       display: flex;
       align-items: center;
-      margin: 0 8px;
+      margin: 0 4px;
       justify-self: flex-end;
       width: max-content;
       background-color: transparent;
       color: $acc-color;
       cursor: pointer;
+      padding: 4px;
+      border-radius: $radius-sm;
+      transition: $cubic1;
+
+      &:hover {
+        background: $acc-muted;
+      }
+
       .add-cat-icon,
       .del-cat-icon {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
       }
     }
 
     .tab-btn {
       text-transform: capitalize;
-      color: darken($light-color, 10);
-      font-size: 1rem;
-      padding: 5px 10px;
+      color: $text-secondary;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 7px 14px;
       cursor: pointer;
       outline: none;
-      border: none;
-      border-right: 3px solid $dark-color;
-      background-color: lighten($dark-color, 10);
-      margin: 5px 0;
+      border: 1px solid $border;
+      border-radius: 999px;
+      background: $bg-surface;
+      margin: 3px 2px;
       transition: $cubic1;
+
       &:hover {
         transition: $cubic1;
-        background-color: darken($light-color, 40);
-        color: darken($dark-color, 30);
+        background: $bg-hover;
+        color: $text-primary;
+        border-color: $border-strong;
       }
     }
+
     .active-btn {
       transition: $cubic1;
-      background-color: $acc-color;
-      color: $dark-color;
+      background: $acc-gradient;
+      color: $bg-deep;
+      border-color: transparent;
+      font-weight: 600;
+      box-shadow: 0 2px 10px $acc-glow;
+
       &:hover {
-        background-color: $acc-color;
+        background: $acc-gradient-hover;
+        color: $bg-deep;
       }
     }
   }
 
   .control-bar-container {
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
     height: 100%;
-    background-color: $dark-color;
+    background: $bg-surface;
+    border: 1px solid $border;
+    border-radius: $radius;
     width: max-content;
     display: grid;
-    grid-template-columns: 50px auto;
+    grid-template-columns: 44px auto;
+    overflow: hidden;
 
     form {
-      // height: 100%;
       display: flex;
       align-items: center;
-      margin: 5px 0;
+      margin: 4px 0;
 
       input {
         height: 90%;
-        background: darken($light-color, 50);
+        background: $bg-elevated;
         border: 0;
         outline: none;
-        text-indent: 5px;
+        text-indent: 10px;
+        color: $text-primary;
+        font-size: 0.9rem;
+        border-radius: $radius-sm 0 0 $radius-sm;
+        min-width: 140px;
+
+        &::placeholder {
+          color: $text-muted;
+        }
+
+        &:focus {
+          background: $bg-hover;
+        }
       }
+
       button {
-        background-color: darken($light-color, 50);
+        background: $bg-elevated;
         border: none;
         outline: none;
         height: 90%;
-        width: 30px;
-        border-left: 1px solid $dark-color;
-        margin-right: 5px;
+        width: 34px;
+        border-left: 1px solid $border;
+        margin-right: 4px;
         pointer-events: none;
-        // cursor: pointer;
+        border-radius: 0 $radius-sm $radius-sm 0;
+
         .search-icon {
-          font-size: 1.5rem;
-          color: $dark-color;
+          font-size: 1.35rem;
+          color: $text-muted;
         }
       }
     }
+
     .controlBar-icon {
-      border: 1px solid lighten($dark-color, 30);
-      max-height: 80%;
+      border: none;
+      border-right: 1px solid $border;
+      max-height: 100%;
       width: max-content;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      margin: 5px 0;
+      margin: 0;
+      background: transparent;
+      transition: $cubic1;
+
+      &:hover {
+        background: $acc-muted;
+      }
 
       .sort-icon {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
         color: $acc-color;
-        padding: 0 5px;
+        padding: 0 10px;
       }
     }
   }
@@ -124,7 +167,11 @@
 
     .del-cat {
       right: 50px;
-      color: red;
+      color: $danger;
+
+      &:hover {
+        background: $danger-muted;
+      }
     }
   }
 }
@@ -138,79 +185,118 @@
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.3s linear;
   z-index: 10;
+
   .add-category-modal {
     position: fixed;
     min-width: 200px;
     min-height: 100px;
-    width: 300px;
+    width: 340px;
     height: max-content;
-    background-color: $dark-color;
+    background: $bg-elevated;
+    border: 1px solid $border-strong;
     top: -200px;
-    left: calc(50% - 150px);
+    left: calc(50% - 170px);
     z-index: 8;
-    border-radius: 5px;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 1);
-    transition: top 0.3s linear;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-dark, 0 0 60px rgba(0, 0, 0, 0.4);
+    transition: top 0.3s $ease-out;
+    overflow: hidden;
+
     .error-msg {
-      margin: 0 25px;
+      margin: 0 20px;
     }
 
     form {
       height: 100%;
-      margin: 20px auto 20px auto;
+      margin: 16px auto 20px;
       box-sizing: border-box;
-      padding: 10px;
+      padding: 10px 14px 14px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+
       input {
-        height: 30px;
-        margin: 15px;
-        font-size: 1.1rem;
-        text-indent: 5px;
-        outline: none;
-        border: none;
-      }
-      button {
-        margin: 0 15px;
-        padding: 5px 10px;
-        outline: none;
-        border: none;
-        background-color: $acc-color;
+        height: 42px;
+        margin: 12px 8px;
         font-size: 1rem;
-        font-weight: 500;
+        text-indent: 0;
+        padding: 0 12px;
+        outline: none;
+        border: 1px solid $border;
+        border-radius: $radius;
+        background: $bg-surface;
+        color: $text-primary;
+        transition: $cubic1;
+
+        &:focus {
+          border-color: $acc-color;
+          box-shadow: 0 0 0 3px $acc-muted;
+        }
+      }
+
+      button {
+        margin: 4px 8px 0;
+        padding: 10px 16px;
+        outline: none;
+        border: none;
+        background: $acc-gradient;
+        color: $bg-deep;
+        font-size: 0.95rem;
+        font-weight: 600;
         cursor: pointer;
+        border-radius: $radius;
+        transition: $cubic1;
+
+        &:hover {
+          filter: brightness(1.08);
+        }
       }
     }
 
     .modal-header {
-      background-color: $dark-color;
-      color: $light-color;
-      padding: 5px 10px;
+      background: $bg-surface;
+      color: $text-primary;
+      padding: 12px 14px;
       display: grid;
-      grid-template-columns: auto 20px;
+      grid-template-columns: auto 28px;
+      border-bottom: 1px solid $border;
+      align-items: center;
 
       h3 {
-        margin-left: 15px;
+        margin-left: 8px;
+        font-family: $display-font;
+        font-weight: 600;
+        font-size: 1.05rem;
       }
 
       .close-btn {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $radius-sm;
+        transition: $cubic1;
+
+        &:hover {
+          background: $danger-muted;
+        }
 
         .close-icon {
-          color: rgb(202, 0, 0);
-          font-size: 1.5rem;
+          color: $danger;
+          font-size: 1.4rem;
         }
       }
     }
   }
+
   .modal-transition-1 {
     top: 100px;
-    transition: top 0.3s linear;
+    transition: top 0.3s $ease-out;
   }
 }
 
 .modal-transition {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(11, 13, 18, 0.65);
+  backdrop-filter: blur(4px);
   transition: background-color 0.3s linear;
 }

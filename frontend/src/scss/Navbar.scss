@@ -1,167 +1,219 @@
 @import 'config';
 
 .navbar {
-    max-width: 1600px;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    padding: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    height: 40px;
-    align-items: center;
-    z-index: 7;
+  max-width: 1600px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 52px;
+  align-items: center;
+  z-index: 7;
 
-    .navbar-logo {
-        margin-left: 30px;
-        margin-right: auto;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.3rem;
-        color: $acc-color;
+  .navbar-logo {
+    margin-left: 20px;
+    margin-right: auto;
+    text-decoration: none;
+    font-family: $display-font;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    color: $acc-color;
+    background: linear-gradient(135deg, $acc-color 0%, $acc-hover 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: $cubic1;
+
+    &:hover {
+      filter: brightness(1.15);
     }
+  }
 }
 
 .menu-icon {
-    position: absolute;
-    margin-top: 10px;
-    margin-right: 20px;
-    padding: 0;
-    top: 0;
-    right: 0;
-    font-size: 2rem;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    transition: $cubic1;
-    color: $light-color;
+  position: absolute;
+  margin-top: 10px;
+  margin-right: 16px;
+  padding: 6px;
+  top: 0;
+  right: 0;
+  font-size: 1.6rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: $cubic1;
+  color: $text-secondary;
+  border-radius: $radius-sm;
+
+  &:hover {
+    color: $acc-color;
+    background: $acc-muted;
+  }
 }
+
 .menu-list {
-    position: static;
-    margin-right: 30px;
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  position: static;
+  margin-right: 20px;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  transition: $cubic1;
+
+  a {
+    text-transform: capitalize;
+    text-decoration: none;
+    margin: 0;
+    margin-left: 2px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    color: $text-secondary;
+    border-radius: $radius-sm;
     transition: $cubic1;
 
-    a {
-        text-transform: capitalize;
-        text-decoration: none;
-        margin: 0;
-        margin-left: 10px;
-        font-weight: normal;
-        font-size: 1rem;
-        text-decoration: none;
-        padding: 0px 15px;
-        color: $light-color;
-        &:hover {
-            color: lighten($acc-color, 30);
-        }
-        &:active {
-            color: lighten($acc-color, 30);
-        }
+    &:hover {
+      color: $text-primary;
+      background: $bg-hover;
     }
-    .active {
-        // text-decoration: underline;
-        color: $acc-color;
+    &:active {
+      color: $acc-color;
     }
+  }
+  .active {
+    color: $acc-color;
+    background: $acc-muted;
+  }
 }
 
 /* Dropdown Button */
 .dropbtn {
-    background: transparent;
-    color: $light-color;
-    margin-right: 10px;
-    font-size: 16px;
-    border: none;
-    z-index: 100;
+  background: transparent;
+  color: $text-secondary;
+  margin-right: 8px;
+  font-size: 15px;
+  border: none;
+  z-index: 100;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: $radius-sm;
+  transition: $cubic1;
+
+  &:hover {
+    color: $acc-color;
+    background: $acc-muted;
+  }
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: relative;
-    display: inline-block;
-    width: 30px;
-    margin-right: 3%;
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  margin-right: 2%;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-    display: none;
-    position: absolute;
-    right: 10px;
-    background-color: #f1f1f1;
-    width: fit-content;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    div {
-        padding: 3px 6px;
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background-color: $bg-elevated;
+  width: fit-content;
+  min-width: 100px;
+  box-shadow: $shadow-dark;
+  border: 1px solid $border-strong;
+  border-radius: $radius;
+  z-index: 100;
+  overflow: hidden;
 
-        background: none;
-        cursor: pointer;
+  div {
+    padding: 10px 16px;
+    background: none;
+    cursor: pointer;
+    color: $text-secondary;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: $cubic1;
+
+    &:hover {
+      background-color: $bg-hover;
+      color: $acc-color;
     }
+  }
 }
 
 .dropdown-content div:hover {
-    background-color: $light-color;
+  background-color: $bg-hover;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
 
 @media screen and (max-width: 1300px) {
-    .navbar {
-        .navbar-logo {
-            margin: 0 auto 0 40px;
-            width: fit-content;
-            transition: $cubic1;
-        }
+  .navbar {
+    .navbar-logo {
+      margin: 0 auto 0 28px;
+      width: fit-content;
+      transition: $cubic1;
     }
-    .menu-list {
-        margin-right: 40px;
-        transition: $cubic1;
-    }
-    .menu-item {
-        margin-left: 5px;
-        font-size: 1rem;
-        color: $light-color;
-        padding: 20px 10px;
-    }
+  }
+  .menu-list {
+    margin-right: 28px;
+    transition: $cubic1;
+  }
+  .menu-item {
+    margin-left: 4px;
+    font-size: 0.9rem;
+    color: $text-secondary;
+    padding: 16px 10px;
+  }
 }
 
 @media screen and (max-width: 740px) {
-    .menu-icon {
-        display: block;
+  .menu-icon {
+    display: flex;
+  }
+  .menu-list {
+    display: none;
+    .menu-item {
+      font-size: 1.15rem;
+      color: $text-secondary;
+      padding: 14px 16px;
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
     }
-    .menu-list {
-        display: none;
-        .menu-item {
-            font-size: 1.5rem;
-            color: $light-color;
-            padding: 20px 10px;
-            text-decoration: none;
-        }
-    }
-    .show {
-        position: absolute;
-        top: 50px;
-        left: 0;
-        right: 0;
-        margin-right: 0;
-        background-color: $dark-color;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: max-content;
-        transition: $cubic1;
-    }
-    .dropdown {
-        margin-right: 70px;
-    }
+  }
+  .show {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    margin-right: 0;
+    background: var(--bg-elevated-solid);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid $border;
+    box-shadow: $shadow-dark;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+    padding: 12px 0 16px;
+    gap: 4px;
+    transition: $cubic1;
+  }
+  .dropdown {
+    margin-right: 56px;
+  }
 }

@@ -1,226 +1,255 @@
 @import 'config';
 
 body {
-    font-family: $main-font;
-    margin: 0;
-    padding: 0;
-    background: $body-bg;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+  font-family: $main-font;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: $text-primary;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(240, 160, 48, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(99, 102, 241, 0.05), transparent),
+    $body-bg;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .header {
-    max-width: 100%;
-    height: auto;
-    background: $dark-color;
+  max-width: 100%;
+  height: auto;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid $border;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
 }
+
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: calc(100% - 40px);
-    margin: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: calc(100% - 40px);
+  margin: 0 20px;
 }
+
 .header-buttons {
-    padding: 5px 0;
-    background: $dark-color;
-    display: flex;
-    align-items: center;
-    max-height: fit-content;
+  padding: 8px 16px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  max-height: fit-content;
+  gap: 4px;
+  flex-wrap: wrap;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn {
-    height: 100%;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 3px;
-    border: none;
+  height: 100%;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: $radius-sm;
+  border: 1px solid $border;
+  outline: none;
+  color: $text-secondary;
+  padding: 7px 14px;
+  background: $bg-surface;
+  transition: $cubic1;
+
+  &:active {
+    border: 1px solid $border;
     outline: none;
-    color: $light-color;
-    // margin: 0 10px;
-    padding: 5px 10px;
-    background: darken($dark-color, 5%);
+  }
+
+  &:hover {
     transition: $cubic1;
-    &:active {
-        border: none;
-        outline: none;
-    }
-    &:hover {
-        transition: $cubic1;
-        background: rgb(7, 7, 7);
-    }
+    background: $bg-hover;
+    color: $text-primary;
+    border-color: $border-strong;
+  }
 }
 
 .spinner-container {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.9);
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  background: rgba(11, 13, 18, 0.92);
+  backdrop-filter: blur(8px);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* spinner */
 .spinner {
-    margin: 0 auto;
-    width: 100px;
-    height: 100px;
-    position: relative;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  position: relative;
 }
 
 .spinner div {
-    box-sizing: border-box;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 13px solid transparent;
-    border-top-color: rgb(187, 0, 187);
-    border-radius: 50%;
-    animation: spinnerOne 1.2s linear infinite;
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: $acc-color;
+  border-radius: 50%;
+  animation: spinnerOne 1.2s linear infinite;
 }
 .spinner div:nth-child(2) {
-    border: 13px solid transparent;
-    border-bottom-color: rgb(187, 0, 187);
-    border-radius: 50%;
-    animation: spinnerTwo 1.2s linear infinite;
+  border: 4px solid transparent;
+  border-bottom-color: $acc-hover;
+  border-radius: 50%;
+  animation: spinnerTwo 1.2s linear infinite;
 }
 
 @keyframes spinnerOne {
-    0% {
-        transform: rotate(0deg);
-        border-width: 13px;
-    }
-    50% {
-        transform: rotate(180deg);
-        border-width: 3px;
-        border-top-color: rgb(65, 0, 187);
-    }
-    100% {
-        transform: rotate(360deg);
-        border-width: 13px;
-    }
+  0% {
+    transform: rotate(0deg);
+    border-width: 4px;
+  }
+  50% {
+    transform: rotate(180deg);
+    border-width: 2px;
+    border-top-color: $acc-hover;
+  }
+  100% {
+    transform: rotate(360deg);
+    border-width: 4px;
+  }
 }
 @keyframes spinnerTwo {
-    0% {
-        transform: rotate(0deg);
-        border-width: 3px;
-    }
-    50% {
-        transform: rotate(180deg);
-        border-width: 13px;
-        border-bottom-color: rgb(65, 0, 187);
-    }
-    100% {
-        transform: rotate(360deg);
-        border-width: 3px;
-    }
+  0% {
+    transform: rotate(0deg);
+    border-width: 2px;
+  }
+  50% {
+    transform: rotate(180deg);
+    border-width: 4px;
+    border-bottom-color: $acc-dark;
+  }
+  100% {
+    transform: rotate(360deg);
+    border-width: 2px;
+  }
 }
 
 // lds-facebook
 .lds-facebook-container {
-    // position: absolute;
-    // top: 0px;
-    // left: 50%;
-    width: fit-content;
-    margin: auto auto;
-    transform: translate(-50%);
-    z-index: 14;
+  width: fit-content;
+  margin: auto auto;
+  transform: translate(-50%);
+  z-index: 14;
 }
 .lds-facebook {
-    display: block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
+  display: block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
 }
 .lds-facebook div {
-    display: inline-block;
-    position: absolute;
-    left: 8px;
-    width: 16px;
-    background: rgb(183, 0, 255);
-    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  display: inline-block;
+  position: absolute;
+  left: 8px;
+  width: 14px;
+  border-radius: 4px;
+  background: $acc-color;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 .lds-facebook div:nth-child(1) {
-    left: 8px;
-    animation-delay: -0.24s;
+  left: 8px;
+  animation-delay: -0.24s;
 }
 .lds-facebook div:nth-child(2) {
-    left: 32px;
-    animation-delay: -0.12s;
+  left: 32px;
+  animation-delay: -0.12s;
 }
 .lds-facebook div:nth-child(3) {
-    left: 56px;
-    animation-delay: 0;
+  left: 56px;
+  animation-delay: 0;
 }
 @keyframes lds-facebook {
-    0% {
-        top: 8px;
-        height: 64px;
-    }
-    50%,
-    100% {
-        top: 24px;
-        height: 32px;
-    }
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%,
+  100% {
+    top: 24px;
+    height: 32px;
+  }
 }
+
 .close-btn-spinner {
-    cursor: pointer;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    .close-icon-spinner {
-        color: rgb(202, 0, 0);
-        font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  .close-icon-spinner {
+    color: $danger;
+    font-size: 1.5rem;
+    transition: $cubic1;
+    &:hover {
+      color: $danger-hover;
+      transform: scale(1.1);
     }
+  }
 }
+
 .error-msg-container {
+  width: 100%;
+  height: 45px;
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 50;
+  .error-msg {
+    background: linear-gradient(135deg, #7f1d1d, #991b1b);
     width: 100%;
-    height: 45px;
-    position: absolute;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    .error-msg {
-        background-color: rgb(136, 0, 0);
-        width: 100%;
-        text-align: center;
-        color: $light-color;
-        padding: 7px 0;
-        border: 0;
-    }
+    max-width: 1600px;
+    text-align: center;
+    color: $light-color;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 0 0 $radius $radius;
+    font-weight: 500;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 20px rgba(127, 29, 29, 0.4);
+  }
 }
 
 img {
-    display: block;
+  display: block;
 }
 
 .info-modal {
-    position: fixed;
-    z-index: 11;
-    background-color: $acc-color;
-    color: $dark-color;
-    font-weight: bold;
-    font-size: 1rem;
-    box-sizing: border-box;
-    padding: 20px;
-    right: 5%;
-    top: 10%;
-    box-shadow: $shadow-dark;
-    border-radius: 5px;
-    .info-modal-category {
-        text-transform: capitalize;
-    }
+  position: fixed;
+  z-index: 11;
+  background: $acc-gradient;
+  color: $bg-deep;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  right: 5%;
+  top: 10%;
+  box-shadow: $shadow-glow;
+  border-radius: $radius;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  .info-modal-category {
+    text-transform: capitalize;
+  }
 }
-

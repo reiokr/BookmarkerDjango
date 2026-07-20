@@ -1,31 +1,188 @@
-@import 'config';
+@import "config";
 
 .user-content {
-  margin-top: 50px;
-  background-color: $light-color;
-  min-width: 250px;
-  max-width: 800px;
-  min-height: 200px;
-  padding: 20px;
+  margin: 48px auto;
+  background: linear-gradient(145deg, $bg-elevated, $bg-surface);
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  min-width: 280px;
+  max-width: 760px;
+  min-height: 220px;
+  padding: 28px 32px;
+  box-shadow: $shadow-dark;
+  color: $text-primary;
+  display: grid;
+  gap: 22px;
+
+  h1,
+  h2,
+  h3 {
+    font-family: $display-font;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .user-section-title {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .user-close-button {
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: transparent;
+    color: $text-secondary;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: $cubic1;
+
+    &:hover {
+      color: $text-primary;
+      background: $bg-hover;
+      border-color: $border-strong;
+    }
+  }
+
   .user-data,
   .user-options {
     list-style-type: none;
-    margin-top: 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+      padding: 12px 14px;
+      background: $bg-surface;
+      border: 1px solid $border;
+      border-radius: $radius;
+      color: $text-secondary;
+      font-size: 0.95rem;
+    }
+  }
+
+  .settings-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+  }
+
+  .settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    color: $text-primary;
+
+    label,
+    span {
+      font-weight: 600;
+    }
+  }
+
+  .settings-row--compact {
+    color: $text-secondary;
+    font-size: 0.95rem;
+  }
+
+  .settings-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: $acc-muted;
+    color: $acc-color;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .theme-select {
+    appearance: none;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    background: $bg-elevated;
+    color: $text-primary;
+    padding: 8px 12px;
+    min-width: 140px;
+    outline: none;
+  }
+
+  .settings-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .save-button {
+    border: none;
+    border-radius: $radius-sm;
+    padding: 8px 16px;
+    background: $acc-gradient;
+    color: $light-color;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      transform $cubic1,
+      box-shadow $cubic1;
+    box-shadow: $shadow-glow;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.8;
+      cursor: wait;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  .save-feedback {
+    color: $acc-color;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 }
 
 .user-delete {
   button {
-    margin-top: 20px;
-    background: inherit;
-    background: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    color: $dark-color;
-    font-weight: 400;
-    font-size: 0.8rem;
+    margin-top: 24px;
+    background: transparent;
+    border: 1px solid var(--danger-border);
+    color: $danger;
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: $cubic1;
+
     &:hover {
-      background: inherit;
-      border: 1px solid rgba(146, 0, 0, 0.8);
+      background: $danger-muted;
+      border-color: $danger;
     }
   }
 }
@@ -33,32 +190,66 @@
 .user-delete-modal {
   text-align: center;
   width: fit-content;
+  max-width: 90vw;
   height: fit-content;
-  background: rgb(172, 0, 0);
+  background: linear-gradient(160deg, #7f1d1d, #450a0a);
   color: white;
   position: absolute;
   top: -150px;
   left: 50%;
   transform: translate(-50%);
   transition: $cubic1;
-  padding: 20px;
+  padding: 28px;
+  border-radius: $radius-xl;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: $shadow-dark;
+
   .user-modal-buttons {
-    margin-top: 20px;
+    margin-top: 24px;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
     input {
-      text-indent: 5px;
+      text-indent: 0;
+      padding: 0 12px;
+      height: 38px;
+      border-radius: $radius-sm;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      outline: none;
     }
+
     button {
-      height: 30px;
+      height: 38px;
+      padding: 0 16px;
+      border: none;
+      border-radius: $radius-sm;
+      cursor: pointer;
+      font-weight: 600;
+      transition: $cubic1;
+
       &:nth-child(2) {
-        background: rgb(255, 255, 255);
-        color: red;
+        background: white;
+        color: $danger;
+
+        &:hover {
+          background: #fee2e2;
+        }
       }
+
       &:nth-child(3) {
-        background: rgb(48, 48, 48);
+        background: rgba(0, 0, 0, 0.4);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.55);
+        }
       }
     }
   }
@@ -69,11 +260,14 @@
   top: 20%;
   transition: $cubic1;
 }
+
 .delete-user-loader {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.856);
+  background: rgba(11, 13, 18, 0.85);
+  backdrop-filter: blur(4px);
   margin-left: -20px;
+  border-radius: $radius-xl;
 }

@@ -1,45 +1,84 @@
+@import 'config';
+
 .signup-form-container {
-  border-radius: 10px;
-  padding: 10px 50px 60px 50px;
+  border-radius: $radius-xl;
+  padding: 2rem 2.25rem 2.75rem;
   box-sizing: border-box;
-  max-width: 400px;
+  max-width: 420px;
   height: auto;
-  margin: 100px auto 20px auto;
-  box-shadow: 0px 0px 50px 30px rgb(88, 88, 88), 0 0 3px 1px rgb(124, 0, 201);
+  margin: 64px auto 24px;
+  background: $bg-elevated;
+  border: 1px solid $border;
+  box-shadow: $shadow-dark, 0 0 60px rgba(240, 160, 48, 0.04);
+
   h1,
   h2,
   h3 {
-    margin: 20px;
+    margin: 0 0 1.25rem;
     text-align: center;
-    color: rgb(199, 199, 199);
+    font-family: $display-font;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $text-primary;
   }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
   form {
     width: 100%;
+
     input {
-      border: none;
-      background: rgb(218, 218, 218);
-      border-radius: 5px;
+      border: 1px solid $border;
+      background: $bg-surface;
+      border-radius: $radius;
       width: 100%;
       margin: 10px 0;
-      height: 30px;
-      font-size: 1.1rem;
-      text-indent: 5px;
+      height: 44px;
+      font-size: 1rem;
+      text-indent: 0;
+      padding: 0 14px;
+      color: $text-primary;
+      outline: none;
+      transition: $cubic1;
+
+      &::placeholder {
+        color: $text-muted;
+      }
+
+      &:focus {
+        border-color: $acc-color;
+        box-shadow: 0 0 0 3px $acc-muted;
+        background: $bg-hover;
+      }
     }
+
     .form-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+
       input {
-        background: rgb(29, 29, 29);
-        color: rgb(185, 185, 185);
+        background: $acc-gradient;
+        color: $bg-deep;
         border: none;
-        border-radius: 5px;
+        border-radius: $radius;
         width: fit-content;
-        float: left;
-        padding: 0 10px;
+        float: none;
+        padding: 0 18px;
+        height: 42px;
         cursor: pointer;
-        transition: all 0.3s linear;
+        font-weight: 600;
+        box-shadow: 0 2px 12px $acc-glow;
+        transition: $cubic1;
+
         &:hover {
-          box-shadow: 0 0 5px 5px rgb(128, 128, 128);
-          color: white;
-          transition: all 0.3s linear;
+          box-shadow: 0 4px 20px $acc-glow;
+          color: $bg-deep;
+          filter: brightness(1.08);
+          transform: translateY(-1px);
         }
       }
     }
