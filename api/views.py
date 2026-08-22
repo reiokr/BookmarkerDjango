@@ -1,3 +1,4 @@
+import logging
 from urllib.error import HTTPError
 
 import requests
@@ -77,6 +78,8 @@ from .tokens import account_activation_token
 # Valid values for the commentThreads().list ``order`` enum (audit spec §4.1).
 YT_COMMENT_ORDERS = ("time", "relevance")
 
+logger = logging.getLogger(__name__)
+
 
 def _reject_bad_id(value, regex, param):
     """Audit spec §4.1: non-conforming proxy IDs are a 400 client error.
@@ -121,6 +124,16 @@ class MyObtainTokenPairView(TokenObtainPairView):
     throttle_classes = [LoginAnonRateThrottle]
 
     def post(self, request, *args, **kwargs):
+        # Same defense-in-depth Origin gate as refresh/logout (P2): a
+        # present-but-foreign Origin is rejected; header-absent non-browser
+        # clients (curl/tests) pass. /api/extension-login/ stays exempt --
+        # its consumer is a browser extension whose Origin legitimately
+        # differs from the SPA.
+        if not origin_allowed(request):
+            return Response(
+                {"detail": "Cross-origin request rejected."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         # Roadmap step [2.2] option (a): on a successful login the refresh
         # token moves to an HttpOnly SameSite=Lax cookie and is REMOVED
         # from the JSON body -- the browser never holds it in JS-reachable
@@ -246,15 +259,30 @@ class RegisterView(generics.CreateAPIView):
                 )
                 to_email = [user.email]
 
-                send_mail(
-                    subject=mail_subject,
-                    message=msg,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=to_email,
-                )
+                # An unreachable SMTP host must NOT fail the signup: the
+                # user row already exists at this point, so a raised
+                # exception used to surface as a 500 while leaving an
+                # unactivated account behind. Delivery failures are logged;
+                # clients learn about them via ``email_sent``.
+                email_sent = True
+                try:
+                    send_mail(
+                        subject=mail_subject,
+                        message=msg,
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=to_email,
+                    )
+                except Exception:
+                    logger.exception(
+                        "Activation email delivery failed for %s", user.email
+                    )
+                    email_sent = False
 
                 return Response(
-                    {"msg": "Verification link sent to your email"},
+                    {
+                        "msg": "Verification link sent to your email",
+                        "email_sent": email_sent,
+                    },
                     status=status.HTTP_201_CREATED,
                 )
             else:

@@ -197,3 +197,87 @@ class CrossOriginRejectionTests(RefreshCookieTestBase):
         self._login()
         res = self.client.post(REFRESH_URL, format="json")
         self.assertEqual(res.status_code, 200)
+
+    # --- /api/login/ carries the same gate (port-drift fix) ---
+
+    def test_unknown_origin_is_rejected_on_login(self):
+        res = self._post_with_origin(LOGIN_URL, "https://evil.example")
+        self.assertEqual(res.status_code, 403)
+
+    def test_frontend_origin_is_accepted_on_login(self):
+        from django.conf import settings
+
+        # Login needs credentials -- unlike refresh/logout, an empty body
+        # would 400 on serializer validation before anything else.
+        res = self.client.post(
+            LOGIN_URL,
+            {"email": "cookie-user@example.com", "password": PASSWORD},
+            format="json",
+            HTTP_ORIGIN=settings.FRONTEND_URL,
+        )
+        self.assertEqual(res.status_code, 200)
+
+    def test_backend_origin_is_accepted_on_login(self):
+        from django.conf import settings
+
+        res = self.client.post(
+            LOGIN_URL,
+            {"email": "cookie-user@example.com", "password": PASSWORD},
+            format="json",
+            HTTP_ORIGIN=settings.BACKEND_URL,
+        )
+        self.assertEqual(res.status_code, 200)
+
+    def test_no_origin_header_is_accepted_on_login(self):
+        # curl/tests/server-to-server: no Origin header, allowed.
+        res = self.client.post(
+            LOGIN_URL,
+            {"email": "cookie-user@example.com", "password": PASSWORD},
+            format="json",
+        )
+        self.assertEqual(res.status_code, 200)
+
+
+class OriginAllowlistReadsSettingsTests(APITestCase):
+    """Unit-level pin of the allowlist source: settings, read per request.
+
+    Incident: .env shipped FRONTEND_URL=:3001 / BACKEND_URL=:8001 while
+    the real dev topology is CRA on :3000 proxying to Django on :8000 --
+    every in-browser refresh 403'd. These tests prove the allowlist is
+    derived from FRONTEND_URL/BACKEND_URL at request time, so correcting
+    the two .env values is the single knob that fixes it.
+    """
+
+    DEV_FRONTEND = "http://localhost:3000"
+    DEV_BACKEND = "http://localhost:8000"
+    DRIFTED_FRONTEND = "http://localhost:3001"
+
+    def _request_with_origin(self, origin):
+        from django.test import RequestFactory
+
+        from api.auth_cookies import origin_allowed
+
+        return origin_allowed(
+            RequestFactory().post(REFRESH_URL, HTTP_ORIGIN=origin)
+        )
+
+    def test_corrected_dev_ports_are_allowed_on_refresh_semantics(self):
+        with override_settings(
+            FRONTEND_URL=self.DEV_FRONTEND, BACKEND_URL=self.DEV_BACKEND
+        ):
+            self.assertTrue(self._request_with_origin(self.DEV_FRONTEND))
+            self.assertTrue(self._request_with_origin(self.DEV_BACKEND))
+
+    def test_drifted_port_is_rejected(self):
+        with override_settings(
+            FRONTEND_URL=self.DRIFTED_FRONTEND, BACKEND_URL=self.DEV_BACKEND
+        ):
+            # The browser really runs on :3000; the allowlist says :3001
+            # -> exactly the incident's 403 behaviour.
+            self.assertFalse(self._request_with_origin(self.DEV_FRONTEND))
+
+    def test_trailing_slash_is_normalised(self):
+        with override_settings(
+            FRONTEND_URL=self.DEV_FRONTEND + "/", BACKEND_URL=self.DEV_BACKEND
+        ):
+            self.assertTrue(self._request_with_origin(self.DEV_FRONTEND))

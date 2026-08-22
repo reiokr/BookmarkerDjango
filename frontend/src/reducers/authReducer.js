@@ -39,6 +39,7 @@ const initialState = {
     isLoading: false,
     user: null,
     sendingEmail: false,
+    emailError: false,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -66,6 +67,7 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoading: false,
                 sendingEmail: false,
+                emailError: false,
             };
         case SENDING_EMAIL:
             return {
@@ -73,9 +75,13 @@ export default function (state = initialState, action) {
                 sendingEmail: true,
             };
         case EMAIL_ERROR:
+            // The account itself was created; only the activation email
+            // failed to go out (backend reports email_sent=false). Signup
+            // renders <EmailError /> off this flag.
             return {
                 ...state,
                 sendingEmail: false,
+                emailError: true,
             };
         case LOGIN_SUCCESS:
             return {

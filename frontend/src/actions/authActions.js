@@ -112,13 +112,26 @@ const signUpUser = (data) => async (dispatch) => {
     const res = await axios(config);
     if (res.data) {
       dispatch({ type: SIGN_UP });
-      dispatch(returnSuccess(res.data, res.status, "SIGNUP_SUCCESS"));
+      // Backend returns email_sent=false when the activation email could
+      // not be delivered (SMTP down) -- the account still exists, so this
+      // is NOT a request failure; Signup shows <EmailError /> for it.
+      if (res.data.email_sent === false) {
+        dispatch({ type: EMAIL_ERROR });
+      }
+      // returnSuccess(status, id): pass the literal id so Signup's
+      // success.id === 'SIGNUP_SUCCESS' gate actually fires (the previous
+      // 3-arg call left id as the numeric HTTP status).
+      dispatch(returnSuccess(res.status, "SIGNUP_SUCCESS"));
       // localStorage.setItem('ytpw', 840);
       // localStorage.setItem('playerVolume', 50);
       // window.location = '/login';
     }
   } catch (err) {
-    dispatch({ type: EMAIL_ERROR });
+    // Request-level failure (validation 400 etc.): conclude the signup
+    // attempt (stop the spinner, clear any stale emailError) WITHOUT
+    // raising the emailError flag -- EMAIL_ERROR now means "activation
+    // email could not be sent", which would be wrong here.
+    dispatch({ type: SIGN_UP });
     dispatch(
       returnErrors(err.response.data, err.response.status, "SIGNUP_ERROR"),
     );

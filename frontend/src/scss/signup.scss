@@ -26,6 +26,17 @@
     font-size: 1.75rem;
   }
 
+  .email-error-note {
+    border: 1px solid $danger;
+    background: $danger-muted;
+    border-radius: $radius;
+    color: $text-primary;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    padding: 10px 14px;
+    margin: 10px 0;
+  }
+
   form {
     width: 100%;
 

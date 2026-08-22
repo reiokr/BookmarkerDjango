@@ -32,7 +32,11 @@ const Signup = ({ signUpUser, auth, success, err }) => {
     return (
         <>
             <div className="signup-form-container">
-                {success.id==='SIGNUP_SUCCESS' && <SuccessAlert />}
+                {/* Normal completion -> success alert; activation-email
+                    delivery failure -> EmailError note instead. */}
+                {success.id === 'SIGNUP_SUCCESS' && !auth.emailError && (
+                    <SuccessAlert />
+                )}
                 {auth.emailError && <EmailError />}
                 {auth.sendingEmail && <SendingEmail />}
                 <h1>{t('Sign Up')}</h1>

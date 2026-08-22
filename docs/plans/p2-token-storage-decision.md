@@ -122,3 +122,34 @@ browsers simply expire (Max-Age ≤ 14 d) or are cleared by the next logout.
 * Login response body contains no `refresh` substring (asserted).
 * Frontend grep proof: no refresh-token write to localStorage remains in
   `frontend/src`.
+
+## 7. Origin-check scope & the port-drift incident (post-rollout addendum)
+
+**Scope of the Origin allowlist** (defense-in-depth CSRF posture, §2):
+
+* Checked: `/api/login/`, `/api/login/refresh/`, `/api/login/logout/` --
+  the three web-auth surfaces that consume or mint the refresh cookie.
+  A present-but-foreign `Origin` header is rejected with 403; a request
+  WITHOUT the header (curl, tests, server-to-server) is allowed, since a
+  header-absent request cannot be a browser-driven cross-site POST.
+* Exempt: `/api/login/extension-login/` -- its consumer is a browser
+  extension whose Origin legitimately differs from the SPA, so applying
+  the allowlist there would break the extension for no CSRF gain (it
+  never touches the cookie).
+
+**Port-drift incident:** `.env` shipped `FRONTEND_URL=http://localhost:3001`
+and `BACKEND_URL=http://localhost:8001` while the real dev topology is CRA
+on :3000 (`react-scripts start`, no PORT override) proxying `/api` to
+Django on :8000 (`"proxy": "http://127.0.0.1:8000/"` in
+`frontend/package.json`). Because `_allowed_origins()` reads exactly these
+two settings, every in-browser token refresh carried
+`Origin: http://localhost:3000` against an allowlist expecting :3001 and
+answered 403 -- silent re-auth was broken end to end.
+
+**Resolution:** corrected the two `.env` values (:3000 / :8000) and added a
+topology warning to `.env.example`: FRONTEND_URL/BACKEND_URL MUST match the
+actual deployment ports or cookie-auth refresh will reject cross-origin
+calls. Regression-pinned by `OriginAllowlistReadsSettingsTests`
+(`api/tests/test_token_cookie.py`), which proves the allowlist is derived
+from settings at request time, and by login-surface origin tests on
+`MyObtainTokenPairView`.
