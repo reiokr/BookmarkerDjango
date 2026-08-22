@@ -237,6 +237,37 @@ class CrossOriginRejectionTests(RefreshCookieTestBase):
         )
         self.assertEqual(res.status_code, 200)
 
+    # --- CRA dev-proxy loopback aliasing (proxy rewrites Origin) ---
+
+    def test_proxy_rewritten_origin_is_accepted_on_login(self):
+        # react-dev-utils' onProxyReq rewrites every proxied request's
+        # Origin to the proxy target -- historically the exact form
+        # "http://127.0.0.1:8000/" -- which must pass the gate.
+        res = self.client.post(
+            LOGIN_URL,
+            {"email": "cookie-user@example.com", "password": PASSWORD},
+            format="json",
+            HTTP_ORIGIN="http://127.0.0.1:8000/",
+        )
+        self.assertEqual(res.status_code, 200)
+
+    def test_proxy_rewritten_origin_passes_gate_on_refresh(self):
+        # Gate passes -> request proceeds to cookie validation; with no
+        # cookie that is a 401, NOT the gate's 403.
+        res = self._post_with_origin(REFRESH_URL, "http://127.0.0.1:8000/")
+        self.assertEqual(res.status_code, 401)
+
+    def test_foreign_origin_with_trailing_slash_still_rejected(self):
+        res = self._post_with_origin(LOGIN_URL, "https://evil.example/")
+        self.assertEqual(res.status_code, 403)
+
+    def test_trailing_slash_frontend_origin_accepted_on_refresh(self):
+        from django.conf import settings
+
+        self._login()
+        res = self._post_with_origin(REFRESH_URL, settings.FRONTEND_URL + "/")
+        self.assertEqual(res.status_code, 200)
+
 
 class OriginAllowlistReadsSettingsTests(APITestCase):
     """Unit-level pin of the allowlist source: settings, read per request.
@@ -281,3 +312,30 @@ class OriginAllowlistReadsSettingsTests(APITestCase):
             FRONTEND_URL=self.DEV_FRONTEND + "/", BACKEND_URL=self.DEV_BACKEND
         ):
             self.assertTrue(self._request_with_origin(self.DEV_FRONTEND))
+
+    # --- loopback aliasing: localhost <-> 127.0.0.1 (dev proxy) ---
+
+    def test_loopback_alias_of_configured_urls_is_allowed(self):
+        with override_settings(
+            FRONTEND_URL=self.DEV_FRONTEND, BACKEND_URL=self.DEV_BACKEND
+        ):
+            self.assertTrue(self._request_with_origin("http://127.0.0.1:8000/"))
+            self.assertTrue(self._request_with_origin("http://127.0.0.1:3000"))
+            self.assertTrue(self._request_with_origin("http://localhost:3000/"))
+
+    def test_wrong_port_loopback_alias_is_rejected(self):
+        with override_settings(
+            FRONTEND_URL=self.DEV_FRONTEND, BACKEND_URL=self.DEV_BACKEND
+        ):
+            self.assertFalse(
+                self._request_with_origin("http://127.0.0.1:9999")
+            )
+
+    def test_non_loopback_config_gains_no_aliases(self):
+        prod = "https://bookmarks.example.com"
+        with override_settings(FRONTEND_URL=prod, BACKEND_URL=prod):
+            self.assertTrue(self._request_with_origin(prod))
+            self.assertFalse(self._request_with_origin("https://127.0.0.1"))
+            self.assertFalse(
+                self._request_with_origin("https://localhost")
+            )

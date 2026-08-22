@@ -18,9 +18,13 @@ Cookie contract:
 CSRF posture: SameSite=Lax already blocks cross-site POSTs carrying the
 cookie in all modern browsers. As defense-in-depth the cookie-consuming
 POSTs additionally reject requests whose ``Origin`` header names an
-origin outside {FRONTEND_URL, BACKEND_URL} -- see
+origin outside {FRONTEND_URL, BACKEND_URL} -- each configured loopback
+URL also accepts its localhost <-> 127.0.0.1 alias, because CRA's dev
+proxy rewrites proxied requests' Origin to the proxy target -- see
 docs/plans/p2-token-storage-decision.md for the full analysis.
 """
+
+from urllib.parse import urlsplit
 
 from django.conf import settings
 
@@ -28,10 +32,30 @@ REFRESH_COOKIE_NAME = "refresh_token"
 #: Covers /api/login/refresh/ and /api/login/logout/.
 REFRESH_COOKIE_PATH = "/api/login/"
 
+#: The two spellings of "this same machine" in dev; either may arrive at
+#: Django because react-dev-utils' onProxyReq rewrites Origin to the
+#: proxy target (frontend/package.json ``proxy``).
+_LOOPBACK_HOSTS = {"localhost", "127.0.0.1"}
+
+
+def _origin_forms(url):
+    """Configured origin plus its loopback alias, slash-normalised.
+
+    Non-loopback hosts gain no aliases: production must match its
+    configured URL exactly.
+    """
+    parts = urlsplit(url)
+    if parts.hostname not in _LOOPBACK_HOSTS:
+        return {url.rstrip("/")}
+    port = f":{parts.port}" if parts.port else ""
+    return {f"{parts.scheme}://{host}{port}" for host in _LOOPBACK_HOSTS}
+
 
 def _allowed_origins():
-    origins = {settings.FRONTEND_URL, settings.BACKEND_URL}
-    return {o.rstrip("/") for o in origins}
+    origins = set()
+    for url in (settings.FRONTEND_URL, settings.BACKEND_URL):
+        origins |= _origin_forms(url)
+    return origins
 
 
 def origin_allowed(request):
