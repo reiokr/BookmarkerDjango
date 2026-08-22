@@ -1,0 +1,116 @@
+@import "config";
+
+.notfound {
+  min-height: calc(100vh - 52px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.notfound-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 40% at 50% 30%,
+    var(--acc-muted),
+    transparent 70%
+  );
+  opacity: 0.7;
+}
+
+.notfound-card {
+  max-width: 540px;
+  width: 100%;
+  padding: 3rem 2rem;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-dark;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notfound-code {
+  font-family: $display-font;
+  font-size: clamp(5rem, 18vw, 9rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  margin: 0;
+  background: $acc-gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: notfound-pulse 3s ease-in-out infinite;
+}
+
+@keyframes notfound-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 var(--acc-glow));
+  }
+  50% {
+    filter: drop-shadow(0 0 24px var(--acc-glow));
+  }
+}
+
+.notfound-title {
+  font-family: $display-font;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.notfound-subtitle {
+  color: $text-secondary;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 40ch;
+  margin: 0;
+}
+
+.notfound-btn {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: $radius;
+  background: $acc-gradient;
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px var(--acc-glow);
+  transition: $cubic1;
+
+  &:hover {
+    background: $acc-gradient-hover;
+    box-shadow: 0 8px 32px var(--acc-glow);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notfound-code {
+    animation: none;
+  }
+  .notfound-btn {
+    transition: none;
+  }
+}

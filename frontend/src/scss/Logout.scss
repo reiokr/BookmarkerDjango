@@ -1,0 +1,122 @@
+@import 'config';
+
+.logout {
+  min-height: calc(100vh - 52px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  isolation: isolate;
+}
+
+.logout-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 45% 35% at 50% 35%, var(--acc-muted), transparent 70%);
+  opacity: 0.6;
+}
+
+.logout-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 3rem 2rem;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-dark;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: $acc-muted;
+  color: $acc-color;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.logout-title {
+  font-family: $display-font;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.logout-subtitle {
+  color: $text-secondary;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 38ch;
+  margin: 0;
+}
+
+.logout-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: $radius;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: $cubic1;
+  white-space: nowrap;
+
+  &--primary {
+    background: $acc-gradient;
+    color: var(--on-accent);
+    box-shadow: 0 4px 20px var(--acc-glow);
+
+    &:hover {
+      background: $acc-gradient-hover;
+      box-shadow: 0 8px 32px var(--acc-glow);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--ghost {
+    background: $bg-surface;
+    color: $text-secondary;
+    border: 1px solid $border;
+
+    &:hover {
+      background: $bg-hover;
+      color: $text-primary;
+      border-color: $border-strong;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logout-btn {
+    transition: none;
+  }
+}

@@ -1,0 +1,459 @@
+@import 'config';
+
+// ═══════════════════════════════════════════════════════════
+// Landing page — modern, glassmorphism, mesh gradient, motion
+// ═══════════════════════════════════════════════════════════
+
+.landing {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 52px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+// Animated aurora glow background — sits behind everything
+.landing-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    will-change: transform;
+  }
+
+  &::before {
+    width: 520px;
+    height: 520px;
+    top: -120px;
+    left: -80px;
+    background: radial-gradient(circle, var(--acc-color), transparent 70%);
+    animation: aurora-drift-1 18s ease-in-out infinite;
+  }
+
+  &::after {
+    width: 460px;
+    height: 460px;
+    top: 10%;
+    right: -100px;
+    background: radial-gradient(circle, var(--acc-hover), transparent 70%);
+    opacity: 0.4;
+    animation: aurora-drift-2 22s ease-in-out infinite;
+  }
+}
+
+@keyframes aurora-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 40px) scale(1.15); }
+}
+@keyframes aurora-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, 60px) scale(1.1); }
+}
+
+// ── Hero ────────────────────────────────────────────────
+.landing-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(4rem, 10vw, 7rem) 1.5rem 4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.landing-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid $border-strong;
+  color: $text-secondary;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+
+  .landing-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $acc-gradient;
+    box-shadow: 0 0 12px var(--acc-glow);
+  }
+}
+
+.landing-hero-title {
+  font-family: $display-font;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7vw, 4.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin: 0;
+  max-width: 18ch;
+  background: linear-gradient(135deg, $text-primary 0%, $acc-color 60%, $acc-hover 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing-hero-subtitle {
+  color: $text-secondary;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  max-width: 56ch;
+  margin: 0;
+}
+
+.landing-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: $radius;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: $cubic1;
+  white-space: nowrap;
+
+  &--primary {
+    background: $acc-gradient;
+    color: var(--on-accent);
+    box-shadow: 0 4px 20px var(--acc-glow);
+
+    &:hover {
+      background: $acc-gradient-hover;
+      box-shadow: 0 8px 32px var(--acc-glow);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--ghost {
+    background: var(--bg-elevated-alpha);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    color: $text-primary;
+    border-color: $border-strong;
+
+    &:hover {
+      background: $bg-hover;
+      border-color: $border-accent;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.landing-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+  color: $text-muted;
+  font-size: 0.85rem;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  svg {
+    color: $acc-color;
+    font-size: 1rem;
+  }
+}
+
+// ── Features ─────────────────────────────────────────────
+.landing-features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.landing-section-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  h2 {
+    font-family: $display-font;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $text-primary;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 50ch;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+.landing-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.landing-feature-card {
+  position: relative;
+  padding: 1.75rem 1.5rem;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  transition: $cubic1;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--acc-muted), transparent 50%);
+    opacity: 0;
+    transition: $cubic1;
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: $border-accent;
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-4px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .landing-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: $radius;
+    background: $acc-muted;
+    color: $acc-color;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    transition: $cubic1;
+  }
+
+  &:hover .landing-feature-icon {
+    background: $acc-gradient;
+    color: var(--on-accent);
+    box-shadow: 0 4px 16px var(--acc-glow);
+  }
+
+  h3 {
+    font-family: $display-font;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// ── Theme showcase ───────────────────────────────────────
+.landing-themes {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.landing-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.landing-theme-card {
+  position: relative;
+  padding: 1.25rem;
+  background: var(--bg-elevated-alpha);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  text-align: center;
+  transition: $cubic1;
+  overflow: hidden;
+
+  &:hover {
+    border-color: $border-strong;
+    box-shadow: $shadow-dark;
+    transform: translateY(-3px);
+  }
+
+  &.is-active {
+    border-color: $border-accent;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .landing-theme-swatch {
+    width: 100%;
+    height: 80px;
+    border-radius: $radius;
+    margin-bottom: 0.75rem;
+    border: 1px solid $border;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .landing-theme-name {
+    font-family: $display-font;
+    font-weight: 600;
+    color: $text-primary;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+
+  .landing-theme-active-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: $acc-gradient;
+    color: var(--on-accent);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: $cubic1;
+  }
+
+  &.is-active .landing-theme-active-tag {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Footer ───────────────────────────────────────────────
+.landing-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  border-top: 1px solid $border;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-muted;
+  font-size: 0.85rem;
+
+  a {
+    color: $text-secondary;
+    text-decoration: none;
+    transition: $cubic1;
+
+    &:hover {
+      color: $acc-color;
+    }
+  }
+
+  .landing-footer-heart {
+    color: var(--danger);
+    margin: 0 2px;
+  }
+}
+
+// ── Scroll reveal animation ──────────────────────────────
+.landing-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: landing-fade-up 0.7s $ease-out forwards;
+}
+
+.landing-reveal-1 { animation-delay: 0.05s; }
+.landing-reveal-2 { animation-delay: 0.15s; }
+.landing-reveal-3 { animation-delay: 0.25s; }
+.landing-reveal-4 { animation-delay: 0.35s; }
+.landing-reveal-5 { animation-delay: 0.45s; }
+
+@keyframes landing-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────
+@media (max-width: 640px) {
+  .landing-hero-cta {
+    flex-direction: column;
+    width: 100%;
+
+    .landing-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .landing-hero-meta {
+    gap: 1rem;
+    flex-direction: column;
+  }
+}
+
+// ── Reduced motion ───────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .landing-aurora::before,
+  .landing-aurora::after {
+    animation: none;
+  }
+
+  .landing-reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .landing-btn,
+  .landing-feature-card,
+  .landing-theme-card {
+    transition: none;
+  }
+}
