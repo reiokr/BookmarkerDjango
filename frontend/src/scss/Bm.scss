@@ -11,6 +11,7 @@
 .error-alert {
   margin: 0 auto;
   font-size: 0.95rem;
+  width: -moz-fit-content;
   width: fit-content;
   padding: 0 12px;
 }
@@ -50,6 +51,7 @@
     max-width: 380px;
     width: 100%;
     height: auto;
+    max-height: -moz-fit-content;
     max-height: fit-content;
     min-height: 200px;
     min-width: 280px;
@@ -109,6 +111,7 @@
       }
 
       .bm-img {
+        -o-object-fit: contain;
         object-fit: contain;
         height: inherit;
         width: inherit;
@@ -173,6 +176,7 @@
             font-size: 0;
             color: $acc-color;
             position: absolute;
+            width: -moz-fit-content;
             width: fit-content;
             bottom: 40%;
             left: 50%;
@@ -407,6 +411,7 @@
     display: flex;
     flex-direction: column;
     position: fixed;
+    width: -moz-max-content;
     width: max-content;
     max-width: 95vw;
     max-height: 100%;
@@ -427,6 +432,7 @@
       top: 10px;
       left: 10px;
       margin: 8px 12px;
+      width: -moz-fit-content;
       width: fit-content;
     }
 
@@ -514,6 +520,7 @@
           flex-direction: row;
           justify-content: center;
           align-items: center;
+          width: -moz-fit-content;
           width: fit-content;
           margin-right: 49px;
 
@@ -569,6 +576,7 @@
         max-width: 380px;
         width: 100%;
         height: auto;
+        max-height: -moz-fit-content;
         max-height: fit-content;
         min-height: 200px;
         margin: 0;
@@ -583,6 +591,7 @@
           min-width: 100px;
           max-width: 300px;
           height: auto;
+          -o-object-fit: cover;
           object-fit: cover;
           border-radius: $radius;
         }
@@ -634,6 +643,7 @@
   display: flex;
   flex-direction: column;
   position: fixed;
+  width: -moz-max-content;
   width: max-content;
   max-width: 95vw;
   max-height: 100%;

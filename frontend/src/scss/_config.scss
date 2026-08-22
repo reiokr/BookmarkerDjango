@@ -65,6 +65,11 @@ $radius-xl: var(--radius-xl);
   --video-width: 840px;
 }
 
+::-moz-selection {
+  background: var(--selection-bg);
+  color: var(--selection-color);
+}
+
 ::selection {
   background: var(--selection-bg);
   color: var(--selection-color);

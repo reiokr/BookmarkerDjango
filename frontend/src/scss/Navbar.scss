@@ -106,10 +106,15 @@
   padding: 6px 8px;
   border-radius: $radius-sm;
   transition: $cubic1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  &:hover {
+  &:hover,
+  &.active {
     color: $acc-color;
     background: $acc-muted;
+    box-shadow: inset 0 0 0 1px $border-accent;
   }
 }
 
@@ -126,18 +131,23 @@
   display: none;
   position: absolute;
   right: 0;
-  top: calc(100% + 6px);
-  background-color: $bg-elevated;
+  top: calc(100% + 8px);
+  background: $bg-elevated;
+  width: -moz-fit-content;
   width: fit-content;
-  min-width: 100px;
+  min-width: 132px;
   box-shadow: $shadow-dark;
   border: 1px solid $border-strong;
   border-radius: $radius;
   z-index: 100;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 
-  div {
-    padding: 10px 16px;
+  .locale-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
     background: none;
     cursor: pointer;
     color: $text-secondary;
@@ -145,18 +155,15 @@
     font-weight: 500;
     transition: $cubic1;
 
-    &:hover {
-      background-color: $bg-hover;
+    &:hover,
+    &.active {
+      background: $bg-hover;
       color: $acc-color;
     }
   }
 }
 
-.dropdown-content div:hover {
-  background-color: $bg-hover;
-}
-
-.dropdown:hover .dropdown-content {
+.dropdown-content.show {
   display: block;
 }
 
@@ -164,6 +171,7 @@
   .navbar {
     .navbar-logo {
       margin: 0 auto 0 28px;
+      width: -moz-fit-content;
       width: fit-content;
       transition: $cubic1;
     }
@@ -208,6 +216,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    height: -moz-max-content;
     height: max-content;
     padding: 12px 0 16px;
     gap: 4px;

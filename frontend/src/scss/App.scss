@@ -39,6 +39,7 @@ body {
   background: transparent;
   display: flex;
   align-items: center;
+  max-height: -moz-fit-content;
   max-height: fit-content;
   gap: 4px;
   flex-wrap: wrap;
@@ -147,6 +148,7 @@ body {
 
 // lds-facebook
 .lds-facebook-container {
+  width: -moz-fit-content;
   width: fit-content;
   margin: auto auto;
   transform: translate(-50%);

@@ -19,6 +19,7 @@
 /* The slider itself */
 .slider {
   -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   width: 100%;
   height: 6px;
@@ -26,7 +27,6 @@
   border-radius: 999px;
   outline: none;
   opacity: 0.9;
-  -webkit-transition: 0.2s;
   transition: opacity 0.2s;
 }
 
@@ -43,6 +43,7 @@
   border-radius: 50%;
   box-shadow: 0 0 0 3px $acc-muted, $shadow;
   cursor: pointer;
+  -webkit-transition: $cubic1;
   transition: $cubic1;
 
   &:hover {

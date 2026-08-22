@@ -43,6 +43,10 @@
       outline: none;
       transition: $cubic1;
 
+      &::-moz-placeholder {
+        color: $text-muted;
+      }
+
       &::placeholder {
         color: $text-muted;
       }
@@ -65,6 +69,7 @@
         color: $bg-deep;
         border: none;
         border-radius: $radius;
+        width: -moz-fit-content;
         width: fit-content;
         float: none;
         padding: 0 18px;

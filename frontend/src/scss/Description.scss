@@ -6,6 +6,7 @@
   box-sizing: border-box;
   padding: 0;
   color: $text-primary;
+  height: -moz-max-content;
   height: max-content;
   width: 840px;
   background: inherit;
@@ -43,8 +44,10 @@
     margin-top: -10px;
 
     .comment-order {
+      width: -moz-fit-content;
       width: fit-content;
       align-self: center;
+      height: -moz-fit-content;
       height: fit-content;
       display: flex;
       flex-direction: row;
@@ -68,6 +71,8 @@
         border: 1px solid $border;
         outline: none;
         padding: 8px 28px 8px 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
         appearance: none;
         font-size: 0.875rem;
         cursor: pointer;
@@ -127,6 +132,7 @@
 
           .author-name {
             margin: 0;
+            width: -moz-fit-content;
             width: fit-content;
             color: $acc-color;
           }
@@ -171,6 +177,7 @@
           .comment-replies-btn {
             position: absolute;
             font-size: 0.8rem;
+            width: -moz-fit-content;
             width: fit-content;
             white-space: nowrap;
             display: flex;
@@ -194,6 +201,7 @@
                 align-items: center;
 
                 .comment-replies-icon {
+                  height: -moz-fit-content;
                   height: fit-content;
                   display: flex;
                   align-items: center;
@@ -230,6 +238,7 @@
             .hide-replies {
               display: flex;
               align-items: flex-start;
+              width: -moz-fit-content;
               width: fit-content;
               white-space: nowrap;
               color: $text-secondary;
@@ -313,6 +322,7 @@
       max-width: 380px;
       width: 100%;
       height: auto;
+      max-height: -moz-fit-content;
       max-height: fit-content;
       margin: 0;
       display: grid;
@@ -334,6 +344,7 @@
         margin: 0 auto;
         max-height: 150px;
         max-width: 100%;
+        -o-object-fit: cover;
         object-fit: cover;
       }
 
@@ -505,6 +516,7 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
+      width: -moz-fit-content;
       width: fit-content;
       margin-right: 48px;
       margin-left: 6px;

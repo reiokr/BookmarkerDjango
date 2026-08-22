@@ -32,6 +32,9 @@
       color: $text-primary;
       transition: $cubic1;
 
+      &::-moz-placeholder {
+        color: $text-muted;
+      }
       &::placeholder {
         color: $text-muted;
       }

@@ -15,6 +15,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     height: 100%;
+    width: -moz-fit-content;
     width: fit-content;
     align-items: center;
     margin: 0 4px 0 0;
@@ -26,6 +27,7 @@
       align-items: center;
       margin: 0 4px;
       justify-self: flex-end;
+      width: -moz-max-content;
       width: max-content;
       background-color: transparent;
       color: $acc-color;
@@ -87,6 +89,7 @@
     background: $bg-surface;
     border: 1px solid $border;
     border-radius: $radius;
+    width: -moz-max-content;
     width: max-content;
     display: grid;
     grid-template-columns: 44px auto;
@@ -108,6 +111,9 @@
         border-radius: $radius-sm 0 0 $radius-sm;
         min-width: 140px;
 
+        &::-moz-placeholder {
+          color: $text-muted;
+        }
         &::placeholder {
           color: $text-muted;
         }
@@ -139,6 +145,7 @@
       border: none;
       border-right: 1px solid $border;
       max-height: 100%;
+      width: -moz-max-content;
       width: max-content;
       display: flex;
       justify-content: center;
@@ -191,6 +198,7 @@
     min-width: 200px;
     min-height: 100px;
     width: 340px;
+    height: -moz-max-content;
     height: max-content;
     background: $bg-elevated;
     border: 1px solid $border-strong;

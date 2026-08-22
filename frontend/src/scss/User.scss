@@ -117,6 +117,8 @@
   }
 
   .theme-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     border: 1px solid $border;
     border-radius: $radius-sm;
@@ -189,8 +191,10 @@
 
 .user-delete-modal {
   text-align: center;
+  width: -moz-fit-content;
   width: fit-content;
   max-width: 90vw;
+  height: -moz-fit-content;
   height: fit-content;
   background: linear-gradient(160deg, #7f1d1d, #450a0a);
   color: white;
