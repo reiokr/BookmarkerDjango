@@ -11,6 +11,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -132,11 +133,6 @@ def activate(request, uidb64, token):
         return HttpResponse("Activation link is invalid!")
 
 
-class UserList(generics.ListAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-
 class UserDetail(APIView):
     """
     Retrieve, update or delete a user instance.
@@ -193,12 +189,23 @@ class UpdateUserCategories(APIView):
     def put(self, request, pk, format=None):
         user = self.get_object(self.request.user.id)
         serializer = CategorySerializer(user, data=request.data)
-        # print(request.data['category'])
-        if request.data["category"] != "category":
-            bookmarks = Bm.objects.filter(category__iexact=request.data["category"])
-            if len(bookmarks) > 0:
-                if serializer.is_valid():
-                    return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
+        category = request.data.get("category", "")
+        if category and category != "category":
+            # Roadmap fact F3 fix: only the CALLER'S OWN bookmarks may
+            # influence this decision. The old query ran unscoped across all
+            # users' bookmarks, making every user's data a category-existence
+            # oracle for everyone else, and the old nested
+            # ``if serializer.is_valid(): return serializer.errors`` block was
+            # inverted -- it only rejected *valid* payloads and answered 403
+            # with an empty error body.
+            already_backed = Bm.objects.filter(
+                owner=request.user, category__iexact=category
+            ).exists()
+            if already_backed:
+                return Response(
+                    {"detail": "Category already exists."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -234,10 +241,12 @@ class OptionsView(APIView):
 class AddBookmark(APIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
-    def get(self, request, format=None):
-        bookmarks = Bm.objects.all()
-        serializer = BmSerializer(bookmarks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # NOTE: no GET handler on purpose. The former GET returned
+    # Bm.objects.all() -- every user's bookmarks -- to any authenticated
+    # caller (roadmap fact F2); it was an unrouted-in-practice debug
+    # leftover with no frontend consumer (R1 grep: bmActions.js only POSTs).
+    # Listing lives in BmListView (owner-scoped). Unsupported methods now
+    # get DRF's standard 405.
 
     def post(self, request, format=None):
         # validate url
@@ -524,6 +533,10 @@ class BmDetailView(APIView):
 
     def get_object(self, pk):
         bookmark = Bm.objects.filter(pk=pk).first()
+        # Roadmap fact F14 bonus defect: a missing pk used to dereference
+        # None here and blow up as a 500. Missing bookmarks are a 404.
+        if bookmark is None:
+            raise Http404
         if self.request.user.id == bookmark.owner_id:
             try:
                 return Bm.objects.get(pk=pk)
@@ -650,32 +663,77 @@ class LoadRelatedVideosView(APIView):
             raise Http404
 
 
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def extensionLogin(request):
-    email = request.GET.get("email", "")
-    password = request.GET.get("password", "")
-    html = f"""<!DOCTYPE html>
-<html><body><script>
-(async function(){{
-  var r = await fetch('/api/login/', {{
-    method:'POST',
-    headers:{{'Content-Type':'application/json'}},
-    body: JSON.stringify({{email:{email and '"'+email.replace('"','')+'"' or '""'}, password:{password and '"'+password.replace('"','')+'"' or '""'}}})
-  }});
-  var result = {{}};
-  if(!r.ok) {{
-    result = {{_loginResult:{{ok:false, error:'HTTP '+r.status}}}};
-  }} else {{
-    var d = await r.json();
-    if(!d.access) {{
-      result = {{_loginResult:{{ok:false, error:'No access token'}}}};
-    }} else {{
-      var m = await fetch('/api/user/me', {{headers:{{Authorization:'Bearer '+d.access}}}});
-      var user=null, cats=[];
-      if(m.ok) {{ var md = await m.json(); user = md.first_name||md.email; cats = md.categories||[]; }}
-      result = {{_loginResult:{{ok:true, user:user, categories:cats, accessToken:d.access, serverUrl:window.location.origin}}}};
-    }}
-  }}
-  window.parent.postMessage(result, '*');
-}})();
-</script></body></html>"""
-    return HttpResponse(html)
+    """Browser-extension login endpoint -- rewritten by roadmap step [0.4].
+
+    Contract (v2, BREAKING vs the legacy GET+HTML flow):
+
+    * Method: POST only. Any other method (including the legacy GET) is
+      rejected by DRF with 405. Credentials are never accepted via query
+      string.
+    * Request body: JSON ``{"email": str, "password": str}``.
+    * Responses are application/json ONLY -- no HTML, no inline JavaScript,
+      no template rendering, hence zero credential-interpolation surface:
+
+      - 200 ``{"ok": true, "access": <jwt>, "refresh": <jwt>,
+        "first_name": str, "categories": [str]}``
+      - 400 ``{"ok": false, "error": "email and password are required"}``
+        when either field is missing or blank
+      - 401 ``{"ok": false, "error": ...}`` for unknown email / wrong
+        password / unverified account (mirrors /api/login/ semantics)
+
+    * The submitted email/password are NEVER echoed back in any response
+      body. The user's email is deliberately omitted from the success
+      payload as well; consumers needing it can call GET /api/user/me with
+      the returned access token.
+
+    * No postMessage: this endpoint no longer renders a framed page at all.
+      The extension performs its own fetch() against this endpoint and owns
+      its own messaging; the legacy ``postMessage(result, '*')`` JWT leak is
+      gone entirely.
+
+    Migration note (risk R7): repo-wide grep found no in-repo consumer of
+    the legacy flow; any external browser-extension consumer must switch
+    from GET-with-query-params to POST JSON per this contract.
+    """
+    email = request.data.get("email", "")
+    password = request.data.get("password", "")
+    if not email or not password:
+        return Response(
+            {"ok": False, "error": "email and password are required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    token_serializer = MyTokenObtainPairSerializer(
+        data={"email": email, "password": password}
+    )
+    try:
+        token_serializer.is_valid(raise_exception=False)
+    except AuthenticationFailed:
+        # Wrong password for an existing, active account.
+        token_serializer = None
+
+    validated = getattr(token_serializer, "validated_data", None)
+    if not isinstance(validated, dict) or "access" not in validated:
+        # MyTokenObtainPairSerializer signals not-registered / not-verified
+        # accounts by returning a status-carrying dict instead of raising.
+        detail = "Invalid credentials"
+        if isinstance(validated, dict) and validated.get("msg"):
+            detail = str(validated["msg"])
+        return Response(
+            {"ok": False, "error": detail},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    user = token_serializer.user
+    return Response(
+        {
+            "ok": True,
+            "access": validated["access"],
+            "refresh": validated["refresh"],
+            "first_name": user.first_name or "",
+            "categories": list(user.categories or []),
+        }
+    )
