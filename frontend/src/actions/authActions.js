@@ -54,16 +54,25 @@ const loadUser = () => async (dispatch, getState) => {
       // console.log(res.data)
       dispatch(returnSuccess(res.data, res.status, "SIGNUP_SUCCESS"));
       if (res.data) {
-        const data = {
-          refresh:
-            JSON.parse(localStorage.getItem("token")).refresh ||
-            getState().auth.token?.refresh,
-        };
-        const refreshResult = await axios(
-          `/api/login/refresh/`,
-          tokenConfig(getState, "post", JSON.stringify(data)),
-        );
-        localStorage.setItem("token", JSON.stringify(refreshResult.data));
+        // Roadmap step [2.2] option (a): the refresh token lives in an
+        // HttpOnly SameSite=Lax cookie -- it is never read from storage
+        // and never sent in a body. The backend rotates the cookie on
+        // every successful refresh; only the new ACCESS token comes back.
+        try {
+          const refreshResult = await axios.post(
+            `/api/login/refresh/`,
+            {},
+            tokenConfig(getState, "post"),
+          );
+          const stored = JSON.parse(localStorage.getItem("token")) || {};
+          delete stored.refresh;
+          stored.access = refreshResult.data.access;
+          localStorage.setItem("token", JSON.stringify(stored));
+        } catch (refreshErr) {
+          // Cookie missing / expired / blacklisted: keep using the
+          // current access token until it lapses, same semantics as the
+          // pre-migration opportunistic refresh.
+        }
       }
       dispatch({ type: USER_LOADED, payload: res.data });
       if (res.data?.options?.theme !== undefined) {
@@ -143,7 +152,15 @@ const loginUser = (data) => async (dispatch) => {
   }
 };
 
-const logout = () => (dispatch) => {
+const logout = () => async (dispatch) => {
+  // Roadmap step [2.2]: tell the backend to blacklist the refresh token
+  // carried by the HttpOnly cookie and expire the cookie itself.
+  // Fire-and-forget: local state is cleared regardless of network state.
+  try {
+    await axios.post("/api/login/logout/", {}, { withCredentials: true });
+  } catch (err) {
+    // Already logged out / cookie gone -- nothing to revoke server-side.
+  }
   dispatch({ type: LOGOUT_SUCCESS });
 };
 

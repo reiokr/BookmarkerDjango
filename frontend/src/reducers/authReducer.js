@@ -13,8 +13,28 @@ import {
     EMAIL_ERROR,
 } from '../actions/types';
 
+// Roadmap step [2.2] option (a): refresh tokens no longer live in
+// localStorage -- the backend hands them over as HttpOnly cookies and the
+// stored payload is access-only. Purge any legacy entry that still
+// carries a refresh token so old sessions migrate on first load.
+const readStoredToken = () => {
+    try {
+        const stored = JSON.parse(localStorage.getItem('token'));
+        if (stored && typeof stored === 'object') {
+            if ('refresh' in stored) {
+                delete stored.refresh;
+                localStorage.setItem('token', JSON.stringify(stored));
+            }
+            return stored;
+        }
+    } catch (e) {
+        localStorage.removeItem('token');
+    }
+    return null;
+};
+
 const initialState = {
-    token: JSON.parse(localStorage.getItem('token')) || null,
+    token: readStoredToken(),
     isAuthenticated: null,
     isLoading: false,
     user: null,

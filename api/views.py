@@ -17,8 +17,18 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+
+from api.auth_cookies import (
+    REFRESH_COOKIE_NAME,
+    clear_refresh_cookie,
+    origin_allowed,
+    set_refresh_cookie,
+)
 
 from utils import fetch_youtube, find_playlist
 from utils.fetch_channel import (
@@ -110,11 +120,101 @@ class MyObtainTokenPairView(TokenObtainPairView):
     # anonymous scope keys by IP -- the correct credential-stuffing dampener.
     throttle_classes = [LoginAnonRateThrottle]
 
+    def post(self, request, *args, **kwargs):
+        # Roadmap step [2.2] option (a): on a successful login the refresh
+        # token moves to an HttpOnly SameSite=Lax cookie and is REMOVED
+        # from the JSON body -- the browser never holds it in JS-reachable
+        # storage again. The not_registered / not_verified bodies carry no
+        # 'refresh' key, so they pass through untouched.
+        response = super().post(request, *args, **kwargs)
+        if (
+            response.status_code == status.HTTP_200_OK
+            and isinstance(response.data, dict)
+            and "refresh" in response.data
+        ):
+            refresh_token = response.data.pop("refresh")
+            set_refresh_cookie(response, refresh_token)
+        return response
+
 
 class ThrottledTokenRefreshView(TokenRefreshView):
     """TokenRefreshView with the shared anonymous ``login`` throttle."""
 
     throttle_classes = [LoginAnonRateThrottle]
+
+
+class CookieTokenRefreshView(ThrottledTokenRefreshView):
+    """Roadmap step [2.2]: refresh reads its token from the HttpOnly cookie.
+
+    Body tokens are rejected outright -- after this migration no client
+    legitimately holds a refresh token outside the cookie, so an explicit
+    body token is either stale client code or an attack attempt.
+
+    Rotation + blacklist stay on (settings.SIMPLE_JWT): each successful
+    refresh blacklists the presented token and REPLACES the cookie with
+    the freshly issued one.
+    """
+
+    def post(self, request, *args, **kwargs):
+        if not origin_allowed(request):
+            return Response(
+                {"detail": "Cross-origin request rejected."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        if request.data.get("refresh"):
+            return Response(
+                {"detail": "Refresh tokens are accepted via cookie only."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        token = request.COOKIES.get(REFRESH_COOKIE_NAME)
+        if not token:
+            return Response(
+                {"detail": "Refresh token cookie missing."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        serializer = TokenRefreshSerializer(data={"refresh": token})
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        data = dict(serializer.validated_data)
+        rotated_refresh = data.pop("refresh", None)
+        response = Response(data, status=status.HTTP_200_OK)
+        if rotated_refresh:
+            set_refresh_cookie(response, rotated_refresh)
+        return response
+
+
+class LogoutView(APIView):
+    """Roadmap step [2.2]: blacklist the cookie's refresh token, clear it.
+
+    AllowAny: the cookie itself is the credential. An expired or already
+    blacklisted token still gets a clean logout (cookie cleared); only
+    valid tokens reach the blacklist.
+    """
+
+    permission_classes = (AllowAny,)
+    throttle_classes = [LoginAnonRateThrottle]
+
+    def post(self, request):
+        if not origin_allowed(request):
+            return Response(
+                {"detail": "Cross-origin request rejected."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        token = request.COOKIES.get(REFRESH_COOKIE_NAME)
+        if token:
+            try:
+                RefreshToken(token).blacklist()
+            except TokenError:
+                # Expired / garbage / already blacklisted: nothing left to
+                # revoke server-side; clearing the cookie is the logout.
+                pass
+        response = Response({"detail": "Logged out."}, status=status.HTTP_200_OK)
+        clear_refresh_cookie(response)
+        return response
 
 
 class RegisterView(generics.CreateAPIView):

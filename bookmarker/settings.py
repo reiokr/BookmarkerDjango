@@ -17,7 +17,12 @@ import environ
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    # Roadmap step [2.1]: Content-Security-Policy delivery mode.
+    #   enforce -> Content-Security-Policy (default; acceptance gate)
+    #   report  -> Content-Security-Policy-Report-Only (tuning phase)
+    #   off     -> no CSP header
+    CSP_MODE=(str, 'enforce'),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -93,7 +98,10 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    # Roadmap step [2.3]: refresh tokens live 14 days, not 90. Users
+    # re-login biweekly by design -- a stolen refresh token expires fast,
+    # and rotation+blacklist (below) kill replayed ones even sooner.
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
@@ -124,6 +132,10 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    # CSP first: it is the outermost response wrapper, so even responses
+    # short-circuited by later middleware (e.g. the CORS layer's synthetic
+    # OPTIONS reply) still carry the policy header.
+    'bookmarker.csp.CspMiddleware',
     'bookmarker.middleware.SimpleCorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -229,6 +241,11 @@ STATIC_URL = 'static/'
 
 FRONTEND_URL = env('FRONTEND_URL')
 BACKEND_URL = env('BACKEND_URL')
+
+# Roadmap step [2.1]: CSP mode -- validated by bookmarker.csp.resolve_mode()
+# at request time (enforce | report | off). Default is enforce: the
+# acceptance criterion requires an enforced policy.
+CSP_MODE = env('CSP_MODE')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

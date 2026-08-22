@@ -3,13 +3,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import (AddBookmark, AddPlaylistTOBookmarksView, BmDetailView,
                     BmListSearchView, BmListView, ChannelNextPlaylistsView,
-                    ChannelPlaylistsView, GetVideoData, LoadRelatedVideosView,
-                    MyObtainTokenPairView, NextPageCommentsView, OptionsView,
-                    RateVideoView, RegisterView, RepliesNextPageView,
-                    RepliesView, ThrottledTokenRefreshView,
-                    UpdateUserCategories, UserDetail, VideoCommentsView,
-                    YouTubeList, activate, extensionLogin, getCurrentUser,
-                    getRoutes)
+                    ChannelPlaylistsView, CookieTokenRefreshView,
+                    GetVideoData, LoadRelatedVideosView,
+                    LogoutView, MyObtainTokenPairView, NextPageCommentsView,
+                    OptionsView, RateVideoView, RegisterView, RepliesView,
+                    RepliesNextPageView, UpdateUserCategories, UserDetail,
+                    VideoCommentsView, YouTubeList, activate, extensionLogin,
+                    getCurrentUser, getRoutes)
 
 urlpatterns = [
     path('', getRoutes),
@@ -17,7 +17,11 @@ urlpatterns = [
     # path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('extension-login/', extensionLogin, name='extension_login'),
     path('login/',  MyObtainTokenPairView.as_view(), name='my_token_obtain_pair'),
-    path('login/refresh/', ThrottledTokenRefreshView.as_view(), name='token_refresh'),
+    # Roadmap step [2.2]: refresh reads the HttpOnly cookie; body tokens
+    # are rejected. The old body-token ThrottledTokenRefreshView remains
+    # defined in views.py but no route points at it.
+    path('login/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
+    path('login/logout/', LogoutView.as_view(), name='token_logout'),
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('users/<int:pk>', UserDetail.as_view(), name='user_detail'),
     path('user/options', OptionsView.as_view(), name='options'),
