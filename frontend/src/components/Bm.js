@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../css/Bm.css';
+import '../scss/Bm.scss';
 import { CgCloseO } from 'react-icons/cg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';

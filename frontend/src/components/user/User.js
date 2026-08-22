@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import moment from "moment";
-import "../../css/User.css";
+import "../../scss/User.scss";
 import DelUserModal from "./DelUserModal";
 import ErrorAlert from "../ErrorAlert";
 import { useTranslation } from "react-i18next";

@@ -1,4 +1,4 @@
-import '../css/Categories.css'
+import '../scss/Categories.scss'
 import { useState, useRef, useEffect } from 'react'
 import { CgCloseO } from 'react-icons/cg'
 import { connect } from 'react-redux'

@@ -1,4 +1,4 @@
-import '../css/Login.css'
+import '../scss/Login.scss'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { loginUser } from '../actions/authActions'

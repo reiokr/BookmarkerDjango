@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import '../css/ControlBar.css';
+import '../scss/ControlBar.scss';
 import { BiSort, BiSearchAlt } from 'react-icons/bi';
 import { connect } from 'react-redux';
 import { sortItems, filterBookmarks } from '../actions/bmActions';

@@ -1,4 +1,4 @@
-import '../css/Navbar.css'
+import '../scss/Navbar.scss'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
 const Menu = ({ toggleMenu }) => {

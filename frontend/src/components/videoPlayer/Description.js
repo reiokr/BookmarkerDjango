@@ -1,4 +1,4 @@
-import '../../css/Description.css'
+import '../../scss/Description.scss'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import FormatText from './FormatText'

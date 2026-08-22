@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../css/Categories.css";
+import "../scss/Categories.scss";
 import BmContainer from "./BmContainer";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";

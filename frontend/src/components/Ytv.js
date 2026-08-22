@@ -1,5 +1,5 @@
-import '../css/Bm.css';
-import '../css/Description.css';
+import '../scss/Bm.scss';
+import '../scss/Description.scss';
 import { useState, useEffect } from 'react';
 import Fade from '@mui/material/Fade';
 import { CgCloseO } from 'react-icons/cg';

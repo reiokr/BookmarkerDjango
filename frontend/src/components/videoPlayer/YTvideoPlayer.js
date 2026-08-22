@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import '../../css/YTvideoPlayer.css';
+import '../../scss/YTvideoPlayer.scss';
 import { connect } from 'react-redux';
 import { loadPlayer } from '../../actions/playerActions';
 import Player from './Player';

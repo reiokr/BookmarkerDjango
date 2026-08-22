@@ -1,5 +1,5 @@
 import React from 'react'
-import '../css/Home.css';
+import '../scss/Home.scss';
 import {useTranslation} from 'react-i18next'
 
 const HomePage = () => {

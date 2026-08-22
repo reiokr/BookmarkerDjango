@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import '../css/Bm.css'
+import '../scss/Bm.scss'
 import { clearSuccess } from '../actions/successActions'
 import PropTypes from 'prop-types'
 import Alert from '@mui/material/Alert'

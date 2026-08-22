@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import '../css/signup.css';
+import '../scss/signup.scss';
 import { useNavigate } from 'react-router';
 import { signUpUser } from '../actions/authActions';
 import ErrorAlert from './ErrorAlert';

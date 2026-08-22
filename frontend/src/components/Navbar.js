@@ -1,4 +1,4 @@
-import '../css/Navbar.css'
+import '../scss/Navbar.scss'
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { logout } from '../actions/authActions'

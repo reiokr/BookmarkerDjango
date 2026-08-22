@@ -1,4 +1,4 @@
-import '../css/Home.css';
+import '../scss/Home.scss';
 import { connect } from 'react-redux';
 import Loader from './Loader';
 import Categories from './Categories';

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getList, updateVideo } from '../../actions/ytvActions'
 import moment from 'moment'
-import '../../css/Bm.css'
+import '../../scss/Bm.scss'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import img from '../../default-img.gif'
 
