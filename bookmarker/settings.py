@@ -61,10 +61,7 @@ INSTALLED_APPS = [
     'frontend',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'rest_framework.authtoken',
-    'rest_auth',
     'api.apps.ApiConfig',
-    'django_extensions',
 ]
 
 REST_FRAMEWORK = {
