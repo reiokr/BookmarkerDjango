@@ -39,3 +39,4 @@ Thumbs.db
 
 # Misc
 reviews/
+db.backup.pgsql
