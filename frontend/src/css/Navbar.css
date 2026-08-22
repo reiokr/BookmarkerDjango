@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap");
 :root,
 html[data-theme="0"],
-html[data-theme="nocturne"] {
-  --font-main: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", var(--font-main);
+html[data-theme=nocturne] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
@@ -47,16 +47,8 @@ html[data-theme="nocturne"] {
   --dark-color: #181c25;
   --on-accent: #0b0d12;
   --body-gradient:
-    radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(240, 160, 48, 0.08),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 60% 40% at 100% 100%,
-      rgba(99, 102, 241, 0.05),
-      transparent
-    ),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(240, 160, 48, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(99, 102, 241, 0.05), transparent),
     var(--body-bg);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.25);
   --shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border);
@@ -71,9 +63,9 @@ html[data-theme="nocturne"] {
 }
 
 html[data-theme="1"],
-html[data-theme="ocean"] {
-  --font-main: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", var(--font-main);
+html[data-theme=ocean] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
@@ -117,16 +109,8 @@ html[data-theme="ocean"] {
   --dark-color: #0f1c2a;
   --on-accent: #062033;
   --body-gradient:
-    radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(56, 189, 248, 0.1),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 50% 40% at 0% 100%,
-      rgba(14, 165, 233, 0.06),
-      transparent
-    ),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.1), transparent),
+    radial-gradient(ellipse 50% 40% at 0% 100%, rgba(14, 165, 233, 0.06), transparent),
     var(--body-bg);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 20, 40, 0.35);
   --shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
@@ -141,9 +125,9 @@ html[data-theme="ocean"] {
 }
 
 html[data-theme="2"],
-html[data-theme="violet"] {
-  --font-main: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", var(--font-main);
+html[data-theme=violet] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
@@ -187,16 +171,8 @@ html[data-theme="violet"] {
   --dark-color: #1a1625;
   --on-accent: #140f22;
   --body-gradient:
-    radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(167, 139, 250, 0.1),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 50% 40% at 100% 100%,
-      rgba(236, 72, 153, 0.05),
-      transparent
-    ),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167, 139, 250, 0.1), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(236, 72, 153, 0.05), transparent),
     var(--body-bg);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(20, 0, 40, 0.3);
   --shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
@@ -211,9 +187,9 @@ html[data-theme="violet"] {
 }
 
 html[data-theme="3"],
-html[data-theme="light"] {
-  --font-main: "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Outfit", var(--font-main);
+html[data-theme=light] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
@@ -257,16 +233,8 @@ html[data-theme="light"] {
   --dark-color: #ffffff;
   --on-accent: #ffffff;
   --body-gradient:
-    radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      rgba(245, 158, 11, 0.08),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 50% 40% at 100% 100%,
-      rgba(99, 102, 241, 0.04),
-      transparent
-    ),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.08), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(99, 102, 241, 0.04), transparent),
     var(--body-bg);
   --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.06);
   --shadow-dark: 0 8px 28px rgba(15, 23, 42, 0.1), 0 0 0 1px var(--border);
@@ -281,19 +249,76 @@ html[data-theme="light"] {
   --danger-muted: rgba(239, 68, 68, 0.1);
 }
 
+html[data-theme="4"],
+html[data-theme=aurora] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+  --danger-dark: #dc2626;
+  --danger-muted: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.45);
+  --success: #22c55e;
+  --success-muted: rgba(34, 197, 94, 0.15);
+  --bg-deep: #050810;
+  --bg-base: #070b14;
+  --body-bg: #070b14;
+  --bg-elevated: #0c1320;
+  --bg-elevated-alpha: rgba(12, 19, 32, 0.78);
+  --bg-elevated-solid: rgba(12, 19, 32, 0.96);
+  --bg-surface: #111a2b;
+  --bg-surface-alpha: rgba(17, 26, 43, 0.55);
+  --bg-hover: #16223a;
+  --bg-active: #1c2c4a;
+  --bg-deep-alpha: rgba(5, 8, 16, 0.92);
+  --bg-deep-soft: rgba(5, 8, 16, 0.65);
+  --bg-deep-strong: rgba(5, 8, 16, 0.95);
+  --border: rgba(148, 220, 255, 0.08);
+  --border-strong: rgba(148, 220, 255, 0.16);
+  --border-accent: rgba(34, 211, 238, 0.4);
+  --acc-color: #22d3ee;
+  --acc-hover: #67e8f9;
+  --acc-dark: #06b6d4;
+  --acc-muted: rgba(34, 211, 238, 0.14);
+  --acc-glow: rgba(34, 211, 238, 0.3);
+  --acc-scroll: rgba(34, 211, 238, 0.45);
+  --acc-gradient: linear-gradient(135deg, #34d399 0%, #22d3ee 50%, #f472b6 100%);
+  --acc-gradient-hover: linear-gradient(135deg, #6ee7b7 0%, #67e8f9 50%, #f9a8d4 100%);
+  --text-primary: #e8f4f8;
+  --text-secondary: #8aa8b5;
+  --text-muted: #5a7585;
+  --light-color: #e8f4f8;
+  --dark-color: #050810;
+  --on-accent: #050810;
+  --body-gradient:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(52, 211, 153, 0.18), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 5%, rgba(34, 211, 238, 0.16), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(244, 114, 182, 0.14), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 100% 60%, rgba(99, 102, 241, 0.08), transparent 60%),
+    var(--body-bg);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 10, 25, 0.4);
+  --shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+  --shadow-glow: 0 0 0 1px var(--border-accent), 0 8px 32px var(--acc-glow);
+  --scrollbar-thumb: rgba(148, 220, 255, 0.15);
+  --header-bg: var(--bg-elevated-alpha);
+  --card-hover-shadow: var(--shadow-dark), 0 0 0 1px var(--border-accent), 0 0 40px rgba(34, 211, 238, 0.12);
+  --selection-bg: var(--acc-muted);
+  --selection-color: var(--acc-hover);
+  --overlay: rgba(5, 8, 16, 0.78);
+  --overlay-modal: rgba(5, 8, 16, 0.7);
+  --danger-muted: rgba(239, 68, 68, 0.15);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:
-    var(--font-main),
-    "Inter",
-    system-ui,
-    -apple-system,
-    sans-serif,
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family: var(--font-main), "Inter", system-ui, -apple-system, sans-serif, Arial, Helvetica, sans-serif;
   --video-width: 840px;
 }
 
@@ -335,7 +360,7 @@ html {
 }
 
 html[data-theme="3"],
-html[data-theme="light"] {
+html[data-theme=light] {
   color-scheme: light;
 }
 
@@ -348,11 +373,7 @@ body,
 .signup-form-container,
 .user-content,
 .add-category-modal {
-  transition:
-    background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .navbar {
@@ -379,11 +400,7 @@ body,
   font-size: 1.35rem;
   letter-spacing: -0.02em;
   color: var(--acc-color);
-  background: linear-gradient(
-    135deg,
-    var(--acc-color) 0%,
-    var(--acc-hover) 100%
-  );
+  background: linear-gradient(135deg, var(--acc-color) 0%, var(--acc-hover) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -464,8 +481,7 @@ body,
   align-items: center;
   justify-content: center;
 }
-.dropbtn:hover,
-.dropbtn.active {
+.dropbtn:hover, .dropbtn.active {
   color: var(--acc-color);
   background: var(--acc-muted);
   box-shadow: inset 0 0 0 1px var(--border-accent);
@@ -508,8 +524,7 @@ body,
   font-weight: 500;
   transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.dropdown-content .locale-option:hover,
-.dropdown-content .locale-option.active {
+.dropdown-content .locale-option:hover, .dropdown-content .locale-option.active {
   background: var(--bg-hover);
   color: var(--acc-color);
 }
@@ -573,4 +588,4 @@ body,
   .dropdown {
     margin-right: 56px;
   }
-} /*# sourceMappingURL=Navbar.css.map */
+}/*# sourceMappingURL=Navbar.css.map */

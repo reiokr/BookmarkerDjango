@@ -249,6 +249,71 @@ html[data-theme=light] {
   --danger-muted: rgba(239, 68, 68, 0.1);
 }
 
+html[data-theme="4"],
+html[data-theme=aurora] {
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-main);
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+  --danger-dark: #dc2626;
+  --danger-muted: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.45);
+  --success: #22c55e;
+  --success-muted: rgba(34, 197, 94, 0.15);
+  --bg-deep: #050810;
+  --bg-base: #070b14;
+  --body-bg: #070b14;
+  --bg-elevated: #0c1320;
+  --bg-elevated-alpha: rgba(12, 19, 32, 0.78);
+  --bg-elevated-solid: rgba(12, 19, 32, 0.96);
+  --bg-surface: #111a2b;
+  --bg-surface-alpha: rgba(17, 26, 43, 0.55);
+  --bg-hover: #16223a;
+  --bg-active: #1c2c4a;
+  --bg-deep-alpha: rgba(5, 8, 16, 0.92);
+  --bg-deep-soft: rgba(5, 8, 16, 0.65);
+  --bg-deep-strong: rgba(5, 8, 16, 0.95);
+  --border: rgba(148, 220, 255, 0.08);
+  --border-strong: rgba(148, 220, 255, 0.16);
+  --border-accent: rgba(34, 211, 238, 0.4);
+  --acc-color: #22d3ee;
+  --acc-hover: #67e8f9;
+  --acc-dark: #06b6d4;
+  --acc-muted: rgba(34, 211, 238, 0.14);
+  --acc-glow: rgba(34, 211, 238, 0.3);
+  --acc-scroll: rgba(34, 211, 238, 0.45);
+  --acc-gradient: linear-gradient(135deg, #34d399 0%, #22d3ee 50%, #f472b6 100%);
+  --acc-gradient-hover: linear-gradient(135deg, #6ee7b7 0%, #67e8f9 50%, #f9a8d4 100%);
+  --text-primary: #e8f4f8;
+  --text-secondary: #8aa8b5;
+  --text-muted: #5a7585;
+  --light-color: #e8f4f8;
+  --dark-color: #050810;
+  --on-accent: #050810;
+  --body-gradient:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(52, 211, 153, 0.18), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 5%, rgba(34, 211, 238, 0.16), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(244, 114, 182, 0.14), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 100% 60%, rgba(99, 102, 241, 0.08), transparent 60%),
+    var(--body-bg);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 10, 25, 0.4);
+  --shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+  --shadow-glow: 0 0 0 1px var(--border-accent), 0 8px 32px var(--acc-glow);
+  --scrollbar-thumb: rgba(148, 220, 255, 0.15);
+  --header-bg: var(--bg-elevated-alpha);
+  --card-hover-shadow: var(--shadow-dark), 0 0 0 1px var(--border-accent), 0 0 40px rgba(34, 211, 238, 0.12);
+  --selection-bg: var(--acc-muted);
+  --selection-color: var(--acc-hover);
+  --overlay: rgba(5, 8, 16, 0.78);
+  --overlay-modal: rgba(5, 8, 16, 0.7);
+  --danger-muted: rgba(239, 68, 68, 0.15);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -330,7 +395,7 @@ body,
 .slider {
   -webkit-appearance: none;
   -moz-appearance: none;
-       appearance: none;
+  appearance: none;
   width: 100%;
   height: 6px;
   background: var(--bg-hover);

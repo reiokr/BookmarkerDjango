@@ -29,6 +29,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
 
     // create player object
     const loadVideoPlayer = useCallback(() => {
+        if (!window.YT || !window.YT.Player) return;
         if (!playerWidth) {
             localStorage.setItem('ytpw', 840);
             setPlayerWidth((prev) => localStorage.getItem('ytpw'));
@@ -56,7 +57,7 @@ const YTvideoPlayer = ({ video, auth, vp, loadPlayer }) => {
                 cc_load_policy: 0,
                 iv_load_policy: 3,
                 start: videoData?.start_at,
-                origin: 'http://localhost:3000',
+                origin: window.location.origin,
             },
             events: {
                 onReady: onPlayerReady,
