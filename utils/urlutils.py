@@ -54,3 +54,25 @@ def getUrl(url):  # todo do something
     result = re.sub(regex, subst, test_str, 0, re.MULTILINE)
     if result:
         return result
+
+
+# --- YouTube ID validators (audit spec §4.1) -------------------------------
+#
+# VIDEO_ID_RE / PLAYLIST_ID_RE wrap the character domains the extractors
+# above already accept (extractVideoId group 1, extractPlaylistId group 2),
+# length-capped and anchored. CHANNEL_ID_RE / COMMENT_ID_RE / PAGE_TOKEN_RE
+# are gap-fills for ID types with no existing coverage, using the same
+# charset convention. All proxy views must pass user-supplied IDs through
+# these before they reach googleapiclient -- non-conforming input is a
+# client error (400), never an upstream API call.
+
+VIDEO_ID_RE = re.compile(r"^[A-Za-z0-9_\-]{11}$")
+PLAYLIST_ID_RE = re.compile(r"^[A-Za-z0-9_\-]{12,64}$")
+CHANNEL_ID_RE = re.compile(r"^UC[A-Za-z0-9_\-]{22}$")
+COMMENT_ID_RE = re.compile(r"^[A-Za-z0-9_\-]{10,100}$")
+PAGE_TOKEN_RE = re.compile(r"^[A-Za-z0-9_=\-]{1,512}$")
+
+
+def matches_id(value, regex):
+    """True when ``value`` is a str conforming to the given ID regex."""
+    return isinstance(value, str) and bool(regex.match(value))

@@ -37,6 +37,10 @@ YOUTUBE_API_KEY = env('YOUTUBE_API_KEY')
 # Mitu playlisti kontrollida automaatsel playlisti tuvastusel (0 = keelatud)
 YT_PLAYLIST_AUTO_DETECT_MAX = 5
 
+# YouTubeList server-side pagination cap (audit spec §8.2): one request
+# walks at most this many upstream pages (<= 50 * N items).
+YT_PLAYLIST_MAX_PAGES = 10
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
@@ -72,6 +76,17 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
 
     ),
+    # Audit spec §4.3 -- rates copied verbatim. Scopes are attached per view
+    # (ScopedRateThrottle / AnonRateThrottle), NOT as global defaults, so
+    # each rate stays reviewable at its view.
+    'DEFAULT_THROTTLE_RATES': {
+        'youtube_proxy': '30/min',   # 11 cheap proxy views (~1 unit/call)
+        'youtube_search': '6/min',   # LoadRelatedVideosView only (100 units/call)
+        'youtube_list': '10/min',    # YouTubeList (server-side pagination amplifier)
+        'bm_create': '10/min',       # AddBookmark.post (findPlaylistId walks <=5 playlists x pages)
+        'login': '10/min',           # MyObtainTokenPairView + TokenRefreshView (AnonRateThrottle)
+        'register': '5/min',         # RegisterView (AnonRateThrottle)
+    },
 
 }
 

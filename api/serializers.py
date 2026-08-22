@@ -42,6 +42,24 @@ class UserSerializer(serializers.ModelSerializer):
                   'email', 'date_joined', 'date_updated', 'categories', 'bookmarks', 'bookmark_link', 'options',)
 
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Write-facing serializer for self-service profile updates.
+
+    Audit spec §8.4: ``UserDetail.put`` previously bound ``UserSerializer``,
+    whose model booleans (``is_staff``, ``is_active``, ``is_superuser``) DRF
+    renders writable -- so ``PUT /api/users/<own-pk> {"is_superuser": true}``
+    promoted the caller to superuser. This serializer is writable ONLY on
+    ``first_name`` / ``last_name``; privilege fields, email and nested
+    relations are simply not accepted (unknown keys are ignored by DRF,
+    which also kills the nested-``options`` PUT 500). ``UserSerializer``
+    stays read-facing.
+    """
+
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name')
+
+
 class CategorySerializer(serializers.Serializer):
     categories = serializers.ListField(
         child=serializers.CharField(), allow_empty=True)

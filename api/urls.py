@@ -1,16 +1,15 @@
 from django.urls import include, path
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
 
 from .views import (AddBookmark, AddPlaylistTOBookmarksView, BmDetailView,
                     BmListSearchView, BmListView, ChannelNextPlaylistsView,
                     ChannelPlaylistsView, GetVideoData, LoadRelatedVideosView,
                     MyObtainTokenPairView, NextPageCommentsView, OptionsView,
                     RateVideoView, RegisterView, RepliesNextPageView,
-                    RepliesView, UpdateUserCategories, UserDetail,
-                    VideoCommentsView, YouTubeList, activate, extensionLogin,
-                    getCurrentUser, getRoutes)
+                    RepliesView, ThrottledTokenRefreshView,
+                    UpdateUserCategories, UserDetail, VideoCommentsView,
+                    YouTubeList, activate, extensionLogin, getCurrentUser,
+                    getRoutes)
 
 urlpatterns = [
     path('', getRoutes),
@@ -18,7 +17,7 @@ urlpatterns = [
     # path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('extension-login/', extensionLogin, name='extension_login'),
     path('login/',  MyObtainTokenPairView.as_view(), name='my_token_obtain_pair'),
-    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/refresh/', ThrottledTokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('users/<int:pk>', UserDetail.as_view(), name='user_detail'),
     path('user/options', OptionsView.as_view(), name='options'),

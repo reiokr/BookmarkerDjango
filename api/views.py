@@ -1,21 +1,24 @@
 from urllib.error import HTTPError
 
+import requests
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle, ScopedRateThrottle
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
 from utils import fetch_youtube, find_playlist
 from utils.fetch_channel import (
@@ -31,14 +34,20 @@ from utils.fetch_video_comments import (
 )
 from utils.find_playlist import get_playlist_item
 from utils.rate_video import rate_video
-from utils.scraper import scrape_page_metadata
+from utils.scraper import ScrapeBlocked, scrape_page_metadata
 from utils.urlutils import (
+    CHANNEL_ID_RE,
+    COMMENT_ID_RE,
+    PAGE_TOKEN_RE,
+    PLAYLIST_ID_RE,
+    VIDEO_ID_RE,
     checkUrlType,
     extractPlaylistId,
     extractVideoId,
     formaturl,
     getStartTime,
     getUrl,
+    matches_id,
 )
 
 from .models import Bm, Bml, CustomUser, UserOptions
@@ -51,8 +60,34 @@ from .serializers import (
     RegisterSerializer,
     UserOptionsSerializer,
     UserSerializer,
+    UserUpdateSerializer,
 )
 from .tokens import account_activation_token
+
+# Valid values for the commentThreads().list ``order`` enum (audit spec §4.1).
+YT_COMMENT_ORDERS = ("time", "relevance")
+
+
+def _reject_bad_id(value, regex, param):
+    """Audit spec §4.1: non-conforming proxy IDs are a 400 client error.
+
+    Applied at the top of every YouTube-proxy handler so garbage never
+    reaches googleapiclient (which would otherwise burn quota on a doomed
+    upstream call and surface as a 500).
+    """
+    if not matches_id(value, regex):
+        raise ValidationError({param: ["Invalid identifier format."]})
+
+
+# AnonRateThrottle reads its scope from the CLASS attribute (only
+# ScopedRateThrottle consults view.throttle_scope), so per-surface scopes
+# are attached via subclasses -- the standard DRF pattern.
+class LoginAnonRateThrottle(AnonRateThrottle):
+    scope = "login"
+
+
+class RegisterAnonRateThrottle(AnonRateThrottle):
+    scope = "register"
 
 
 @api_view(["GET"])
@@ -71,12 +106,22 @@ def getCurrentUser(request):
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
+    # Audit spec §4.3: AllowAny surfaces have no user identity, so the
+    # anonymous scope keys by IP -- the correct credential-stuffing dampener.
+    throttle_classes = [LoginAnonRateThrottle]
+
+
+class ThrottledTokenRefreshView(TokenRefreshView):
+    """TokenRefreshView with the shared anonymous ``login`` throttle."""
+
+    throttle_classes = [LoginAnonRateThrottle]
 
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+    throttle_classes = [RegisterAnonRateThrottle]
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -151,13 +196,26 @@ class UserDetail(APIView):
 
     def get(self, request, pk, format=None):
         user = self.get_object(pk)
-        user.last_login = timezone.now()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
+        # Audit spec §8.4: UserSerializer renders is_staff/is_active/
+        # is_superuser writable, so binding request.data into it let any
+        # user promote themselves (PUT {"is_superuser": true}). Writes go
+        # through UserUpdateSerializer -- first_name/last_name ONLY;
+        # privilege fields are not accepted and never reach the model.
         user = self.get_object(pk)
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UserUpdateSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk, format=None):
+        # Partial self-service profile update; same lockdown as put().
+        user = self.get_object(pk)
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -170,7 +228,7 @@ class UserDetail(APIView):
 
 
 class UpdateUserCategories(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         if self.request.user.id == pk:
@@ -213,7 +271,7 @@ class UpdateUserCategories(APIView):
 
 
 class OptionsView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -239,7 +297,11 @@ class OptionsView(APIView):
 
 
 class AddBookmark(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    # POST cost is multi-call (findPlaylistId walks playlists server-side),
+    # hence the tightest create scope; GET is gone by design (see below).
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "bm_create"
 
     # NOTE: no GET handler on purpose. The former GET returned
     # Bm.objects.all() -- every user's bookmarks -- to any authenticated
@@ -249,47 +311,77 @@ class AddBookmark(APIView):
     # get DRF's standard 405.
 
     def post(self, request, format=None):
+        # Audit spec §8.3: malformed bodies are client errors (400), never
+        # KeyError -> 500.
+        raw_url = request.data.get("url")
+        category = request.data.get("category")
+        if not raw_url or not category:
+            return Response(
+                {"detail": "url and category are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # validate url
-        format_url = formaturl(request.data["url"])
+        format_url = formaturl(raw_url)
         # check the url type
         url_type = checkUrlType(format_url)
         # if youtube video url, get video id
         video_id = extractVideoId(format_url)
+        # Audit spec §4.1: extracted IDs are asserted against the charset
+        # the extractor already accepts -- truthy-but-nonconforming -> 400.
+        if video_id:
+            _reject_bad_id(video_id, VIDEO_ID_RE, "video_id")
         # if youtube video url with time indicator, get time
         startAt = getStartTime(format_url)
-        # if bookmark type is 'yt' fetch video data from youtube API
-        # if format_url and url_type == "bm":
-        #     return
 
         if format_url and url_type == "yt":
-            if video_id:
-                video_data = fetch_youtube.fetch_Video(video_id)
-                # pprint(video_data)
-                snip = video_data["items"][0]["snippet"]
-                detail = video_data["items"][0]["contentDetails"]
-                bm_status = video_data["items"][0]["status"]
-                statistics = video_data["items"][0]["statistics"]
-                # if no tags attribute set tags []
-                if "tags" in snip:
-                    tags = snip["tags"]
-                else:
-                    tags = []
-                try:
-                    dislikeCount = statistics["dislikeCount"]
-                except KeyError:
-                    dislikeCount = 0
-                try:
-                    commentCount = statistics["commentCount"]
-                except KeyError:
-                    commentCount = 0
-                try:
-                    viewCount = statistics["viewCount"]
-                except KeyError:
-                    viewCount = 0
+            if not video_id:
+                # §8.3: a yt-classified URL without an extractable video id
+                # used to blow up on unbound snip/statistics below.
+                return Response(
+                    {"detail": "Could not extract a YouTube video id."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            video_data = fetch_youtube.fetch_Video(video_id)
+            items = video_data.get("items") or []
+            if not items:
+                # §8.3: deleted/private videos come back with zero items --
+                # a client-input problem, not an IndexError 500.
+                return Response(
+                    {"detail": "Video not found on YouTube."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            snip = items[0]["snippet"]
+            detail = items[0]["contentDetails"]
+            bm_status = items[0]["status"]
+            statistics = items[0]["statistics"]
+            # if no tags attribute set tags []
+            if "tags" in snip:
+                tags = snip["tags"]
+            else:
+                tags = []
+            try:
+                dislikeCount = statistics["dislikeCount"]
+            except KeyError:
+                dislikeCount = 0
+            try:
+                commentCount = statistics["commentCount"]
+            except KeyError:
+                commentCount = 0
+            try:
+                viewCount = statistics["viewCount"]
+            except KeyError:
+                viewCount = 0
+
             # find list id from url
             list_id = extractPlaylistId(format_url)
+            if list_id:
+                _reject_bad_id(list_id, PLAYLIST_ID_RE, "list_id")
+            # §8.3: initialise so a playlist without this video cannot leave
+            # them unbound.
+            list_index = None
+            list_items_count = 0
             # if list id exists fetch playlist items from youtube API
-            # print(list_id)
             if list_id:
                 playlist = find_playlist.get_playlist_items(list_id, "")
                 # find list item playlist index
@@ -298,24 +390,21 @@ class AddBookmark(APIView):
                     if item["contentDetails"]["videoId"] == video_id:
                         list_index = item["snippet"]["position"]
             else:
-                found = find_playlist.findPlaylistId(video_id) if video_id else None
+                found = find_playlist.findPlaylistId(video_id)
                 if found:
                     list_id = found["playlist_id"]
                     list_index = found["position"]
                     pl_items = find_playlist.get_playlist_items(list_id, "")
                     list_items_count = pl_items["pageInfo"]["totalResults"]
-                else:
-                    list_index = None
-                    list_id = None
-                    list_items_count = 0
+
             # create youtube video bookmark object
             data = {
                 "title": snip["title"],
                 "description": snip["description"],
-                "category": request.data["category"],
+                "category": category,
                 "bm_type": "yt",
                 "thumbnails": snip["thumbnails"],
-                "url": getUrl(request.data["url"]),
+                "url": getUrl(raw_url),
                 "video_id": video_id,
                 "list_id": list_id,
                 "list_index": list_index,
@@ -335,68 +424,90 @@ class AddBookmark(APIView):
 
             serializer = BmSerializer(data=data)
             if serializer.is_valid():
-                cat = request.data.get("category", "").strip()
+                cat = category.strip()
                 if cat and cat.lower() not in [c.lower() for c in request.user.categories]:
                     request.user.categories.append(cat)
                     request.user.save(update_fields=["categories"])
                 serializer.save(owner=self.request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         if format_url and url_type == "bm":
             try:
-                # Scrape bookmark data from html
+                # Scrape bookmark data from html (SSRF-guarded, audit §5)
                 bookmark_meta = scrape_page_metadata(format_url)
-                data = {
-                    "title": bookmark_meta["title"],
-                    "description": bookmark_meta["description"],
-                    "category": request.data["category"],
-                    "bm_type": "bm",
-                    "image_url": bookmark_meta["image_url"],
-                    "url": bookmark_meta["url"],
-                }
-                if not bookmark_meta["title"]:
-                    data["title"] = bookmark_meta["sitename"]
-
-                if url_type == "bm":
-                    serializer = BmlSerializer(data=data)
-                    if serializer.is_valid():
-                        cat = request.data.get("category", "").strip()
-                        if cat and cat.lower() not in [c.lower() for c in request.user.categories]:
-                            request.user.categories.append(cat)
-                            request.user.save(update_fields=["categories"])
-                        serializer.save(owner=self.request.user)
-                        return Response(status=status.HTTP_201_CREATED)
-
-            # if connection with provided url filed, raise connection error
-            except ConnectionError:
+            except ScrapeBlocked as exc:
+                # §5.6: guard violations surface as client-facing JSON --
+                # never a 500, never internal diagnostics.
                 return Response(
-                    serializer.errors, status=status.HTTP_504_GATEWAY_TIMEOUT
+                    {"detail": "Bookmark fetch blocked: %s" % exc},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            except requests.Timeout:
+                return Response(
+                    {"detail": "Bookmark site timed out."},
+                    status=status.HTTP_504_GATEWAY_TIMEOUT,
+                )
+            except requests.ConnectionError:
+                return Response(
+                    {"detail": "Could not reach the bookmark site."},
+                    status=status.HTTP_504_GATEWAY_TIMEOUT,
+                )
+            except requests.RequestException:
+                return Response(
+                    {"detail": "Failed to fetch the bookmark page."},
+                    status=status.HTTP_502_BAD_GATEWAY,
                 )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            data = {
+                "title": bookmark_meta["title"],
+                "description": bookmark_meta["description"],
+                "category": category,
+                "bm_type": "bm",
+                "image_url": bookmark_meta["image_url"],
+                "url": bookmark_meta["url"],
+            }
+            if not bookmark_meta["title"]:
+                data["title"] = bookmark_meta["sitename"]
+
+            serializer = BmlSerializer(data=data)
+            if serializer.is_valid():
+                cat = category.strip()
+                if cat and cat.lower() not in [c.lower() for c in request.user.categories]:
+                    request.user.categories.append(cat)
+                    request.user.save(update_fields=["categories"])
+                serializer.save(owner=self.request.user)
+                return Response(status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {"detail": "Unsupported URL."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class YouTubeList(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    # Server-side pagination amplifier: one request used to walk EVERY page
+    # of the playlist upstream (audit spec §8.2). Throttled + page-capped.
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_list"
 
     def get_object(self, list_id):
+        _reject_bad_id(list_id, PLAYLIST_ID_RE, "list_id")
+
         data = find_playlist.get_playlist_items(list_id, "")
 
-        try:
-            pageToken = data["nextPageToken"]
-        except:
-            pageToken = None
-            items = data["items"]
-        while True:
-            if not pageToken:
-                break
+        # Audit spec §8.2: walk at most YT_PLAYLIST_MAX_PAGES pages
+        # (default 10 => <=500 items) instead of every page of the playlist.
+        pageToken = data.get("nextPageToken")
+        items = list(data["items"])
+        max_pages = getattr(settings, "YT_PLAYLIST_MAX_PAGES", 10)
+        pages_fetched = 1
+        while pageToken and pages_fetched < max_pages:
             newdata = find_playlist.get_playlist_items(list_id, pageToken)
-            items = data["items"]
+            pages_fetched += 1
             items.extend(newdata["items"])
-            try:
-                pageToken = newdata["nextPageToken"]
-            except:
-                pageToken = None
+            pageToken = newdata.get("nextPageToken")
         playlist = []
         for item in items:
             # duration = fetch_youtube.get_video_duration(item["contentDetails"]['videoId'])
@@ -421,7 +532,9 @@ class YouTubeList(APIView):
 
 
 class VideoCommentsView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get_object(self, video_id):
         order = self.kwargs.get("order")
@@ -429,6 +542,12 @@ class VideoCommentsView(APIView):
         return data
 
     def get(self, request, *args, **kwargs):
+        _reject_bad_id(kwargs.get("video_id"), VIDEO_ID_RE, "video_id")
+        # ``order`` is an upstream API enum, not free text (audit spec §4.1).
+        if kwargs.get("order") not in YT_COMMENT_ORDERS:
+            raise ValidationError(
+                {"order": ["Must be one of: %s" % ", ".join(YT_COMMENT_ORDERS)]}
+            )
         try:
             comments = self.get_object(kwargs.get("video_id"))
             return JsonResponse(comments, safe=False)
@@ -437,19 +556,24 @@ class VideoCommentsView(APIView):
 
 
 class RepliesView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get_object(self, parent_id):
         data = get_replies(parent_id)
         return data
 
     def get(self, request, *args, **kwargs):
+        _reject_bad_id(kwargs.get("parent_id"), COMMENT_ID_RE, "parent_id")
         comments = self.get_object(kwargs.get("parent_id"))
         return JsonResponse(comments, safe=False)
 
 
 class RepliesNextPageView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get_object(self, parent_id):
         page_token = self.kwargs.get("page_token")
@@ -458,12 +582,18 @@ class RepliesNextPageView(APIView):
         return data
 
     def get(self, request, *args, **kwargs):
+        _reject_bad_id(kwargs.get("parent_id"), COMMENT_ID_RE, "parent_id")
+        _reject_bad_id(
+            kwargs.get("page_token"), PAGE_TOKEN_RE, "page_token"
+        )
         comments = self.get_object(kwargs.get("parent_id"))
         return JsonResponse(comments, safe=False)
 
 
 class NextPageCommentsView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get_object(self, video_id):
         order = self.kwargs.get("order")
@@ -473,14 +603,25 @@ class NextPageCommentsView(APIView):
         return data
 
     def get(self, request, *args, **kwargs):
+        _reject_bad_id(kwargs.get("video_id"), VIDEO_ID_RE, "video_id")
+        _reject_bad_id(
+            kwargs.get("page_token"), PAGE_TOKEN_RE, "page_token"
+        )
+        if kwargs.get("order") not in YT_COMMENT_ORDERS:
+            raise ValidationError(
+                {"order": ["Must be one of: %s" % ", ".join(YT_COMMENT_ORDERS)]}
+            )
         comments = self.get_object(kwargs.get("video_id"))
         return JsonResponse(comments, safe=False)
 
 
 class RateVideoView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get(self, request, video_id):
+        _reject_bad_id(video_id, VIDEO_ID_RE, "video_id")
         response = rate_video(video_id)
         return JsonResponse(response)
 
@@ -529,21 +670,24 @@ class BmListSearchView(generics.ListCreateAPIView):
 
 
 class BmDetailView(APIView):
+    # Audit spec §7: the ONE view where IsOwnerOrReadOnly is wired and
+    # load-bearing -- get_object() calls check_object_permissions on every
+    # request, so the attachment is never inert.
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self, pk):
-        bookmark = Bm.objects.filter(pk=pk).first()
-        # Roadmap fact F14 bonus defect: a missing pk used to dereference
-        # None here and blow up as a 500. Missing bookmarks are a 404.
-        if bookmark is None:
-            raise Http404
-        if self.request.user.id == bookmark.owner_id:
-            try:
-                return Bm.objects.get(pk=pk)
-            except Bm.DoesNotExist:
-                raise Http404
-        else:
+        # Canonical object fetch (audit spec §7.2): 404 for a missing pk,
+        # then object-level permission enforcement.
+        bm = get_object_or_404(Bm.objects.select_related("owner"), pk=pk)
+        # IsOwnerOrReadOnly executes here: unsafe methods require
+        # obj.owner == request.user or DRF raises PermissionDenied (403).
+        self.check_object_permissions(self.request, bm)
+        # Reads are owner-scoped as well: a foreign bookmark is invisible
+        # even to GET -- the contract pinned by api/tests/test_ownership.py
+        # (cross-user GET/PUT/DELETE -> 403).
+        if bm.owner_id != self.request.user.id:
             raise PermissionDenied()
+        return bm
 
     def get(self, request, pk, format=None):
         bm = self.get_object(pk)
@@ -571,12 +715,15 @@ class BmDetailView(APIView):
 
 
 class GetVideoData(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get_object(self, video_id):
         return fetch_youtube.fetch_Video(video_id)
 
     def get(self, request, video_id, format=None):
+        _reject_bad_id(video_id, VIDEO_ID_RE, "video_id")
         video_data = self.get_object(video_id)
         snip = video_data["items"][0]["snippet"]
         detail = video_data["items"][0]["contentDetails"]
@@ -622,9 +769,12 @@ class GetVideoData(APIView):
 
 
 class ChannelPlaylistsView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get(self, request, channel_id, *args, **kwargs):
+        _reject_bad_id(channel_id, CHANNEL_ID_RE, "channel_id")
         try:
             playlists = fetch_channel_playlists(channel_id)
             return JsonResponse(playlists, safe=False)
@@ -633,18 +783,25 @@ class ChannelPlaylistsView(APIView):
 
 
 class ChannelNextPlaylistsView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get(self, request, channel_id, *args, **kwargs):
+        _reject_bad_id(channel_id, CHANNEL_ID_RE, "channel_id")
+        _reject_bad_id(kwargs.get("token"), PAGE_TOKEN_RE, "token")
         token = kwargs.get("token")
         next_playlists = fetch_channel_next_playlists(channel_id, token)
         return JsonResponse(next_playlists, safe=False)
 
 
 class AddPlaylistTOBookmarksView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_proxy"
 
     def get(self, request, pl_id, *args, **kwargs):
+        _reject_bad_id(pl_id, PLAYLIST_ID_RE, "pl_id")
         try:
             bookmark = get_playlist_item(pl_id)
             return JsonResponse(bookmark, safe=False)
@@ -653,9 +810,14 @@ class AddPlaylistTOBookmarksView(APIView):
 
 
 class LoadRelatedVideosView(APIView):
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    # search.list costs 100 quota units vs 1 for every other proxy call --
+    # the only view on the tightest scope (audit spec §4.3).
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "youtube_search"
 
     def get(self, request, video_id, *args, **kwargs):
+        _reject_bad_id(video_id, VIDEO_ID_RE, "video_id")
         try:
             relatedVideos = search_related_videos(video_id)
             return JsonResponse(relatedVideos, safe=False)
