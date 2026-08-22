@@ -43,7 +43,7 @@ class Bm(models.Model):
     bm_type = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     thumbnails = models.JSONField()
-    url = models.CharField(max_length=255)
+    url = models.URLField(max_length=2048)
     video_id = models.CharField(max_length=200)
     list_id = models.CharField(
         max_length=200, default="", null=True, blank=True)
@@ -74,7 +74,7 @@ class Bml(models.Model):
     category = models.CharField(max_length=50)
     bm_type = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    url = models.CharField(max_length=255)
+    url = models.URLField(max_length=2048)
     image_url = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     owner = models.ForeignKey(
